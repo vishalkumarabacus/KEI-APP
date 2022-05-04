@@ -1,0 +1,150 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			<h1>Add Checkin</h1>
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+	<!-- <div class="cs-figure mb16" *ngIf="userCurrentLocation">
+		<p > <span>Current Location :</span>  {{userCurrentLocation | titlecase}}</p>
+	</div> -->
+	<ng-container *ngIf="userType!='OFFICE'&&load != '1'">
+	<ion-list class="m0 cs-list-change" radio-group [(ngModel)]="data.network" name="network" (ngModelChange)="get_network_list(data.network)">
+		<ion-list-header class="border-heading">
+			Select Type
+		</ion-list-header>
+		<div *ngFor="let row of networkType">
+		<ion-item>
+			<ion-label>{{row.module_name}}</ion-label>
+			<ion-radio value={{row.type}} ></ion-radio>
+		</ion-item>
+		</div>
+		
+		<!-- <ion-item>
+			<ion-label>Contractor</ion-label>
+			<ion-radio value="10" ></ion-radio>
+		</ion-item>
+		<ion-item>
+			<ion-label>Architect</ion-label>
+			<ion-radio value="11" ></ion-radio>
+		</ion-item>
+		<ion-item>
+			<ion-label>Customer</ion-label>
+			<ion-radio value="15" ></ion-radio>
+		</ion-item>
+		<ion-item>
+			<ion-label>Builder</ion-label>
+			<ion-radio value="13" ></ion-radio>
+		</ion-item>
+		<ion-item>
+			<ion-label>Cement Dealer</ion-label>
+			<ion-radio value="14" ></ion-radio>
+		</ion-item> -->
+		<!-- <ion-item>
+			<ion-label>Other</ion-label>
+			<ion-radio value="6"></ion-radio>
+		</ion-item> -->
+	</ion-list>
+</ng-container>
+	<div *ngIf="data.network == '1' || data.network == '2' || data.network == '3' || data.network == '4' || data.network == '5' || data.network == '6' || data.network == '11'|| data.network == '12'|| data.network == '13'|| data.network == '14'|| data.network == '15'|| data.network == '16'" class="edit m0 mt16">
+		<ion-list>
+			<ion-item class="cs-select">
+				<ion-label *ngIf="data.network == '1'">Distributor</ion-label>
+				<ion-label *ngIf="data.network == '3'">Retailer</ion-label>
+				<ion-label *ngIf="data.network == '2'">Dealer</ion-label>
+				<ion-label *ngIf="data.network == '11'">Electrician</ion-label>
+				<ion-label *ngIf="data.network == '12'">Sub-dealer</ion-label>
+				<ion-label *ngIf="data.network == '13'">Private Contractor</ion-label>
+				<ion-label *ngIf="data.network == '14'">Government Contractor</ion-label>
+				<ion-label *ngIf="data.network == '15'">Builder</ion-label>
+				<ion-label *ngIf="data.network == '16'">Architect</ion-label>
+				<ion-label *ngIf="data.network == '6'">Others</ion-label>
+				<ion-label *ngIf="data.network == '4'">Project</ion-label>
+				<ion-label *ngIf="data.network == '5'">End User</ion-label>
+				
+				<ionic-selectable
+				item-content 
+				[(ngModel)]="data.type_name"
+				[items]="distributor_network_list"
+				itemValueField="id"
+				name="name"
+				value="company_name"
+				itemTextField="company_name"
+				(onChange)="other(data.type_name.company_name,data.network,data.type_name)"
+				[canSearch]="true"
+				#selectComponent>
+			</ionic-selectable>
+		</ion-item>			
+	</ion-list>
+</div>
+
+<div class="cs-figure mt16" *ngIf="load == '1' && data.type_name.company_name != 'Other' && addNewDealer==false">
+	<p ><span>Company Name :</span> {{type_name.company_name}}</p>
+	<p><span>Name :</span>  {{type_name.name}}</p>
+	<p> <span>Mobile :</span> {{type_name.mobile}}</p>
+	<p *ngIf=" type_name.address  || type_name.state  || type_name.district  || type_name.city  || type_name.area  || type_name.pincode"> <span>Address :</span>{{type_name.address}} {{type_name.state | titlecase}} {{type_name.district | titlecase}} {{type_name.city | titlecase}} {{type_name.area | titlecase}}  {{type_name.pincode}}</p>
+</div>
+
+<form name="f1" #f1="ngForm" (ngSubmit)="f1.valid && startOtherVisit()">
+	<div class="edit m0" *ngIf="data.network == 'Other'" > 
+		<ion-list>
+			<ion-item [ngClass]="{'cs-error': (f1.submitted &&  name?.invalid )}" >
+				<ion-label floating><span>Name <strong>*</strong></span></ion-label>
+				<ion-input type="text" [(ngModel)]="data.name" name="name"  #name="ngModel" minlength="3" required></ion-input>
+			</ion-item>
+			<p *ngIf="f1.submitted && name?.invalid && !data.name"  class="error-line relative">Name is required!</p>
+			<p *ngIf="f1.submitted && name?.invalid && data.name"  class="error-line relative">Name Is Invalid</p>
+			
+			<ion-item [ngClass]="{'cs-error': (f1.submitted &&  mobile?.invalid )}">
+				<ion-label floating><span>Mobile <strong>*</strong></span></ion-label>
+				<ion-input type="tel" minlength="10" maxlength="10" (keypress)="MobileNumber($event)"  [(ngModel)]="data.mobile" name="mobile"  #mobile="ngModel" required></ion-input>
+			</ion-item>
+			<p *ngIf="f1.submitted && mobile?.invalid && !data.mobile"  class="error-line relative">Mobile is required!</p>
+			<p *ngIf="f1.submitted && mobile?.invalid && data.mobile"  class="error-line relative">Mobile Is Invalid</p>
+		</ion-list>
+	</div>
+	<button ion-button block class="h40 green-color mt20" style="letter-spacing: 1px;"  *ngIf="data.network == 'Other'">Start Visit</button>
+</form>
+
+
+<form name="f" #f="ngForm" (ngSubmit)="f.valid && startDealerVisit()">
+	<div class="edit m0" *ngIf="addNewDealer==true" > 
+		<ion-list>
+			<ion-item [ngClass]="{'cs-error': ((f.submitted &&  mobile?.invalid) || checkExist==true)}">
+				<ion-label floating><span>Mobile <strong>*</strong></span></ion-label>
+				<ion-input type="tel" minlength="10" maxlength="10"  (keypress)="MobileNumber($event)"  [(ngModel)]="data.mobile" name="mobile"  #mobile="ngModel" required (ngModelChange)="check_num(data.mobile)"></ion-input>
+			</ion-item>
+			<p *ngIf="f.submitted && mobile?.invalid && !data.mobile"  class="error-line">Mobile is required!</p>
+			<p  *ngIf="checkExist==true" class="error-line">Same Mobile No. Already Exists</p>
+			
+			<p *ngIf="f.submitted && mobile?.invalid && data.mobile"  class="error-line">Mobile Is Invalid</p>
+			<ng-container *ngIf="data.mobile && data.mobile.length==10 && checkExist!=true"  >
+				<ion-item [ngClass]="{'cs-error': (f.submitted &&  company_name?.invalid )}">
+					<ion-label floating><span>Company Name <strong>*</strong></span></ion-label>
+					<ion-input type="text" [(ngModel)]="data.company_name" name="company_name"  #company_name="ngModel" minlength="3" required></ion-input>
+				</ion-item>
+				<p *ngIf="f.submitted && company_name?.invalid && !data.name"  class="error-line">Company Name is required!</p>
+				<p *ngIf="f.submitted && company_name?.invalid && data.name"  class="error-line">Company Name Is Invalid</p>
+				
+				<ion-item [ngClass]="{'cs-error': (f.submitted &&  name?.invalid )}">
+					<ion-label floating><span>Name <strong>*</strong></span></ion-label>
+					<ion-input type="text" [(ngModel)]="data.name" name="name"  #name="ngModel" minlength="3" required></ion-input>
+				</ion-item>
+				<p *ngIf="f.submitted && name?.invalid && !data.name"  class="error-line">Name is required!</p>
+				<p *ngIf="f.submitted && name?.invalid && data.name"  class="error-line">Name Is Invalid</p>
+				
+			</ng-container>
+		</ion-list>
+	</div>
+	
+	<button ion-button block class="h40 green-color mt20" style="letter-spacing: 1px;"  *ngIf="addNewDealer==true">Start Visit</button>
+	<!-- (click)="startDealerVisit()" -->
+</form>
+
+
+<button ion-button block class="h40 green-color mt20" style="letter-spacing: 1px;" [disabled]="!data.network" (click)="startVisit()" *ngIf="data.network != 'Other' && other_name != 'Other' && (type_name.company_name) && addNewDealer==false">Start Visit</button>
+</ion-content>

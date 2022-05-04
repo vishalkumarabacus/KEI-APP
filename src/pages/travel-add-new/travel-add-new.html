@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Travel Plan</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+
+  <div class="top-list" >
+    <div class="top pb0">
+        <div class="content">
+          <span>Date</span>
+            <p>total_working_days</p>
+        </div>
+        <div class="content">
+          <span>Travel Plan</span>
+            <p >present</p>
+        </div>
+        <div class="content">
+          <span>Status</span>
+            <p >absent</p>
+        </div>
+    </div>
+    
+</div>
+
+<ion-toolbar>
+  <ion-searchbar [(ngModel)]="search" name="search" ></ion-searchbar>
+</ion-toolbar> 
+
+<div class="list-content" >
+  <div class="upper-content" >
+    <div class="left-info" >
+     <div class="circle">C</div>
+    </div>
+    <div class="right-info">
+      <p>company_name </p>
+      <p>name <span>9667686942</span></p>
+    </div>
+  </div>
+  <div class="address">
+    <p>Address: <span >E-836,Phase 2</span></p>
+  </div>
+  <div class="lower-content">
+      <div class="visit">
+        Last Visit :
+         <p> 20 <span> Days Ago</span></p>
+      </div>
+      <div class="button-right">
+        <button class="add-btn"><i class="material-icons ">add</i>ADD TO LIST</button>
+        <!-- <button><i class="material-icons ">delet_sweep</i>REMOVE FROM LIST</button> -->
+      </div>
+  </div>
+  <!-- group_add -->
+  <!-- add_shopping_cart -->
+  <!-- add_circle -->
+</div>
+
+</ion-content>

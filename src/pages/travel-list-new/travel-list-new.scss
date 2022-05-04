@@ -1,0 +1,259 @@
+page-travel-list-new {
+    .calender-section
+    {
+        background: #fff;
+        padding-top: 0;
+
+        .head
+        {
+            display: flex;
+            align-items: center;
+            height: 45px;
+            justify-content: space-between;
+            padding: 25px;
+
+            button
+            {
+                width: 45px;
+                height: 45px;
+                background: #fff;
+                border: 0px;
+            }
+        }
+
+        .body
+        {
+            display: grid;
+            ion-grid ion-row
+            {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+    
+            .weekday
+            {
+                text-align: center;
+                margin: 0;
+                font-weight: 00;
+                opacity: 0.7;
+    
+            }
+    
+            .date
+            {
+                text-align: center;
+                margin: 0;
+            }
+    
+        }
+    }
+
+   
+
+
+    .calender-section [col-1]
+    {
+        webkit-box-flex: 0;
+        -webkit-flex: 0 0 8.33333%;
+        -ms-flex: 0 0 8.33333%;
+        flex: 0 0 14.285714285714286%;
+        width: 14.285714285714286%;
+        max-width: 14.285714285714286%;
+        height: 45px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        border: solid 1px rgb(104, 103, 103); 
+
+    }
+
+
+    .yellow-box
+    {
+            background-color: #e2e20f;
+            color: #fff;
+            display: block;
+    }
+
+    .green-box
+    {
+            background-color: #5bb637;
+            color: #fff;
+            display: block;
+    }
+
+    .red-box
+    {
+            background-color: #cf1b1b;
+            color: #fff;
+            display: block;
+    }
+
+    .purple-box
+    {
+            background-color: #e20fc6;
+            color: #fff;
+            display: block;
+    }
+    .blue-box
+    {
+            background-color: #754aee;
+            color: #fff;
+            display: block;
+    }
+
+    .grey-box
+    {
+            background-color: #494947;
+            color: #fff;
+            display: block;
+    }
+
+    .white-box
+    {
+            background-color: #ffffff;
+            color: #fff;
+            display: block;
+            border: solid 1px #1b1b1b; 
+    }
+
+    .detail-section
+    {
+        border: 1px solid #f5f0f0;
+        background-color:  #f5f0f0;
+
+        .row-first
+        {
+            display: flex;
+            margin: 10px;
+            span
+            {
+                height: 20px;
+                width: 20px;
+                margin: 5px !important; 
+            }
+            p
+            {
+                font-size: 12px;
+                margin: 5px !important; 
+            }
+
+        }
+        h2{
+            margin-top: 30px !important;
+            text-align: center !important;
+            font-size: 15px;
+            text-decoration: underline;
+        }
+
+        .travel-chart
+        {
+            max-width: 100%;
+            height: 190px;
+            margin-top: 20px;
+            display: flex;
+            
+            .circle-1
+            {
+                overflow: hidden;
+                border-radius: 100%;
+                width: 150px;
+                height: 150px;
+                background: #f39bc7;
+                border: 5px solid #dedede;
+                margin-left: 20px;
+                
+                .circle-2
+                {
+                    margin: 0 auto;
+                    border-radius: 100%;
+                    width: 100px;
+                    height: 100px;
+                    background:#dedede;
+                    text-align: center;
+                    h1
+                    {
+                        font-size: 18px;
+                        color: #000;
+                        font-weight: 500;
+                        @extend.regular;
+                        letter-spacing: 2px;
+                        padding-top: 35px !important;
+
+                    }
+                }
+            }
+
+            .P-0{background: conic-gradient( #4CAF50  0%, #f39bc7 0)}
+            .P-5{background: conic-gradient( #4CAF50  5%, #f39bc7 0)}
+            .P-10{background: conic-gradient( #4CAF50  10%, #f39bc7 0)}
+            .P-15{background: conic-gradient( #4CAF50  15%, #f39bc7 0)}
+            .P-20{background: conic-gradient( #4CAF50  20%, #f39bc7 0)}
+            .P-25{background: conic-gradient( #4CAF50  25%, #f39bc7 0)}
+            .P-30{background: conic-gradient( #4CAF50  30%, #f39bc7 0)}
+            .P-35{background: conic-gradient( #4CAF50  35%, #f39bc7 0)}
+            .P-40{background: conic-gradient( #4CAF50  40%, #f39bc7 0)}
+            .P-45{background: conic-gradient( #4CAF50  45%, #f39bc7 0)}
+            .P-50{background: conic-gradient( #4CAF50 50%, #f39bc7 0)}
+            .P-55{background: conic-gradient( #4CAF50  55%, #f39bc7 0)}
+            .P-60{background: conic-gradient( #4CAF50  60%, #f39bc7 0)}
+            .P-65{background: conic-gradient( #4CAF50  65%, #f39bc7 0)}
+            .P-70{background: conic-gradient( #4CAF50  70%, #f39bc7 0)}
+            .P-75{background: conic-gradient( #4CAF50  75%, #f39bc7 0)}
+            .P-80{background: conic-gradient( #4CAF50  80%, #f39bc7 0)}
+            .P-85{background: conic-gradient( #4CAF50  85%, #f39bc7 0)}
+            .P-90{background: conic-gradient( #4CAF50  90%, #f39bc7 0)}
+            .P-95{background: conic-gradient( #4CAF50  95%, #f39bc7 0)}
+            .P-100{background: conic-gradient( #4CAF50  100%, #f39bc7 0)}
+
+            .travel-detail
+            {
+                margin-left: 20px;
+                margin-top: 30px !important;
+                
+                p
+                {
+                    font-size: 12px;
+                    font-weight: 500;
+                }
+    
+                .count
+                {
+                    margin-left: 30px !important; 
+                    margin-bottom: 25px !important; 
+                    display: flex;
+                    align-items:center ;
+                    span
+                    {
+                        border-radius: 100%;
+                        height: 15px;
+                        width: 15px;
+                        display: block;
+    
+                    }
+                    h1
+                    {
+                     margin-left: 10px !important;
+                     font-size: 16px;
+                     font-weight: 600;
+                    }
+                }
+               
+            }
+            .pink
+            {
+                background-color: #f39bc7;
+            }
+            .green
+            {
+                background-color: #4CAF50;
+
+            }
+           
+        }
+    }
+
+    
+   
+}

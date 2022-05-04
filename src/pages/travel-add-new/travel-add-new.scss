@@ -1,0 +1,220 @@
+page-travel-add-new {
+
+    .top-list {
+        background: #f0efef;
+        border-top: 2px solid #c7c6c6;
+        margin-top:5px ;
+        padding: 10px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        position: sticky;
+        top: 0px;
+        left: 0px;
+        z-index: 2;
+        
+        .top {
+            display: flex;
+            align-items: center;
+            margin: 0px -10px;
+            padding: 0px 10px 10px 10px;
+            justify-content: space-evenly;
+            
+            .content {
+                position: relative;
+                padding-right: 10px;
+                margin-right: 10px;
+                display: flex;
+                align-items: flex-start;
+                flex-direction: column;
+                border-right: 1px dashed #a09e9e;
+                p {
+                    font-size: 13px;
+                    font-weight: 400;
+                    width: 100%;
+                    text-align: center;
+                    line-height: 19px;
+                }
+                span {
+                    font-size: 13px;
+                    color: #000000;
+                    opacity: 0.7;
+                    line-height: 19px;
+                }
+            
+               &:last-child {
+                        margin-right: 0px;
+                        border-right: 0px;
+                        &:after {
+                            background: none;
+                        }
+                    }
+                }
+            }
+        }
+
+    .list-content
+       {
+            margin-top: 20px;
+            // padding: 0px 2px;
+            position: relative;
+            border-bottom: 2px solid #d2d3d3;
+            // background-color: #f7f3f3;
+    
+            .upper-content
+            {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                padding: 0px 10px;
+
+                .left-info 
+                {
+                    margin-right: 10px;
+                    .circle {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 40px;
+                        background: #550e40;
+                        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+                        @extend.dflex;
+                        justify-content: center;
+                        align-items: center;
+                        color: #ffffff;
+                        font-size: 18px;
+                        text-transform: uppercase;
+                        font-weight: 500;
+                      
+                    }
+                }
+
+                .right-info
+                {
+                    p {
+                        display: flex;
+                        font-size: 14px;
+                        color: #000000;
+                        margin-top: 30px;
+                        span
+                        {
+                            margin-left: 10px !important;
+                            font-size: 14px;
+                            color: #000000;
+                            opacity: 0.6;
+                
+                        }
+                    }
+                }
+    
+            }
+            .address
+             {
+                  margin-top: 10px;
+                  padding: 0px 10px;
+                  p {
+                    display: flex;
+                    font-size: 14px;
+                    color: #000000;
+                    margin-top: 30px;
+                        span
+                        {
+                            margin-left: 10px !important;
+                            font-size: 14px;
+                            color: #000000;
+                            opacity: 0.6;
+                
+                        }
+                    }
+              }
+
+              .lower-content
+              {
+                display:flex;
+                margin-top: 5px;
+                justify-content: space-between;
+                position: relative;
+                background: #f0efef;
+                padding: 0px 10px;
+                  
+                 .visit
+                 {
+                     display:flex;
+                     font-size: 14px;
+                     color: #000000;
+                     opacity: 0.7;
+                     margin-top: 5px;
+                     p
+                     {
+                        display: flex;
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #db1515;
+                        margin-top: 30px;
+
+                     }
+                 }
+                 .button-right
+                 {
+                    display: flex;
+                    margin-left: 5px;
+                    button
+                    {
+                        
+                        color: #ffffff;
+                        text-align: center;
+                        font-size: 15px;
+                        font-weight: 500;
+                        height: 30px ;
+                        width: 180px;
+                        i
+                        {
+                            margin-left: -25px !important;
+                            margin-right: 15px !important;
+                            background: #fff;
+                            border: 0px;
+                            color:#979696 ;
+                            align-items: center;
+                            font-size:18px  ;
+
+                        }
+
+                       
+                    }
+                   
+
+                   
+                 }
+                  
+                
+
+              }
+            
+    
+        }  
+
+        .add-btn
+        {
+            button
+            {
+                background-color: #797878 !important;
+            }
+            i 
+            {
+                width: 18px;
+                height: 18px;
+                border-radius: 4px;
+
+            }
+            
+        }
+
+        .remove-btn
+        {
+            button
+            {
+                background-color: #9e1919;
+                
+            }
+        }
+        
+
+}

@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-navbar>
+      <ion-title>Attendance</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+      </ion-refresher-content>
+  </ion-refresher>
+  <div class="capsule-tabsnew">
+      <ul>
+          <li *ngFor="let row of month_array" [ngClass]="{'active' : row.month==current_month}"  (click)="current_month=row.month;current_year=row.year; getAttendanceData()" >{{row.month_name}} {{row.year}}</li>
+          
+      </ul>
+  </div>
+  
+  <div  class="cs-top-list" >
+      <div class="cs-top pb0">
+          <div class="list-content">
+              <p>{{attendance_summery.total_working_days}}</p>
+              <span>Working Days</span>
+          </div>
+          <div class="list-content">
+              <p class="present">{{attendance_summery.present}}</p>
+              <span>Present</span>
+          </div>
+          <div class="list-content">
+              <p class="absent">{{attendance_summery.absent}}</p>
+              <span>Absent</span>
+          </div>
+          <div class="list-content">
+              <p class="leave"> {{attendance_summery.leave}}</p>
+              <span>Leave</span>
+          </div>
+      </div>
+      
+  </div>
+  
+  <div class="collapse" *ngFor="let item of attendance_list;let idx = index;" [ngClass]="{'expand':item.collapse == true,'yellow':item.isOnLeave=='true' && item.start_time==null,'red':item.isHoliday=='false' && item.start_time==null && item.isOnLeave=='false','grey':item.isHoliday=='true'}">
+      <div class="collapse-head" (click)="item.start_time!=null?item.collapse=!item.collapse:''">
+          <div class="date-head">
+              <p>{{item.day}}</p>
+              <span>{{item.date | date:'d MMM y'}}</span>
+          </div>
+          <div class="info" *ngIf="item.work_type=='Working In Territory'">Working</div>
+          <div class="info" *ngIf="item.work_type=='Working Out Of Territory'">Travel</div>
+          <div class="info" *ngIf="item.isHoliday=='true' && item.holidayReason=='Sunday' && item.start_time==null">Weekly Off</div>
+          <div class="info" *ngIf="item.isHoliday=='true' && item.holidayReason!='Sunday' && item.start_time==null">Holiday</div>
+          <div class="info" *ngIf="item.isHoliday=='false' && item.start_time==null && item.isOnLeave=='false'">Absent</div>
+          <div class="info" *ngIf="item.isOnLeave=='true' && item.start_time==null">Leave</div>
+      </div>
+      
+      <div class="collapse-body padding0">
+          <div class="padding10">
+              <div class="two-col">
+                  <div class="col-box">
+                      <p>Punch in</p>
+                      <span>{{item.start_time == null?'NA':item.start_date_time | date:'hh:mm a'}}</span>
+                  </div>
+                  <div class="col-box">
+                      <p>Punch out</p>
+                      <span>{{item.stop_time == null?'NA':item.stop_date_time | date:'hh:mm a'}}</span>
+                  </div>
+              </div>
+              
+              <div class="two-col">
+                  <div class="col-box">
+                      <p>Work Hours</p>
+                      <span>{{item.working_hrs}} Hours</span>
+                  </div>
+                  <div class="col-box">
+                      <p>Total Travel</p>
+                      <span>{{item.km_per_day}} KM</span>
+                  </div>
+              </div>
+              <div class="two-col">
+                  <div class="col-box">
+                      <p>Expenses</p>
+                      <span>&#8377;{{item.Expense}} </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+  </div>
+</ion-content>

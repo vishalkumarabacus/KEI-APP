@@ -1,0 +1,125 @@
+import { Http } from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
+
+@Injectable()
+export class ConstantProvider {
+    public UserLoggedInData: any={}
+    public deviceId:any
+    public tabSelectedOrder:any
+    constructor(public http: Http,public storage:Storage)
+    {
+        console.log('Hello ConstantProvider Provider');
+        this.storage.get('loginData').then((res)=>
+        {
+            if(res.loggedInUserType!='"Employee"')
+            {
+                this.UserLoggedInData=res
+            }
+            
+            console.log(this.UserLoggedInData);
+        })
+        storage.get('loggedInUserType')
+        .then((loggedInUserType) => {
+            console.log(loggedInUserType);
+            var data = {
+                'loggedInUserType':loggedInUserType
+            }
+            Object.assign(this.UserLoggedInData, data)
+            console.log(this.UserLoggedInData);
+        });
+        storage.get('token_value')
+        .then((val) => {
+            var data
+            console.log(val);
+            if(val == '' || val == null || val == undefined)
+            {
+                data = {
+                    'userLoggedInChk':false
+                }
+            }
+            else
+            {
+                data = {
+                    'userLoggedInChk':true
+                }
+            }
+            console.log(data);
+            
+            Object.assign(this.UserLoggedInData, data)
+            console.log(this.UserLoggedInData);
+        });
+    }
+    public connectionChk =''  
+    public networkType =''
+
+    public rootUrl2: string ='https://apps.abacusdesk.com/kei/api/index.php/'
+    public rootUrl: string =  'https://apps.abacusdesk.com/kei/api/index.php/app/'
+    public rootUrl1: string =  'https://apps.abacusdesk.com/kei/'
+    public rootUrl3: string =  'https://apps.abacusdesk.com/kei/api/index.php/'
+
+    public rootUrlSfa: string =  'https://apps.abacusdesk.com/kei/api/index.php/app/'
+    public server_url: string = this.rootUrl1 + 'index.php/app/';
+    public upload_url: string = this.rootUrl1 + 'uploads/';
+    public upload_url1: string = 'https://apps.abacusdesk.com/kei/api/uploads/';
+    public upload_url2: string = 'https://apps.abacusdesk.com/kei/uploads/order-invoice/';
+    public img_url: string =  'https://apps.abacusdesk.com/kei/api/'
+
+
+
+
+    // public rootUrl2: string ='http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/'
+    // public rootUrl: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/app/'
+    // public rootUrl1: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/'
+    // public rootUrl3: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/'
+
+    // public rootUrlSfa: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/app/'
+    // public server_url: string = this.rootUrl1 + 'index.php/app/';
+    // public upload_url: string = this.rootUrl1 + 'uploads/';
+    // public upload_url1: string = 'http://phpstack-83335-2278116.cloudwaysapps.com/api/uploads/';
+    // public upload_url2: string = 'http://phpstack-83335-2278116.cloudwaysapps.com/uploads/order-invoice/';
+    // public img_url: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/'
+    public backButton = 0;
+    
+    setData()
+    {
+        console.log('called')
+        this.storage.get('loginData').then((res)=>
+        {
+            if(res.loggedInUserType!='"Employee"')
+            {
+                this.UserLoggedInData=res
+            }
+            
+            console.log(this.UserLoggedInData);
+        })
+        this.storage.get('loggedInUserType')
+        .then((loggedInUserType) => {
+            console.log(loggedInUserType);
+            var data = {
+                'loggedInUserType':loggedInUserType
+            }
+            Object.assign(this.UserLoggedInData, data)
+            console.log(this.UserLoggedInData);
+        });
+        this.storage.get('token_value')
+        .then((val) => {
+            var data
+            console.log(val);
+            if(val == '' || val == null || val == undefined)
+            {
+                data = {
+                    'userLoggedInChk':false
+                }
+            }
+            else
+            {
+                data = {
+                    'userLoggedInChk':true
+                }
+            }
+            Object.assign(this.UserLoggedInData, data)
+            console.log(this.UserLoggedInData);
+        });
+    }
+}
