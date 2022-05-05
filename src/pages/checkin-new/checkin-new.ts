@@ -16,6 +16,11 @@ export class CheckinNewPage {
   userId:any;
   checkinData:any={};
   actual:any=true;
+
+  travelPlan: string = "actual_travel";
+
+
+
   traveled:any=false
   checkin_count_data : any = {};
   constructor(public navCtrl: NavController, 
