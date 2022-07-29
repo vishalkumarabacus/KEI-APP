@@ -371,11 +371,11 @@
         <div class="edit ml0 mr0">
             <ion-list>
                 <ion-item class="cs-textarea1 " [ngClass]="{'cs-error': (f.submitted && description?.invalid)}">
-                    <ion-label floating><span>Description *</span></ion-label>
-                    <ion-textarea name="description" #description="ngModel" [(ngModel)]="checkin.description"  placeholder="Enter Description" required></ion-textarea>
+                    <ion-label floating><span>Visit Remark *</span></ion-label>
+                    <ion-textarea name="description" #description="ngModel" [(ngModel)]="checkin.description"  placeholder="Enter Visit Remark" required></ion-textarea>
                 </ion-item>
                 
-                <p class="error-line relative"  *ngIf="f.submitted && description?.invalid" >Description is Required!</p>
+                <p class="error-line relative"  *ngIf="f.submitted && description?.invalid" >Visit Remark is Required!</p>
             </ion-list>
         </div>
         

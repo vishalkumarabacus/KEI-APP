@@ -365,11 +365,20 @@ checkin_out:any
         
 
         this.checkinData=result['data'];
+       
+
         this.attendancelist=result['data']['attendance'];
         console.log(this.attendancelist)
         this.expenselist=result['data']['expense_data'];
 
         this.checkinlist= this.checkinData.actual_traval;
+        if(result['data']['attendance'].distance_from_last_checkin!=''){
+          console.log("test by aamir");
+          
+          this.checkinData.actual_travel.push({'km':result['data']['attendance'].distance_from_last_checkin});
+          console.log(this.checkinData.actual_travel);
+          
+          }
         this.serve.dismiss();
 
 if(result['data']['travel_plan']!=null){

@@ -276,7 +276,7 @@
             <li>
               <span class="vistit-count">
                 <i class="material-icons">location_on</i>
-                <span class="km">{{attendancelist.distance_from_last_checkin}} KM</span>
+                <!-- <span class="km">{{attendancelist.distance_from_last_checkin}} KM</span> -->
 
               </span>
               <p style="font-size:12px"*ngIf="checkinData.actual_travel!=null&&attendancelist.stop_time !='00:00:00'"><strong>Day Stop</strong> ({{attendancelist.stop_time_withDate | date:'hh:mm a'}} -{{attendancelist.distance_from_last_checkin}} km )<span  style="font-size:12px">-{{attendancelist.stop_address }}</span>  </p>
