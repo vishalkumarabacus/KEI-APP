@@ -14,22 +14,38 @@
                         <ion-select  placeholder="Select Type" name="type" required #type="ngModel"  [(ngModel)]="data.type">
                             <ion-option value="Full Day">Full Day</ion-option>
                             <ion-option value="Half Day">Half Day</ion-option>
+                            <ion-option value="Short Leave(2hrs)">Short Leave(2hrs)</ion-option>
+
+                        </ion-select>
+                    </ion-item >
+                    <p *ngIf="f1.submitted && type?.invalid"  class="error-line relative">Leave Type is Required!</p>
+                    <ion-item  class="cs-normal-select mt16 mb0" [ngClass]="{'cs-error':f1.submitted && subject?.invalid}" *ngIf="data.type!='Short Leave(2hrs)'">
+                        <ion-label>Leave Type </ion-label>
+                        <ion-select  placeholder="Select Type" name="type" required #leave_type="ngModel"  [(ngModel)]="data.leave_type">
+                        <ion-option *ngFor="let list of leave_list" [value]="list.title">{{list.title}}</ion-option>
+
+                            
                         </ion-select>
                     </ion-item>
-                    <p *ngIf="f1.submitted && type?.invalid"  class="error-line relative">Leave Type is Required!</p>
-                    
-                    <ion-item [ngClass]="{'cs-error':f1.submitted && subject?.invalid}">
+                    <ion-item  class="cs-normal-select mt16 mb0"*ngIf="data.type=='Short Leave(2hrs)'">
+                        <ion-label>Select type</ion-label>
+                        <ion-select  placeholder="Short Leave Type" name="short_leave_type" required #short_leave_type="ngModel"  [(ngModel)]="data.short_leave_type">
+                            <ion-option value="Morning">Morning</ion-option>
+                            <ion-option value="Evening">Evening</ion-option>
+                        </ion-select>
+                    </ion-item>
+                    <!-- <ion-item [ngClass]="{'cs-error':f1.submitted && subject?.invalid}">
                         <ion-label floating><span>Subject *</span></ion-label>
                         <ion-input type="text" style="height: 28px;" name="subject" placeholder="Enter Subject" [(ngModel)]="data.subject" #subject="ngModel" [ngClass]="{'is-invalid':f1.submitted && subject?.invalid}" required></ion-input>
-                    </ion-item>
+                    </ion-item> -->
                     
-                    <p *ngIf="f1.submitted && subject?.invalid"  class="error-line relative">Subject is Required!</p>
+                    <!-- <p *ngIf="f1.submitted && subject?.invalid"  class="error-line relative">Subject is Required!</p> -->
                     
-                    <ng-container *ngIf="data.type=='Full Day'">
+                    <ng-container *ngIf="data.type=='Full Day'||data.type=='Short Leave(2hrs)'">
                         
                         <ion-item [ngClass]="{'cs-error':f1.submitted && leave_start_date?.invalid}" >
                             <ion-label floating><span>Leave Start Date *</span></ion-label>
-                            <ion-datetime display-format="MMM DD, YYYY" placeholder ="Select Leave Start Date" min="{{today_date}}" name="leave_start_date" [(ngModel)]="data.leave_start_date" #leave_start_date="ngModel" [ngClass]="{'is-invalid':f1.submitted && leave_start_date?.invalid}" required></ion-datetime>
+                            <ion-datetime display-format="MMM DD, YYYY" placeholder ="Select Leave Start Date" name="leave_start_date" [(ngModel)]="data.leave_start_date" #leave_start_date="ngModel" [ngClass]="{'is-invalid':f1.submitted && leave_start_date?.invalid}" required></ion-datetime>
                         </ion-item>
                         
                         <p *ngIf="f1.submitted && leave_start_date?.invalid"  class="error-line relative">Leave Start Date is Required!</p>

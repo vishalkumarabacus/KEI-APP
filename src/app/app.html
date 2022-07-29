@@ -34,9 +34,15 @@
                 <a href="#">{{p.title}}</a>
             </div>
         </span>
+      
     </ion-content>
     
     <ion-footer style="background: #fff !important;">
+
+        <div class="app_version"  >
+            <p>V-{{app_version}}</p>
+        </div>
+
         <div class="btns" *ngIf="!user_logged_in" menuClose  (click)="login()">
             <button class ="login" >
                 <div class="lf-btn">

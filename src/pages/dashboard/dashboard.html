@@ -37,7 +37,7 @@
                 <p *ngIf="user_data.mobile">+91 {{user_data.mobile}}</p>
             </div>
             <div class="srt_button">
-                <button ion-button class="str" *ngIf="(last_attendence_data.start_time == '') && (last_attendence_data.stop_time == '' )" (click)="openModal('start')">
+                <button ion-button class="str" *ngIf="(last_attendence_data.start_time == '') && (last_attendence_data.stop_time == '' )" (click)="modal3()">
                     <div class="cs-left">
                         <div class="icon"><img src="assets/imgs/wrk_time-start.svg" alt=""></div>
                         <div class="timeclass">
@@ -67,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="product-option  pt5">
+    <!-- <div class="product-option  pt5">
 
         <div class="main-box" (click)="goToTravel()">
             <div class="product-box"style="background-color:blue">
@@ -135,7 +135,7 @@
             </div>
            
         </div>
-    </div>
+    </div> -->
     <ng-container *ngIf="user_data.user_type!='OFFICE'">
         
         <div class="product-option pt5">
@@ -145,7 +145,8 @@
                     <img src="assets/imgs/icon.png">
                 </div>
                 <div class="heading"  (click)="goToMainDistributorListPage(row.type)">
-                    <div class="count"><span>{{row.count}}</span></div>
+                    <div class="count"><span style="width: 65%;
+                        border-radius: 10px;">{{row.count}}</span></div>
                     <h4>{{row.module_name}}</h4>
                 </div>
             </div>
@@ -228,7 +229,7 @@
             
            
 
-            <div class="go-btn new mb16" (click)="(last_attendence_data.start_time != '0000-00-00 00:00:00' && last_attendence_data.start_time != '') ? start_visit() : show_Error() ">
+            <div class="go-btn new mb16" (click)="start_visit() ">
                 <div class="g-left">
                     <p>{{today_checkin.today_checkin}}</p>
                     <p>Today Check In</p>
@@ -254,7 +255,7 @@
             <div class="g-right">
                 <div class="g-content">
                     <p>Secondary Order</p>
-                    <p>&#x20B9; <span>{{total_secondary_order.secondary_order_sum |number:'1.0-0'}}/-</span></p>
+                    <!-- <p>&#x20B9; <span>{{total_secondary_order.secondary_order_sum |number:'1.0-0'}}/-</span></p> -->
                 </div>
                 <div class="g-count">
                     <i class="material-icons">keyboard_arrow_right</i>
@@ -272,7 +273,7 @@
                 <div class="g-right">
                     <div class="g-content">
                         <p>Primary Order</p>
-                        <p>&#x20B9; <span>{{total_primary_order.primary_order_sum |number:'1.0-0'}}/-</span></p>
+                        <!-- <p>&#x20B9; <span>{{total_primary_order.primary_order_sum |number:'1.0-0'}}/-</span></p> -->
                     </div>
                     <div class="g-count">
                         <i class="material-icons">keyboard_arrow_right</i>
@@ -316,9 +317,43 @@
            
         </div>
     </div> -->
+  <button *ngIf="this.team_count!=null" ion-button class="cs-btn">Waiting For The Approval</button>  
+
+    <div class="product-option pt5"*ngIf="this.team_count!=null">
+            
+    
+        
+        <div class="main-box" (click)="goToTeam()">
+            <div class="product-box">
+                <img src="assets/imgs/leads.svg">
+            </div>
+            <div class="heading">
+                <div class="count"><span>{{leaveany}}</span></div>
+                <h4>Leaves</h4>
+            </div>
+        </div>
+          <div class="main-box" (click)="goToTravel()">
+            <div class="product-box">
+                <img src="assets/imgs/travel.svg">
+            </div>
+            <div class="heading">
+                <div class="count"><span>{{Approval_array}}</span></div>
+                <h4>Travel Plan</h4>
+            </div>
+        </div>
+        <div class="main-box" (click)="goToExpense()">
+            <div class="product-box">
+                <img src="assets/imgs/expense.svg">
+            </div>
+            <div class="heading">
+                <div class="count"><span>{{expense}}</span></div>
+                <h4>Expense</h4>
+            </div>
+        </div>
+    </div> 
      <!-- <div class="dash-tabs">
         <ul>
-            <li (click)="goToLead()">
+            <li (click)="goToTeam()">
                 <div class="d-img">
                     <img src="assets/imgs/leads.svg">
                 </div>

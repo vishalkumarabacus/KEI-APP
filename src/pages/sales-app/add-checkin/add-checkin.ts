@@ -34,9 +34,13 @@ export class AddCheckinPage {
   addNewDealer:any=false;
   distributorList: any = [];
   checkin_data:any = [];
-  
+  filter:any=[]
+  filter_category_active:any = false;
+  filter_active:any = false;
   AddCheckinForm:FormGroup;
-  
+  load_data:any = "0";
+  limit=0;
+  flag:any='';
   customer_type:any = {};
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
@@ -47,9 +51,11 @@ export class AddCheckinPage {
     public formBuilder: FormBuilder,
     public platform: Platform, 
     public locationAccuracy: LocationAccuracy,
+    
     // private  checkinListPage:CheckinListPage,
     public geolocation: Geolocation,public storage:Storage) {
       
+      this.getFilterData()
       this.checkUserLocation()
       this.data = {};
       
@@ -93,7 +99,7 @@ export class AddCheckinPage {
         if(userType=='OFFICE')
         {
           this.data.network=3;
-          this.get_network_list(this.data.network)
+          this.get_network_list(this.data.network,'')
           this.userType  = userType
         }
         
@@ -105,14 +111,84 @@ export class AddCheckinPage {
     
     loading:any;
     networkType:any=[]
-        getNetworkType(){
-            this.service.addData3('', "Dashboard/distributionNetworkModule").then((result => {
-              console.log(result);
-              this.networkType = result['modules'];
-            }))
-          }
+    otherType:any=[]
+
+    // othertype=[{module_name:'Other',type:'11'}]
+    getNetworkType(){
+      this.service.addData3({'type':'checkin'}, "Dashboard/allNetworkModule").then((result => {
+        console.log(result);
+        this.networkType = result['modules'];
+          // this.networkType.push(this.othertype[0])
+          console.log(this.networkType);
+          // console.log(this.othertype);
+
+
+        
+      }))
+    }
+    getotherType(data){
+      this.service.addData3({'type':data}, "Dashboard/others_type").then((result => {
+        console.log(result);
+        this.otherType = result['modules'];
+          // this.networkType.push(this.othertype[0])
+          console.log(this.networkType);
+          this.open();
+
+          // console.log(this.othertype);
+
+
+        
+      }))
+    }
+    category_list:any=[]
+    getFilterData()
+    {
+      
+      
+      this.category_list = [{name:'Scheduled'},{name:'Unscheduled'}];
+      
+      this.category_list.map((x:any)=>{
+        x.checked = false;
+      });
+    }
+    typeboolean:any
+    test(data){
+      console.log(data)
+
+      if(data!='3'&&data!='11'){
+        this.string=undefined
+        this.get_network_list(data,'')
+
+        this.typeboolean =false
+      
+      }
+      if(data!='3'&&data=='11'){
+        this.string=undefined
+        this.getotherType(data)
+
+        this.typeboolean =false
+      
+      }
+      console.log(this.typeboolean)
+      
+      if(data=='3' &&data!='11'){
+        
+        
+        console.log(this.typeboolean)
+        
+        this.typeboolean =true
+        // this.get_network_list(data)
+        
+        console.log(data)
+        console.log(this.typeboolean)
+        
+      }
+    }
     
     
+    
+    
+  
     presentToast() {
       let toast = this.toastCtrl.create({
         message: 'Visit Started Successfully',
@@ -127,22 +203,42 @@ export class AddCheckinPage {
     
     
     distributor_network_list:any = [];
-    
-    get_network_list(network_type)
+    string:any={}
+    search:any={}
+
+    test66(event,network){
+console.log(event.text);
+      this.search=event.text
+console.log(this.search);
+this.get_network_list(network,this.search)
+
+    }
+    get_network_list(network_type,search)
     {
-      this.addNewDealer=false
+      
+      
       this.data.type_name = {};
-      this.load = "0";
+      // this.load = "0";
       
       console.log(network_type);
-      
       if(network_type != 'Other')
       {
-       this.service.show_loading()
-        this.service.addData({'type':network_type},'Distributor/get_type_list').then((result)=>{
+        // this.service.show_loading()
+        this.service.addData({'search':search,'filter':this.string, 'type':network_type},'Distributor/get_type_list').then((result)=>{
           console.log(result);
           this.distributor_network_list = result;
-          this.service.dismiss();
+          for(let i = 0 ;i<this.distributor_network_list.length;i++){
+            if(this.distributor_network_list[i].name!=""||this.distributor_network_list[i].mobile!=""){
+              this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name+' '+'('+this.distributor_network_list[i].name+'  '+this.distributor_network_list[i].mobile+')'
+            }
+            if(this.distributor_network_list[i].name==""&&this.distributor_network_list[i].mobile==""){
+              this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name
+            }
+          }
+          this.filter=[]
+      // this.load = "1";
+
+          // this.service.dismiss();
           this.open();
         });
       }
@@ -150,7 +246,27 @@ export class AddCheckinPage {
       
       
     }
-    
+    loadData(infiniteScroll,network_type)
+    {
+      console.log('loading');
+      
+      this.service.addData({'limit':this.distributor_network_list.length,'filter':this.string, 'type':network_type},'Distributor/get_type_list').then( result=>
+        {
+          console.log(result);
+          if(result=='')
+          {
+            this.flag=1;
+          }
+          else
+          {
+            setTimeout(()=>{
+              this.distributor_network_list=this.distributor_network_list.concat(result);
+              console.log('Asyn operation has stop')
+              infiniteScroll.complete();
+            },1000);
+          }
+        });
+    }
     open()
     {
       this.selectComponent.open();
@@ -173,6 +289,7 @@ export class AddCheckinPage {
     type_name:any={};
     
     other_name:any = '';
+    dr_name:any
     other(name,network,type_name)
     {
       this.addNewDealer=false
@@ -183,7 +300,7 @@ export class AddCheckinPage {
       
       this.type_name = type_name;
       this.load = "1";
-      
+      this.dr_name=name
       console.log(name);
       console.log(network);
       if(name == 'Add New Channel Partner')
@@ -196,11 +313,46 @@ export class AddCheckinPage {
         this.navCtrl.push(AddDealerPage,{'type': network});
       }
       
-      if(name == 'Add New Retailer')
+      if(name == 'Prospective Retailer')
       {
         this.addNewDealer = true;
       }
-      
+      if(name == 'Prospective Distributor')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Dealer')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Project')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Contractor')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Architect')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Constructor')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Interior Designer')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Electrician')
+      {
+        this.addNewDealer = true;
+      }
+      if(name == 'Prospective Direct Customer')
+      {
+        this.addNewDealer = true;
+      }
     }
     
     check_num(mobile)
@@ -217,12 +369,15 @@ export class AddCheckinPage {
       }
     }
     checkExist=false
+    error:any
     check_mobile_existence(mobile)
     {   
       // this.data.mobile=mobile
       
       this.service.show_loading()
       this.service.addData({'mobile':mobile},'Enquiry/check_mobile_existenceLead').then((result)=>{
+        this.error=result['data']
+        console.log(this.error);
         
         this.service.dismiss()
         
@@ -273,39 +428,39 @@ export class AddCheckinPage {
       startVisit()
       {
         this.platform.ready().then(() => {
- 
+          
           var whiteList = ['com.package.example','com.package.example2'];
-     
+          
           (<any>window).gpsmockchecker.check(whiteList, (result) => {
             
             console.log(result);
-     
+            
             if(result.isMock){
-                
-                console.log("DANGER!! Mock is in use");
-                console.log("Apps that use gps mock: ");
-                let alert = this.alertCtrl.create({
-                  title: 'Alert!',
-                  subTitle: 'Please Remove Thirt Party Location Apps',
-                  buttons: [
-                      {
-                          text: 'Ok',
-                          handler: () => 
-                          {
-                              
-                          }
-                      }
-                  ]
+              
+              console.log("DANGER!! Mock is in use");
+              console.log("Apps that use gps mock: ");
+              let alert = this.alertCtrl.create({
+                title: 'Alert!',
+                subTitle: 'Please Remove Thirt Party Location Apps',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => 
+                    {
+                      
+                    }
+                  }
+                ]
               });
               alert.present();
-                console.log(result.mocks);
+              console.log(result.mocks);
             }
             else
             {
               console.log(this.distribution_data);
-        
-            this.service.show_loading()
-            
+              
+              this.service.show_loading()
+              
               this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
                 () => {
                   
@@ -412,46 +567,46 @@ export class AddCheckinPage {
                 
                 
                 
-            }
+              }
+              
+              
+              
+            }, (error) => console.log(error));
+            
+          });
           
-      
-      
-          }, (error) => console.log(error));
-          
-        });
-     
           
         }
         startDealerVisit()
         {
-
+          
           this.platform.ready().then(() => {
- 
+            
             var whiteList = ['com.package.example','com.package.example2'];
-       
+            
             (<any>window).gpsmockchecker.check(whiteList, (result) => {
               
               console.log(result);
-       
+              
               if(result.isMock){
-                  
-                  console.log("DANGER!! Mock is in use");
-                  console.log("Apps that use gps mock: ");
-                  let alert = this.alertCtrl.create({
-                    title: 'Alert!',
-                    subTitle: 'Please Remove Thirt Party Location Apps',
-                    buttons: [
-                        {
-                            text: 'Ok',
-                            handler: () => 
-                            {
-                                
-                            }
-                        }
-                    ]
+                
+                console.log("DANGER!! Mock is in use");
+                console.log("Apps that use gps mock: ");
+                let alert = this.alertCtrl.create({
+                  title: 'Alert!',
+                  subTitle: 'Please Remove Thirt Party Location Apps',
+                  buttons: [
+                    {
+                      text: 'Ok',
+                      handler: () => 
+                      {
+                        
+                      }
+                    }
+                  ]
                 });
                 alert.present();
-                  console.log(result.mocks);
+                console.log(result.mocks);
               }
               else
               {
@@ -520,44 +675,44 @@ export class AddCheckinPage {
                     
                     toast.present();
                   });
-              }
+                }
+                
+                
+                
+              }, (error) => console.log(error));
+              
+            });
             
-        
-        
-            }, (error) => console.log(error));
-            
-          });
-        
           }
           startOtherVisit()
           {
             this.platform.ready().then(() => {
- 
+              
               var whiteList = ['com.package.example','com.package.example2'];
-         
+              
               (<any>window).gpsmockchecker.check(whiteList, (result) => {
                 
                 console.log(result);
-         
+                
                 if(result.isMock){
-                    
-                    console.log("DANGER!! Mock is in use");
-                    console.log("Apps that use gps mock: ");
-                    let alert = this.alertCtrl.create({
-                      title: 'Alert!',
-                      subTitle: 'Please Remove Thirt Party Location Apps',
-                      buttons: [
-                          {
-                              text: 'Ok',
-                              handler: () => 
-                              {
-                                  
-                              }
-                          }
-                      ]
+                  
+                  console.log("DANGER!! Mock is in use");
+                  console.log("Apps that use gps mock: ");
+                  let alert = this.alertCtrl.create({
+                    title: 'Alert!',
+                    subTitle: 'Please Remove Thirt Party Location Apps',
+                    buttons: [
+                      {
+                        text: 'Ok',
+                        handler: () => 
+                        {
+                          
+                        }
+                      }
+                    ]
                   });
                   alert.present();
-                    console.log(result.mocks);
+                  console.log(result.mocks);
                 }
                 else
                 {
@@ -577,8 +732,8 @@ export class AddCheckinPage {
                           if(result == 'success')
                           {
                             
-                          this.navCtrl.remove(2,1,{animate:false});
-                          this.navCtrl.pop({animate:false});
+                            this.navCtrl.remove(2,1,{animate:false});
+                            this.navCtrl.pop({animate:false});
                             this.service.dismiss();
                             this.pending_checkin();
                             if(this.checkin_data != null){
@@ -621,45 +776,45 @@ export class AddCheckinPage {
                       
                       toast.present();
                     });
-                }
+                  }
+                  
+                  
+                  
+                }, (error) => console.log(error));
+                
+              });
               
-          
-          
-              }, (error) => console.log(error));
-              
-            });
-        
             }
             userCurrentLocation:any
             checkUserLocation()
             {
               this.platform.ready().then(() => {
- 
+                
                 var whiteList = ['com.package.example','com.package.example2'];
-           
+                
                 (<any>window).gpsmockchecker.check(whiteList, (result) => {
                   
                   console.log(result);
-           
+                  
                   if(result.isMock){
-                      
-                      console.log("DANGER!! Mock is in use");
-                      console.log("Apps that use gps mock: ");
-                      let alert = this.alertCtrl.create({
-                        title: 'Alert!',
-                        subTitle: 'Please Remove Thirt Party Location Apps',
-                        buttons: [
-                            {
-                                text: 'Ok',
-                                handler: () => 
-                                {
-                                    
-                                }
-                            }
-                        ]
+                    
+                    console.log("DANGER!! Mock is in use");
+                    console.log("Apps that use gps mock: ");
+                    let alert = this.alertCtrl.create({
+                      title: 'Alert!',
+                      subTitle: 'Please Remove Thirt Party Location Apps',
+                      buttons: [
+                        {
+                          text: 'Ok',
+                          handler: () => 
+                          {
+                            
+                          }
+                        }
+                      ]
                     });
                     alert.present();
-                      console.log(result.mocks);
+                    console.log(result.mocks);
                   }
                   else
                   {
@@ -715,14 +870,14 @@ export class AddCheckinPage {
                         
                         toast.present();
                       });
-                  }
+                    }
+                    
+                    
+                    
+                  }, (error) => console.log(error));
+                  
+                });
                 
-            
-            
-                }, (error) => console.log(error));
-                
-              });
-          
               }
               
               pending_checkin()
@@ -737,4 +892,4 @@ export class AddCheckinPage {
               
               
             }
-            
+                

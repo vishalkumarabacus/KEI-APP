@@ -67,7 +67,7 @@ export class LmsActivityAddPage {
     }
     networkType:any=[]
     getNetworkType(){
-        this.db.addData3('', "Dashboard/distributionNetworkModule").then((result => {
+        this.db.addData('', "lead/leadNetworkModule").then((result => {
           console.log(result);
           this.networkType = result['modules'];
         }))

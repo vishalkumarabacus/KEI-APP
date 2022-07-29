@@ -17,7 +17,7 @@ export class LmsLeadAddPage {
   
   constructor(public navCtrl: NavController, public navParams: NavParams,private camera: Camera,public db:MyserviceProvider,private alertCtrl: AlertController,public loadingCtrl: LoadingController) {
     this.getNetworkType()
-
+this.source()
 
   }
   
@@ -98,7 +98,7 @@ console.log(this.form.doa);
   }
   networkType:any=[]
   getNetworkType(){
-      this.db.addData3('', "Dashboard/distributionNetworkModule").then((result => {
+      this.db.addData('', "lead/leadNetworkModule").then((result => {
         console.log(result);
         this.networkType = result['modules'];
       }))
@@ -150,7 +150,52 @@ console.log(this.form.doa);
       this.check_mobile_existence(this.form.mobile)
     }
   }
-  
+  city_list:any=[]
+  getCityList()
+  {
+    this.form.city1 = [];
+    console.log(this.form);
+    // this.show_loading()
+    
+    this.db.addData({'district_name':this.form.district,'state_name':this.form.state},'dealerData/getCity').then((result)=>{
+      // this.loading.dismiss()
+      console.log(result);
+      this.city_list=result['city'];
+      
+      // if(this.navParams.get('from') == 'travel detail page' && this.navParams.get('travel_id') && this.travel_data.travel_type == 'Area Visit'){
+      //   for(let tmp_index = 0 ;tmp_index<this.travel_plan_detail_for_update.selected_data.length ; tmp_index++){
+      //     var Index = (this.city_list.findIndex(row=>row.city == this.travel_plan_detail_for_update.selected_data[tmp_index].city));
+      //     console.log(Index);
+      //     if(Index != -1){
+      //       this.travel_data.city.push(this.city_list[Index]);
+      //     }
+        
+      //   }
+      //   console.log(this.travel_data);
+      // }
+      
+    // },err=>
+    // {
+    //   this.loading.dismiss()
+      
+    });
+  }
+  source_list:any=[]
+  source(){
+    this.db.addData3({},'Lead/lead_source_list').then((result)=>{
+      console.log(result);
+      
+     this.source_list=result['lead_source_list']
+     
+      // this.db.dismiss();
+      
+    },err=>
+    {
+      this.db.dismiss()
+      
+      // this.db.presentToast('Failed To Get ')
+    }) 
+  }
   check_mobile_existence(mobile)
   {   
     // this.form={}
@@ -205,14 +250,16 @@ console.log(this.form.doa);
       
       this.form1.state=this.form.state;
       this.form1.district=this.form.district;
+      this.form1.city=this.form.city1;
+
       console.log(this.form1);
       
 
       // this.db.addData3(this.form1,"User/city_user_list")
-      this.db.addData3(this.form1,"User/area_user_list")
+      this.db.addData(this.form1,"dealerData/getArea")
       .then(resp=>{
         console.log(resp);
-        this.area_list = resp['query']['area'];
+        this.area_list = resp['area'];
         console.log(this.area_list);
         this.form.area='';
         // this.district_list = resp['district_list'];
@@ -310,7 +357,7 @@ console.log(this.form.doa);
         console.log(resp);
         this.db.dismiss()
         
-        if(resp['msg'] == 'success')
+        if(resp == 'Success')
         {
           this.db.presentToast("Success!");
           this.navCtrl.pop();

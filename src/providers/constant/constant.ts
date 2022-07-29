@@ -53,34 +53,35 @@ export class ConstantProvider {
     public connectionChk =''  
     public networkType =''
 
-    public rootUrl2: string ='https://apps.abacusdesk.com/kei/api/index.php/'
-    public rootUrl: string =  'https://apps.abacusdesk.com/kei/api/index.php/app/'
-    public rootUrl1: string =  'https://apps.abacusdesk.com/kei/'
-    public rootUrl3: string =  'https://apps.abacusdesk.com/kei/api/index.php/'
+    // public rootUrl2: string ='https://apps.abacusdesk.com/kei/api/index.php/'
+    // public rootUrl: string =  'https://apps.abacusdesk.com/kei/api/index.php/app/'
+    // public rootUrl1: string =  'https://apps.abacusdesk.com/kei/'
+    // public rootUrl3: string =  'https://apps.abacusdesk.com/kei/api/index.php/'
 
-    public rootUrlSfa: string =  'https://apps.abacusdesk.com/kei/api/index.php/app/'
-    public server_url: string = this.rootUrl1 + 'index.php/app/';
-    public upload_url: string = this.rootUrl1 + 'uploads/';
-    public upload_url1: string = 'https://apps.abacusdesk.com/kei/api/uploads/';
-    public upload_url2: string = 'https://apps.abacusdesk.com/kei/uploads/order-invoice/';
-    public img_url: string =  'https://apps.abacusdesk.com/kei/api/'
-
-
-
-
-    // public rootUrl2: string ='http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/'
-    // public rootUrl: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/app/'
-    // public rootUrl1: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/'
-    // public rootUrl3: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/'
-
-    // public rootUrlSfa: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/index.php/app/'
+    // public rootUrlSfa: string =  'https://apps.abacusdesk.com/kei/api/index.php/app/'
     // public server_url: string = this.rootUrl1 + 'index.php/app/';
     // public upload_url: string = this.rootUrl1 + 'uploads/';
-    // public upload_url1: string = 'http://phpstack-83335-2278116.cloudwaysapps.com/api/uploads/';
-    // public upload_url2: string = 'http://phpstack-83335-2278116.cloudwaysapps.com/uploads/order-invoice/';
-    // public img_url: string =  'http://phpstack-83335-2278116.cloudwaysapps.com/api/'
+    // public upload_url1: string = 'https://apps.abacusdesk.com/kei/api/uploads/';
+    // public upload_url2: string = 'https://apps.abacusdesk.com/kei/uploads/order-invoice/';
+    // public img_url: string =  'https://apps.abacusdesk.com/kei/api/'
+
+    // public backButton = 0;
+
+
+
+    public rootUrl2: string ='https://fsa.kei-ind.in/api/index.php/'
+    public rootUrl: string =  'https://fsa.kei-ind.in/api/index.php/app/'
+    public rootUrl1: string =  'https://fsa.kei-ind.in/api/'
+    public rootUrl3: string =  'https://fsa.kei-ind.in/api/index.php/'
+
+    public rootUrlSfa: string =  'https://fsa.kei-ind.in/api/index.php/app/'
+    public server_url: string = this.rootUrl1 + 'index.php/app/';
+    public upload_url: string = this.rootUrl1 + 'uploads/';
+    public upload_url1: string = 'https://fsa.kei-ind.in/api/uploads/';
+    public upload_url2: string = 'https://fsa.kei-ind.in/uploads/order-invoice/';
+    public img_url: string =  'https://fsa.kei-ind.in/api/'
     public backButton = 0;
-    
+
     setData()
     {
         console.log('called')

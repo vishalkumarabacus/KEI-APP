@@ -28,6 +28,7 @@ secondary: #32db64,
 danger: #55a9e4,
 light: #f4f4f4,
 dark: #222,
+white: #ffffff,
 warn: #55a9e4);
 $avatar-offset: 52+16;
 // App iOS Variables
@@ -1304,6 +1305,18 @@ ul {
                 }
             }
         }
+        &:nth-child(5) {
+            &:before {
+                background: #28288e;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #33336a;
+                    }
+                }
+            }
+        }
     }
     .heading {
         margin: 10px 0px;
@@ -1430,7 +1443,15 @@ ul {
         }
     }
 }
+.app_version {
 
+    padding:5px 10px;
+
+    p {
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
 ion-tabs {
     .tabbar {
         a {
@@ -9684,7 +9705,7 @@ ion-list {
 
 ion-header {
     .toolbar-background {
-        background: linear-gradient(90deg, #55a9e4) !important;
+        background: linear-gradient(90deg, #55a9e4);
         margin: 0 !important;
     }
     h1,

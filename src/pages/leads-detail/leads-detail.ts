@@ -89,7 +89,7 @@ export class LeadsDetailPage {
     
     lead_detail()
     {
-       this.service.show_loading()
+    //    this.service.show_loading()
         console.log(this.search);
         
         this.service.addData({'dr_id':this.dr_id,search:this.search},'Distributor/lead_detailexec').then((result)=>{
@@ -99,7 +99,7 @@ export class LeadsDetailPage {
             // this.achievement=result['total_achivement'];
             // this.total_checkin = result['total_checkin'];
             console.log(this.distributor_detail);
-            this.service.dismiss();
+            // this.service.dismiss();
         });
     }
     distributor_detaill:any={}
@@ -144,13 +144,13 @@ this.fileOpener.open(url, 'application/pdf')
     {
        
         this.distributor_detaill.orderType = type
-        this.service.show_loading()
+        // this.service.show_loading()
 
         console.log(this.search);
         
         this.service.addData({'dr_id':this.dr_id,search:this.search},'Distributor/dr_detail').then((result)=>{
             console.log(result);
-       this.service.dismiss()
+    //    this.service.dismiss()
 
             this.distributor_detail = result['result'];
             this.document = result['result']['image'];

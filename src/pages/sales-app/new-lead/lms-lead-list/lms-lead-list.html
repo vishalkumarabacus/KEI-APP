@@ -53,14 +53,16 @@
             </div>
             <div class="mid">
                 <div class="content-info" (click)="lead_detail(data.id)">
-                    <div class="left-info" >
+                    <div class="left-info"*ngIf="data.type!=10" >
                         <div class="circle" >{{data.company_name.substring(0,1).toUpperCase()}}</div>
                     </div>
-                    
+                    <div class="left-info"*ngIf="data.type==10" >
+                        <div class="circle" >{{data.name.substring(0,1).toUpperCase()}}</div>
+                    </div>
                     <div class="right-info">
                         <!-- (Verified) -->
                         <!-- *ngIf="data.dealer_verify!=0" -->
-                        <p>{{data.company_name.toUpperCase()}}</p>
+                        <p *ngIf="data.type!=10">{{data.company_name.toUpperCase()}}</p>
                         <!-- <p *ngIf="data.dealer_verify==0"> {{data.company_name.toUpperCase()}}</p> -->
                         <p > {{data.name | titlecase}} ({{data.mobile}})</p>
                     </div>

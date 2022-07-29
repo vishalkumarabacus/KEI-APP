@@ -37,36 +37,7 @@
         <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
     </ion-refresher>
-    <div class="capsule-tabs" *ngIf="order_type == 'Primary'">
-        <ul>
-            <!-- <ng-container *ngIf="order_type == 'Primary'"> -->
-            <!-- <li [ngClass]="{'active' : filter.order_status=='Draft'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Draft';get_orders()">
-                <p>Draft<span>{{count.draft}}</span></p>
-            </li> -->
-            <!-- </ng-container> -->
-            <li [ngClass]="{'active' : filter.order_status=='Pending'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Pending' ;get_orders()">
-                <p>Pending<span>{{count.pending}}</span></p>
-            </li>
-            <li [ngClass]="{'active' : filter.order_status=='Approved'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Approved';get_orders()">
-                <p>Approved<span>{{count.approved}}</span></p>
-            </li>
-            <li [ngClass]="{'active' : filter.order_status=='Partial Dispatch'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Partial Dispatch';get_orders()">
-                <p>Partial Dispatch<span>{{count.Partial_Dispatch}}</span></p>
-            </li>
-            <li [ngClass]="{'active' : filter.order_status=='Dispatch'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Dispatch';get_orders()">
-                <p>Dispatch<span>{{count.dispatch}}</span></p>
-            </li>
-            <li [ngClass]="{'active' : filter.order_status=='Reject'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Reject';get_orders()">
-                <p>Rejected<span>{{count.rejected}}</span></p>
-            </li>
-            <!-- <li [ngClass]="{'active' : filter.order_status=='Dispatch'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Dispatch';get_orders()">
-                    <p>Dispatched<span>{{count.dispatch}}</span></p>
-                </li> -->
-            <!-- <li [ngClass]="{'active' : filter.order_status=='Pre Close'}" (click)="filter.date='';filter.master='';start=0;filter.order_status='Pre Close';get_orders()">
-                    <p>Pre Closed<span>{{count.pre_close}}</span></p>
-                </li> -->
-        </ul>
-    </div>
+    
 
 
     <!-- <div class="capsule-tabs" *ngIf="order_type=='Secondary'">
@@ -111,8 +82,15 @@
                 </div>
                 <div class="right-date">
                     <button><p >{{row.order_no}}</p></button>
+                    
+
                 </div>
+             
+               
+              
             </div>
+           
+           
             <div class="mid" [ngClass]="{'mt0' : row.order_status=='Draft' }">
                 <div class="content-info">
                     <div class="left-info">
@@ -121,13 +99,16 @@
                     <div class="right-info">
                         <p *ngIf="order_type == 'Primary' ">{{row.dr_name.toUpperCase()}}</p>
                         <p *ngIf="order_type == 'Secondary'"> Retailer : {{row.dr_name.toUpperCase()}}</p>
-                        <p> Total Item : {{row.order_item ? row.order_item : '0'}}</p>
                     </div>
+
+                    
+                    
                 </div>
-                <div class="tag-info amount-view">
-                    <p>₹ {{row.order_grand_total ? row.order_grand_total : '0'}}</p>
-                    <p>Amount</p>
-                </div>
+               
+            </div>
+            <div class="lower">
+                <p>Amount</p>
+                <p>₹{{row.total_amount}}</p>
             </div>
         </div>
     </div>

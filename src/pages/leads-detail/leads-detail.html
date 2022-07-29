@@ -3,11 +3,11 @@
         
         <ion-title *ngIf="type=='Lead'">Lead Detail</ion-title>
         <ion-title *ngIf="type!='Lead'">Detail</ion-title>
-        <ion-buttons end >
+        <!-- <ion-buttons end >
             <button ion-button icon-only color="light" (click)="Add()">
                 <ion-icon name="md-create"></ion-icon>
             </button>
-        </ion-buttons>
+        </ion-buttons> -->
 
     </ion-navbar>
 </ion-header>
@@ -145,12 +145,12 @@
                         <!-- <p>lat - {{distributor_detail.lat}}, lan - {{distributor_detail.lng}}</p> -->
                     </div>
 
-                <div *ngIf="!distributor_detail.lat">
+                <!-- <div *ngIf="!distributor_detail.lat">
                         <button ion-button  class="h30 cs-btn mt16"  (click)="update_location(distributor_detail.lat,distributor_detail.lng,distributor_detail.id)">
                             <i class="material-icons fff pr16 font18">check_circle</i>
                             Point GPS Location
                         </button>
-                    </div>
+                    </div> -->
                 </div>  
             </div>
             

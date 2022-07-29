@@ -104,7 +104,25 @@ export class MyserviceProvider {
         })
         
     }
+    public upload_file(value,url) {
+        console.log(value);
+        console.log(url);
+        return new Promise((resolve, reject) => {
+            this.storage.get('token').then((token) => {
 
+                let header = new Headers();
+                header.append('Authorization', 'Bearer ' + token);
+                this.http.post(this.constant.rootUrl + url, value, { headers: header }).map((res) => res.json())
+                    .subscribe(res => {
+                        console.log(res);
+                        resolve(res);
+                    }, (err) => {
+                        reject(err);
+                    });
+            });
+        })
+
+    }
     public addData3(value,url) {
         console.log(value);
         console.log(url);

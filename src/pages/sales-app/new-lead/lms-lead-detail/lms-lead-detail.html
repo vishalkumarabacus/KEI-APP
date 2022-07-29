@@ -45,18 +45,18 @@
                     </div>
                     
                     <div class="three_boxes"> 
-                        <div class="lower">
+                        <!-- <div class="lower">
                             <p>GST</p> 
                             <p>{{lead_detail.gst ? lead_detail.gst : 'N/A'}}</p>
                         </div>
                         <div class="lower">
                             <p>Lead Type</p>
                             <p>{{lead_detail.lead_type}}</p>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="lower">
                         <p>Address</p>
-                        <p>{{!lead_detail.state ? 'N/A' : lead_detail.state | titlecase}} {{!lead_detail.district ? '' : ', '+lead_detail.district | titlecase}} {{lead_detail.pincode ? ' - '+lead_detail.pincode : ''}}</p>
+                        <p>{{!lead_detail.state ? 'N/A' : lead_detail.state | titlecase}} {{!lead_detail.district ? '' : ', '+lead_detail.district | titlecase}} {{!lead_detail.city ? '' : ', '+lead_detail.city | titlecase}} {{lead_detail.pincode ? ' - '+lead_detail.pincode : ''}}</p>
                     </div>
                 </div>  
             </div>

@@ -21,6 +21,8 @@ export class TravelListPage {
   selected_date =new Date().toISOString().slice(0,10);
   loading:Loading;  
   travelId:any;
+  travel_from:any;
+
   travelstatus:any = 'Pending';
   travelData:any='today';
   travelList:any = [];
@@ -39,6 +41,12 @@ export class TravelListPage {
     public toastCtrl: ToastController) 
     {
       this.travelId = this.navParams.get('id');
+      this.travel_from = this.navParams.get('from');
+if( this.navParams.get('from')=='travel'){
+  this.travelType="Team"
+  console.log(this.travelType);
+  
+}
     }
     
     ionViewWillEnter() 
@@ -82,6 +90,12 @@ export class TravelListPage {
       {
         this.travel_list=result;
         console.log(this.travel_list);
+   for (let i = 0; i < this.travel_list.length; i++) {
+     if(this.travel_list[i].travel_type=="Distributor Visit"){
+      this.travel_list[i].travel_type="Partywise Visit"
+     }
+   }
+
         this.service.dismiss();
         this.requestSend=true
       })

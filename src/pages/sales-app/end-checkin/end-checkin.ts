@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ActionSheetController,PopoverController, ToastController, LoadingController, AlertController,Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams,Navbar,ActionSheetController,PopoverController, ToastController, LoadingController, AlertController,Platform } from 'ionic-angular';
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { Geolocation } from '@ionic-native/geolocation';
 import {FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -18,6 +18,9 @@ import { PopGiftAddPage } from '../../sales-app/pop-gift/pop-gift-add/pop-gift-a
 import { LmsQuotationAddPage } from '../../sales-app/new-lead/lms-lead-quotation/lms-quotation-add/lms-quotation-add';
 import { ContractorMeetAddPage } from '../../Contractor-Meet/contractor-meet-add/contractor-meet-add';
 import { AddMultipleContactPage } from '../../add-multiple-contact/add-multiple-contact';
+import { CheckinNewPage } from '../../checkin-new/checkin-new';
+import { ExecutiveOrderDetailPage } from '../../executive-order-detail/executive-order-detail';
+import { DashboardPage } from '../../dashboard/dashboard';
 
 
 
@@ -34,6 +37,8 @@ import { AddMultipleContactPage } from '../../add-multiple-contact/add-multiple-
   templateUrl: 'end-checkin.html',
 })
 export class EndCheckinPage {
+  @ViewChild(Navbar) navBar: Navbar;
+
   state_list:any=[];city_list:any=[];
   city_name:any=[];
   data:any={};
@@ -68,6 +73,8 @@ export class EndCheckinPage {
     public locationAccuracy: LocationAccuracy , 
     public services:EnquiryserviceProvider,
     public alertCtrl: AlertController,public storage: Storage) {
+
+     
       this.checkin_data = this.navParams.get('data');
       console.log(this.checkin_data);
       this.getState();
@@ -89,7 +96,7 @@ export class EndCheckinPage {
       this.pending_checkin();
       this.salesUserId=this.checkin_data.created_by;
       console.log(this.salesUserId);
-      
+      this.get_distributor()
     }
     
     present_upload_document_alert(){
@@ -181,7 +188,8 @@ export class EndCheckinPage {
                       if(this.checkin_data.other_name == '')
                       {
                         // this.presentAlert();
-                        this.navCtrl.pop();
+                        // this.navCtrl.pop();
+            this.navCtrl.push(CheckinNewPage);
                         
                         
                       }
@@ -230,11 +238,19 @@ export class EndCheckinPage {
     saveNewRetailer(){
       console.log("saveNewRetailer method calls");
       console.log("Lead/save_lead");
-      
+      this.checkin.type_id=3
       console.log(this.checkin);
       console.log(this.pending_checkin_id);
       console.log(this.new_retailer_id);
-      
+      if(!this.checkin.assign_dr_id && this.checkin_data.dr_type == '3')
+      {
+          let toast = this.toastCtrl.create({
+              message: 'Please Select Distributor!',
+              duration: 3000
+          });
+          toast.present();
+          return;
+      }
       
       // type_id = type_id;
       this.service.show_loading()
@@ -296,19 +312,19 @@ export class EndCheckinPage {
       
         
         console.log(this.checkin);
-        this.service.dismiss();
+        // this.service.dismiss();
         
-        if(!description)
-        {
-          let toast = this.toastCtrl.create({
-            message: 'Please Add Description',
-            duration: 3000,
-            position: 'bottom'
-          });
+        // if(!description)
+        // {
+        //   let toast = this.toastCtrl.create({
+        //     message: 'Please Add Description',
+        //     duration: 3000,
+        //     position: 'bottom'
+        //   });
           
-          toast.present();
-          return;
-        }
+        //   toast.present();
+        //   return;
+        // }
         
         
         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
@@ -316,6 +332,7 @@ export class EndCheckinPage {
             
             let options = {maximumAge: 10000, timeout: 15000, enableHighAccuracy: true};
             this.geolocation.getCurrentPosition(options).then((resp) => {
+              console.log("hloooo");
               
               var lat = resp.coords.latitude
               var lng = resp.coords.longitude
@@ -331,8 +348,9 @@ export class EndCheckinPage {
                   
                   
                   this.service.presentToast('Visit Ended Successfully !!');
+            this.navCtrl.push(CheckinNewPage);
                   
-                  this.navCtrl.pop()
+                  // this.navCtrl.pop()
                   
                   // this.presentAlert();
                 }
@@ -549,7 +567,7 @@ export class EndCheckinPage {
       
       fileChange(img)
       {
-        this.image_data=[];
+        // this.image_data=[];
         this.image_data.push(img);
         console.log(this.image_data);
         this.image = '';
@@ -682,7 +700,7 @@ export class EndCheckinPage {
             this.checkin.district = result['district_name']
             this.checkin.city = result['city']
             
-            this.selectarea();
+            // this.selectarea();
             
             
           },err=>
@@ -740,18 +758,34 @@ export class EndCheckinPage {
         
         
       }
+      distributor_list:any=[]
+      get_distributor()
+{
+    // this.service1.show_loading();
+    this.service.addData({'type':1,'from':'order'},'DealerData/get_type_list').then((result)=>{
+        console.log(result);
+        this.distributor_list = result;
+        
+        // this.service1.dismiss();
       
+        
+    });
+}
+goOnOrderDetail(id)
+    {
+        this.navCtrl.push(ExecutiveOrderDetailPage,{id:id , login:'Employee'})
+    }
       
       goTo(where){
         console.log(where);
         
         if(where == 'Primary'){
-          this.navCtrl.push(AddOrderPage,{'dr_type':this.checkin_data.dr_type,'checkin_id':this.checkin_data.checkin_id ,'dr_name':this.checkin_data.dr_name, 'order_type':'Primary'});
+          this.navCtrl.push(AddOrderPage,{'dr_type':this.checkin_data.dr_type,'checkin_id':this.checkin_data.checkin_id ,'id':this.checkin_data.dr_id,'dr_name':this.checkin_data.dr_name, 'order_type':'Primary'});
         }
         else if(where == 'Secondary'){
           console.log(this.checkin_data.dr_type);
           console.log(this.checkin_data.dr_name);
-          this.navCtrl.push(AddOrderPage,{'dr_type':this.checkin_data.dr_type,'checkin_id':this.checkin_data.checkin_id ,'dr_name':this.checkin_data.dr_name, 'order_type':'Secondary'});
+          this.navCtrl.push(AddOrderPage,{'dr_type':this.checkin_data.dr_type,'id':this.checkin_data.dr_id,'checkin_id':this.checkin_data.checkin_id ,'dr_name':this.checkin_data.dr_name, 'order_type':'Secondary'});
         }
         else if(where == 'FollowUp'){
           this.navCtrl.push(FollowupAddPage, {'dr_type':this.checkin_data.dr_type,'checkin_id':this.checkin_data.checkin_id ,'dr_name':this.checkin_data.dr_name});

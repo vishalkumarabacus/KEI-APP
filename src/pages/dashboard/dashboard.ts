@@ -35,8 +35,9 @@ import { NotificationPage } from '../notification/notification';
 import { AnonymousSubscription } from 'rxjs/Subscription';
 import { CheckinNewPage } from '../checkin-new/checkin-new';
 import { LeaveListPage } from '../leave-list/leave-list';
+import { TravelListNewPage } from '../travel-list-new/travel-list-new';
+import { TravelNewlistPage } from '../travel-newlist/travel-newlist';
 
-import { Chart } from "chart.js";
 
 
 
@@ -46,8 +47,7 @@ import { Chart } from "chart.js";
     templateUrl: 'dashboard.html',
 })
 export class DashboardPage {
-@ViewChild("doughnutCanvas") doughnutCanvas: ElementRef;
-private doughnutChart: Chart;
+    @ViewChild("doughnutCanvas") doughnutCanvas: ElementRef;
     attend_id: any = '';
     currentTime: any = '';
     user_id: any = '';
@@ -74,8 +74,8 @@ private doughnutChart: Chart;
     today_followup: any = [];
     
     constructor(private network: Network,
-         public db:MyserviceProvider,
-
+        public db:MyserviceProvider,
+        
         public navCtrl: NavController
         , public loadingCtrl: LoadingController
         , public service: CatalougeProvider
@@ -97,7 +97,6 @@ private doughnutChart: Chart;
         , public modalCtrl: ModalController) {
             
             
-            
         }
         
         // ngOnInit() {
@@ -112,7 +111,8 @@ private doughnutChart: Chart;
         
         ionViewWillEnter() {
             this.getNetworkType()
-          this.donut()
+            this.pending_checkin();
+            
             this.timer = setInterval(() => {
                 this.time = new Date();
             }, 1000);
@@ -122,7 +122,6 @@ private doughnutChart: Chart;
             //   }, 1000);
             
             this.last_attendence();
-            this.pending_checkin();
             var time = new Date();
             
             this.currentTime = moment().format("HH:mm:ss");
@@ -247,43 +246,51 @@ private doughnutChart: Chart;
         }
         modal3(){
             console.log(this.leave)
-
+            
             if(this.leave=="Not Able To Punch Attendance"){
                 this.serve.presentToast('You are on leave')
-return;
+                return;
             }
             else(this.leave=="Able To Punch Attendance")
             {
-                this.openModal('start');
-
+                this.presentAlert1();
+                
             }
-         }
-        openModal(type) {
-console.log("hlo sunny 1");
-let workTypeModal = this.modal.create(WorkTypeModalPage, { 'type': type, 'id': this.last_attendence_data.attend_id });
-                    
-workTypeModal.onDidDismiss(data => {
-    this.events.publish('user:login');
-    this.last_attendence();
-});
-
-workTypeModal.present();
-           
-            //   });
-        
         }
-        
+        openModal(type) {
+            console.log("hlo sunny 1");
+            let workTypeModal = this.modal.create(WorkTypeModalPage, { 'type': type, 'id': this.last_attendence_data.attend_id });
+            
+            workTypeModal.onDidDismiss(data => {
+                this.events.publish('user:login');
+                this.last_attendence();
+            });
+            
+            workTypeModal.present();
+            
+            //   });
+            
+        }
+        pending_checkin()
+        {
+            this.serve.pending_data().then((result)=>{
+                console.log(result);
+                this.checkin_data = result['checkin_data'];
+                console.log(this.checkin_data); 
+                // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});      
+            })
+        }
         // stop_attend() 
         // {
         //     log("hiiii")
         //     this.platform.ready().then(() => {
- 
+        
         //         var whiteList = ['com.package.example','com.package.example2'];
-           
+        
         //         (<any>window).gpsmockchecker.check(whiteList, (result) => {
-                  
+        
         //           console.log(result,'test');
-           
+        
         //           if(result.isMock){
         //               console.log("DANGER!! Mock is in use");
         //               console.log("Apps that use gps mock: ");
@@ -295,7 +302,7 @@ workTypeModal.present();
         //                         text: 'Ok',
         //                         handler: () => 
         //                         {
-                                    
+        
         //                         }
         //                     }
         //                 ]
@@ -314,7 +321,7 @@ workTypeModal.present();
         //                     var lat = resp.coords.latitude
         //                     var lng = resp.coords.longitude
         //                     this.serve.show_loading()
-                            
+        
         //                     this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) => 
         //                     {
         //                         if(result =='success')
@@ -328,7 +335,7 @@ workTypeModal.present();
         //                         this.serve.dismiss()
         //                         this.serve.errToasr()
         //                     })
-                            
+        
         //                 }).catch((error) => 
         //                 {
         //                     this.serve.presentToast('Could Not Get Location !!')
@@ -339,155 +346,234 @@ workTypeModal.present();
         //                 this.serve.presentToast('Please Allow Location !!')
         //             });
         //           }
-                   
-            
-            
+        
+        
+        
         //         }, (error) => console.log(error));
-                
+        
         //       });
-          
+        
         // }
         
-
-
+        start_attend() {
+            // console.log(this.data);
+            this.serve.show_loading();
+            
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+              () => {
+                
+                let options = { maximumAge: 10000, timeout: 15000, enableHighAccuracy: true };
+                this.geolocation.getCurrentPosition(options).then((resp) => {
+                  
+                  var lat = resp.coords.latitude
+                  var lng = resp.coords.longitude
+                  
+                  // this.serve.show_loading()
+                  
+                  this.attendence_serv.start_attend({ 'lat': lat, 'lng': lng, 'id': this.user_id,  }).then((result) => {
+                    if (result['msg'] == 'success') {
+                      this.events.publish('user:login');
+                      this.serve.dismiss();
+                      this.serve.presentToast('Work Time Started Successfully');
+                      this.last_attendence()
+                    }
+                  })
+                  
+                }).catch((error) => {
+                  this.serve.presentToast('Could Not Get Location!!')
+                  this.serve.dismiss();
+                  
+                });
+              },
+              error => {
+                this.serve.dismiss();
+                this.serve.presentToast('Please Allow Location!!')
+              });
+              
+            }
+        
         stop_attend() {
             console.log("hlooo stop");
-
+            
             // this.serve.show_loading();
             console.log("hlooo stop");
             
             
             this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
-              let options = { maximumAge: 10000, timeout: 15000, enableHighAccuracy: true };
-              this.geolocation.getCurrentPosition(options).then((resp) => {
-                var lat = resp.coords.latitude
-                var lng = resp.coords.longitude
-                
-                this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) => {
-                  if (result == 'success') {
-                    // this.serve.dismiss();
-                    this.serve.presentToast('Work Time Stopped Successfully');
-                    this.last_attendence()
-                  }
-                }, err => {
-                  this.serve.dismiss()
-                  this.serve.errToasr()
-                })
-                
-              }).catch((error) => {
-                this.serve.presentToast('Could Not Get Location !!')
-              });
+                let options = { maximumAge: 10000, timeout: 15000, enableHighAccuracy: true };
+                this.geolocation.getCurrentPosition(options).then((resp) => {
+                    var lat = resp.coords.latitude
+                    var lng = resp.coords.longitude
+                    
+                    this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) => {
+                        if (result == 'success') {
+                            // this.serve.dismiss();
+                            this.serve.presentToast('Work Time Stopped Successfully');
+                            this.last_attendence()
+                        }
+                    }, err => {
+                        this.serve.dismiss()
+                        this.serve.errToasr()
+                    })
+                    
+                }).catch((error) => {
+                    this.serve.presentToast('Could Not Get Location !!')
+                });
             },
             error => {
-              this.serve.presentToast('Please Allow Location !!')
+                this.serve.presentToast('Please Allow Location !!')
             });
             
-          }
-          donut(){
-            this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
-                type: "doughnut",
-                data: {
-                  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                  datasets: [
-                    {
-                      label: "# of Votes",
-                      data: [12, 19, 3, 5, 2, 3],
-                      backgroundColor: [
-                        "rgba(255, 99, 132, 0.2)",
-                        "rgba(54, 162, 235, 0.2)",
-                        "rgba(255, 206, 86, 0.2)",
-                        "rgba(75, 192, 192, 0.2)",
-                        "rgba(153, 102, 255, 0.2)",
-                        "rgba(255, 159, 64, 0.2)"
-                      ],
-                      hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#FF6384", "#36A2EB", "#FFCE56"]
-                    }
-                  ]
-                }
-              });
-          }
+        }
+        
         presentAlert() {
-           
+            
             this.platform.ready().then(() => {
- 
+                
                 var whiteList = ['com.package.example','com.package.example2'];
-           
+                
                 (<any>window).gpsmockchecker.check(whiteList, (result) => {
-                  
-                  console.log(result);
-           
-                  if(result.isMock){
-                      console.log("DANGER!! Mock is in use");
-                      console.log("Apps that use gps mock: ");
-                      let alert = this.alertCtrl.create({
-                        title: 'Alert!',
-                        subTitle: 'Please Remove Thirt Party Location Apps',
-                        buttons: [
-                            {
-                                text: 'Ok',
-                                handler: () => 
+                    
+                    console.log(result);
+                    
+                    if(result.isMock){
+                        console.log("DANGER!! Mock is in use");
+                        console.log("Apps that use gps mock: ");
+                        let alert = this.alertCtrl.create({
+                            title: 'Alert!',
+                            subTitle: 'Please Remove Thirt Party Location Apps',
+                            buttons: [
                                 {
-                                    
-                                }
-                            }
-                        ]
-                    });
-                      console.log(result.mocks);
-                  }
-                  else
-                  {
-                    let alert = this.alertCtrl.create({
-                        title: 'Stop Time',
-                        message: 'Do you want to stop work time?',
-                        cssClass: 'alert-modal',
-                        buttons: [
-                            {
-                                text: 'Yes',
-                                handler: () => {
-                                    console.log('Yes clicked');
-                                    console.log(this.vehicle);
-
-                                    if(this.vehicle != 'Car'&&this.vehicle != 'Bike'){
-                                        this.stop_attend();
-                                    console.log('Cancel clicked work out of territory');
-                                        
-                                    }
-                                    else if (this.vehicle == 'Car'||this.vehicle == 'Bike'){
-                                        this.openModal('stop');
-                                        console.log("hloooo sunny");
-                                        
-                                    }
-                                    
-                                    else{
+                                    text: 'Ok',
+                                    handler: () => 
+                                    {
                                         
                                     }
                                 }
-                            },
-                            {
-                                text: 'No',
-                                role: 'cancel',
-                                handler: () => {
-                                    console.log('Cancel clicked');
+                            ]
+                        });
+                        console.log(result.mocks);
+                    }
+                    else
+                    {
+                        let alert = this.alertCtrl.create({
+                            title: 'Stop Time',
+                            message: 'Do you want to stop work time?',
+                            cssClass: 'alert-modal',
+                            buttons: [
+                                {
+                                    text: 'Yes',
+                                    handler: () => {
+                                        console.log('Yes clicked');
+                                        console.log(this.vehicle);
+                                        
+                                        if(this.vehicle != 'Car'&&this.vehicle != 'Bike'){
+                                            this.stop_attend();
+                                            console.log('Cancel clicked work out of territory');
+                                            
+                                        }
+                                        else if (this.vehicle == 'Car'||this.vehicle == 'Bike'){
+                                            this.openModal('stop');
+                                            console.log("hloooo sunny");
+                                            
+                                        }
+                                        
+                                        else{
+                                            
+                                        }
+                                    }
+                                },
+                                {
+                                    text: 'No',
+                                    role: 'cancel',
+                                    handler: () => {
+                                        console.log('Cancel clicked');
+                                    }
                                 }
-                            }
-                            
-                        ]
-                    });
-                    alert.present();
-                  }
-            
-            
+                                
+                            ]
+                        });
+                        alert.present();
+                    }
+                    
+                    
                 }, (error) => console.log(error));
                 
-              });
+            });
             
-      
+            
+        }
+        presentAlert1() {
+            
+            this.platform.ready().then(() => {
+                
+                var whiteList = ['com.package.example','com.package.example2'];
+                
+                (<any>window).gpsmockchecker.check(whiteList, (result) => {
+                    
+                    console.log(result);
+                    
+                    if(result.isMock){
+                        console.log("DANGER!! Mock is in use");
+                        console.log("Apps that use gps mock: ");
+                        let alert = this.alertCtrl.create({
+                            title: 'Alert!',
+                            subTitle: 'Please Remove Thirt Party Location Apps',
+                            buttons: [
+                                {
+                                    text: 'Ok',
+                                    handler: () => 
+                                    {
+                                        
+                                    }
+                                }
+                            ]
+                        });
+                        console.log(result.mocks);
+                    }
+                    else
+                    {
+                        let alert = this.alertCtrl.create({
+                            title: 'Stop Time',
+                            message: 'Do you want to start work time?',
+                            cssClass: 'alert-modal',
+                            buttons: [
+                                {
+                                    text: 'Yes',
+                                    handler: () => {
+                                        console.log('Yes clicked');
+                                        console.log(this.vehicle);
+                                        this.start_attend()
+                                     
+                                    }
+                                },
+                                {
+                                    text: 'No',
+                                    role: 'cancel',
+                                    handler: () => {
+                                        console.log('Cancel clicked');
+                                    }
+                                }
+                                
+                            ]
+                        });
+                        alert.present();
+                    }
+                    
+                    
+                }, (error) => console.log(error));
+                
+            });
+            
+            
         }
         
         
+        Approval_array:any
+        expense:any
+        leaveany:any
         
-        
-        team_count:AnonymousSubscription
+        team_count:any
         last_attendence() {
             // this.db.show_loading()
             this.attendence_serv.last_attendence_data().then((result) => {
@@ -497,7 +583,8 @@ workTypeModal.present();
                 // this.db.dismiss()
                 this.last_attendence_data = result['attendence_data'];
                 this.team_count = result['team_count'];
-console.log(this.team_count)
+                this.storage.set('team_count', this.team_count);
+                console.log(this.team_count)
                 this.vehicle = result['attendence_data']['vehicle'];
                 this.announcementCount=result['announcementCount']['announcementCount'];
                 console.log(this.announcementCount);
@@ -505,6 +592,12 @@ console.log(this.team_count)
                 this.user_data = result['user_data'];
                 this.today_checkin = result['today_checkin'];
                 this.total_dealer = result['total_dealer'];
+                this.Approval_array = result['Approval_array']['PendingTravelPlan'];
+                this.expense = result['Approval_array']['expense'];
+                this.leaveany = result['Approval_array']['leave'];
+                
+                console.log(this.Approval_array)
+                
                 this.total_direct_dealer = result['total_direct_dealer'];
                 this.total_distributor = result['total_distributor'];
                 this.total_primary_order = result['total_primary_order'];
@@ -520,11 +613,11 @@ console.log(this.team_count)
                     var ampm = H < 12 ? "AM" : "PM";
                     this.start_attend_time = h + this.last_attendence_data.start_time.substr(2, 3) +' '+ ampm;
                 }
-                      
+                
             },error=>{
                 console.log("Dashboard error");
                 this.serve.dismiss()
-            
+                
             })
             
         }
@@ -545,8 +638,18 @@ console.log(this.team_count)
         }
         
         goToTravel() {
-            this.navCtrl.push(TravelListPage);
+            if(this.Approval_array>0)
+            {
+            this.navCtrl.push(TravelNewlistPage, { from: 'travel', view_type:'Team'});
+
+
+            }
+            else{
+            this.navCtrl.push(TravelListNewPage, { from: 'travel', view_type:'Team'});
+
+            }
         }
+        
         
         goToLead() {
             this.navCtrl.push(LmsLeadListPage);
@@ -557,10 +660,11 @@ console.log(this.team_count)
             this.navCtrl.push(FollowupListPage);
         }
         goToTeam() {
-            this.navCtrl.push(LeaveListPage);
+            this.navCtrl.push(LeaveListPage,{from:'leave'});
         }
         goToExpense() {
-            this.navCtrl.push(ExpenseListPage);
+            this.navCtrl.push(ExpenseListPage, { from: 'expense', view_type: 'Team'
+});
         }
         goToRequirement() 
         {
@@ -611,33 +715,33 @@ console.log(this.team_count)
             // this.navCtrl.push(TargetAchievementPage);
         }
         
-        // show_Error(){
-        //     console.log("start your attendence first");
+        show_Error(){
+            console.log("start your attendence first");
             
-        //     let alert = this.alertCtrl.create({
-        //         title: 'Alert',
-        //         subTitle: 'Please Start Attendence First',
-        //         buttons: [
-        //             {
-        //                 text: 'Ok',
-        //                 handler: () => 
-        //                 {
+            let alert = this.alertCtrl.create({
+                title: 'Alert',
+                subTitle: 'Please Start Attendence First',
+                buttons: [
+                    {
+                        text: 'Ok',
+                        handler: () => 
+                        {
                             
-        //                 }
-        //             }
-        //         ]
-        //     });
-        //     alert.present();
+                        }
+                    }
+                ]
+            });
+            alert.present();
             
             
             
             
-        // }
+        }
         
         open_notification(){
             console.log("inside notification");
             this.navCtrl.push(AnnouncementListPage);
-        
+            
         }
         
         announcementModal() {
@@ -653,12 +757,12 @@ console.log(this.team_count)
         }
         
         networkType:any=[]
-getNetworkType(){
-    this.serve.addData('', "lead/distributionNetworkModule").then((result => {
-      console.log(result);
-      this.networkType = result['modules'];
-    }))
-  }
+        getNetworkType(){
+            this.serve.addData('', "lead/distributionNetworkModule").then((result => {
+                console.log(result);
+                this.networkType = result['modules'];
+            }))
+        }
         doRefresh (refresher)
         { 
             
@@ -669,15 +773,7 @@ getNetworkType(){
             }, 1000);
         }
         
-        pending_checkin()
-        {
-            this.serve.pending_data().then((result)=>{
-                console.log(result);
-                this.checkin_data = result['checkin_data'];
-                console.log(this.checkin_data); 
-                // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});      
-            })
-        }
+        
         
         
         

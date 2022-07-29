@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams,LoadingController,AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,LoadingController,AlertController, ToastController } from 'ionic-angular';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { IonicSelectableComponent } from 'ionic-selectable';
 
@@ -20,7 +20,7 @@ export class AddRetailerPage {
   @ViewChild('distributorSelectable') distributorSelectable: IonicSelectableComponent;
   @ViewChild('district_Selectable') district_Selectable: IonicSelectableComponent;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider, public loadingCtrl: LoadingController,private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider,  public toastCtrl: ToastController,public loadingCtrl: LoadingController,private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -76,6 +76,49 @@ get_distributor()
         
     });
 }
+city_list:any[]
+area_list:any[]
+
+getCityList()
+{
+  this.form.city1 = [];
+  console.log(this.form);
+  // this.show_loading()
+  
+  this.db.addData({'district_name':this.form.district,'state_name':this.form.state},'dealerData/getCity').then((result)=>{
+    // this.loading.dismiss()
+    console.log(result);
+    this.city_list=result['city'];
+    
+    
+    
+  });
+}
+form1:any={};
+
+selectarea(){
+  console.log(this.form);
+  
+  this.form1.state=this.form.state;
+  this.form1.district=this.form.district;
+  this.form1.city=this.form.city1;
+
+  console.log(this.form1);
+  
+
+  // this.db.addData3(this.form1,"User/city_user_list")
+  this.db.addData(this.form1,"dealerData/getArea")
+  .then(resp=>{
+    console.log(resp);
+    this.area_list = resp['area'];
+    console.log(this.area_list);
+    this.form.area='';
+    // this.district_list = resp['district_list'];
+  },
+  err=>{
+    this.db.errToasr()
+  })
+}
 update()
 {
   console.log(this.form);
@@ -110,6 +153,20 @@ update()
 }
 save_retailer()
 {
+  if(this.checkExist==true)
+  {
+    this.db.presentToast('Mobile No. Already Exists !!');
+    return
+  }
+  if(!this.form.assign_dr_id)
+  {
+      let toast = this.toastCtrl.create({
+          message: 'Please Select Distributor!',
+          duration: 3000
+      });
+      toast.present();
+      return;
+  }
   this.form.type_id = 3;
   this.db.addData({"data":this.form},"Lead/save_lead")
   .then(resp=>{
@@ -217,7 +274,7 @@ MobileNumber(event: any)
     {
       if(this.form.pincode.length==6)
       {
-        this.db.show_loading()
+        // this.db.show_loading()
         this.db.addData({'pincode':this.form.pincode},'Enquiry/selectAddressOnBehalfOfPincode').then((result)=>{
           this.db.dismiss()
           
@@ -230,7 +287,7 @@ MobileNumber(event: any)
           
         },err=>
         {
-          this.db.dismiss()
+          // this.db.dismiss()
           
           // this.db.presentToast('Failed To Get ')
         })

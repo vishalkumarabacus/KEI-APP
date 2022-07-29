@@ -27,7 +27,7 @@
                 
                 
                 <ng-container *ngIf="form.mobile && form.mobile.length==10">
-                    <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && select_type?.invalid}"*ngIf="!form.id">
+                    <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && select_type?.invalid}">
                         <ion-label><span>Select Type<strong>*</strong></span></ion-label>
                       
                         <ion-select   name="select_type" name="select_type" #select_type="ngModel" [(ngModel)]="form.type_id">
@@ -38,7 +38,10 @@
                     
                     <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && source?.invalid}">
                         <ion-label><span>Source<strong>*</strong></span></ion-label>
-                        <ion-select name="source"  #source="ngModel" [(ngModel)]="form.source" required>
+                        <ion-select   name="source" name="source" #source="ngModel" [(ngModel)]="form.source" >
+                            <ion-option *ngFor="let row of source_list" value="{{row.source}}"  >{{row.source}}</ion-option>
+                        </ion-select>
+                        <!-- <ion-select name="source"  #source="ngModel" [(ngModel)]="form.source" required>
                             <ion-option value="Website">Website</ion-option>
                             <ion-option value="Facebook">Facebook</ion-option>
                             <ion-option value="Call">Call</ion-option>
@@ -57,7 +60,7 @@
 
 
 
-                        </ion-select>
+                        </ion-select> -->
                     </ion-item>
                     <p  *ngIf="f.submitted && source?.invalid" class="error-line">Source Is Required</p>
                     
@@ -73,15 +76,17 @@
                     </ion-item>
                     <p  *ngIf="f.submitted && stage?.invalid && !form.stage" class="error-line">Stage Is Required</p>
                      -->
+                     <ng-container  *ngIf="form.type_id !=10">
                     <ion-item [ngClass]="{'cs-error':f.submitted && company_name?.invalid}">
                         <ion-label floating><span>Company Name <strong>*</strong></span></ion-label>
                         <ion-input type="text" placeholder="Enter Company Name"  name="company_name" #company_name="ngModel"  [(ngModel)]="form.company_name" [ngClass]="{'is-invalid':f.submitted && company_name?.invalid}" required></ion-input>
                     </ion-item>
+                </ng-container>
                     <p  *ngIf="f.submitted && company_name?.invalid && form.company_name" class="error-line">Company Name Is Invalid!</p>
                     <p  *ngIf="f.submitted && company_name?.invalid && !form.company_name" class="error-line">Company Name Is Required!</p>
                     
                     <ion-item [ngClass]="{'cs-error':f.submitted && name?.invalid}">
-                        <ion-label floating><span>Name <strong>*</strong></span></ion-label>
+                        <ion-label floating><span> Contact Person Name <strong>*</strong></span></ion-label>
                         <ion-input type="text" placeholder="Enter Name"  name="name" #name="ngModel" [(ngModel)]="form.name" required [ngClass]="{'is-invalid':f.submitted && name?.invalid}"></ion-input>
                     </ion-item>
                     <p  *ngIf="f.submitted && name?.invalid && form.name" class="error-line">Name Is Invalid</p>
@@ -109,10 +114,10 @@
                     </ion-item> -->
 
                     
-                    <ion-item >
+                    <!-- <ion-item >
                         <ion-label floating><span>GST</span></ion-label>
                         <ion-input type="text" placeholder="Enter GST" minlength="16" maxlength="16" name="gst" [(ngModel)]="form.gst" onkeypress="return ((event.charCode >= 48 && event.charCode <= 57) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 65 && event.charCode <= 90))"></ion-input>
-                    </ion-item>
+                    </ion-item> -->
                     <!-- <p  *ngIf="type == 'dealer' && f.submitted && gst?.invalid" class="error-line">Invalid</p> -->
                 </ng-container>
             </ion-list>
@@ -146,19 +151,32 @@
                 </ion-item>
                 <p  *ngIf="f.submitted && state?.invalid" class="error-line">State Is Required</p>
                 
-                <ion-item class="cs-normal-select mb0" [ngClass]="{'cs-error':f.submitted && district?.invalid}">
+                <ion-item class="cs-normal-select mt10" [ngClass]="{'cs-error':f.submitted && district?.invalid}">
                     <ion-label><span>District </span></ion-label>
-                    <ion-select   name="district" name="district" #district="ngModel" [(ngModel)]="form.district"  (ionChange)="selectarea()">
+                    <ion-select   name="district" name="district" #district="ngModel" [(ngModel)]="form.district"  (ionChange)="getCityList()">
                         <ion-option *ngFor="let row of district_list" value="{{row.district_name}}"  [ngClass]="{'is-invalid':f.submitted && district?.invalid}">{{row.district_name}}</ion-option>
                     </ion-select>
                 </ion-item>
                 <p  *ngIf="f.submitted && district?.invalid" class="error-line">District Is Required</p>
-                
-                <ion-item [ngClass]="{'cs-error':f.submitted && city?.invalid}">
+                <ion-item class="cs-normal-select mt10" >
+                    <ion-label><span>City </span></ion-label>
+                    <ion-select   name="city1" name="city1" #city1="ngModel" [(ngModel)]="form.city1"  (ionChange)="selectarea()">
+                        <ion-option *ngFor="let row of city_list" value="{{row.city}}"  >{{row.city}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <p  *ngIf="f.submitted && city?.invalid" class="error-line">City Is Required</p>
+                <ion-item class="cs-normal-select mb0" [ngClass]="{'cs-error':f.submitted && city?.invalid}">
+                    <ion-label><span>Area </span></ion-label>
+                    <ion-select   name="area" name="area" #area="ngModel" [(ngModel)]="form.area">
+                        <ion-option *ngFor="let row of area_list" value="{{row.area}}"  [ngClass]="{'is-invalid':f.submitted && area?.invalid}">{{row.area}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <p  *ngIf="f.submitted && area?.invalid" class="error-line">Area Is Required</p>
+                <!-- <ion-item [ngClass]="{'cs-error':f.submitted && city?.invalid}">
                     <ion-label floating ><span>City </span></ion-label>
                     <ion-input placeholder="Enter City"   type="text" name="city" #city="ngModel" [(ngModel)]="form.city"></ion-input>
                 </ion-item>
-                <p  *ngIf="f.submitted && city?.invalid" class="error-line">City Is Required</p>
+                <p  *ngIf="f.submitted && city?.invalid" class="error-line">City Is Required</p> -->
                 
                 
                 
@@ -198,7 +216,7 @@
         <div class="padding16">
             <!-- <button *ngIf="!form.DealerExist && form.mobile && form.mobile.length==10 && form.state && form.district && form.area.length>0" ion-button class="cs-btn" style="margin: 16px 0px !important;">Save</button> -->
             <button *ngIf=" form.id" [disabled]="!(!form.DealerExist && form.mobile && form.mobile.length==10 && form.state && form.district)" ion-button class="cs-btn" style="margin: 16px 0px !important;"(click)="update()">Update</button>
-            <button *ngIf=" !form.id" [disabled]="!(!form.DealerExist && form.mobile && form.mobile.length==10 && form.state && form.district)" ion-button class="cs-btn" style="margin: 16px 0px !important;" (click)="submit()">Save</button>
+            <button *ngIf=" !form.id" ion-button class="cs-btn" style="margin: 16px 0px !important;" (click)="submit()">Save</button>
         
         </div>		  
     </form>

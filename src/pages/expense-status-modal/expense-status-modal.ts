@@ -45,7 +45,10 @@ export class ExpenseStatusModalPage {
         this.data.id=this.navParams.get("expenseId");
         this.data.type=this.navParams.get("type");
       }
-     
+      if(this.from_page =='leave')
+    {
+      this.data.id=this.navParams.get("leaveId");
+    }
       if(this.from_page =='travel')
       {
         this.data.id=this.navParams.get("travelId");
@@ -84,7 +87,10 @@ export class ExpenseStatusModalPage {
       {
         func_name = 'TravelPlan/update_status'
       }
-      
+      if(this.from_page =='leave')
+      {
+        func_name = 'leave/update_status'
+      }
       this.serve.addData(this.data,func_name).then((result)=>
       {
         console.log(result);
