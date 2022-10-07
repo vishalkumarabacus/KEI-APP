@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, NavController, NavParams,ToastController,ActionSheetController } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams,ToastController,ActionSheetController, ModalController, AlertController, Platform } from 'ionic-angular';
 import { MyserviceProvider } from '../../../../providers/myservice/myservice';
 import { LmsActivityListPage } from '../lms-lead-activity/lms-activity-list/lms-activity-list';
 import { LmsFollowupListPage } from '../lms-lead-followup/lms-followup-list/lms-followup-list';
@@ -8,7 +8,13 @@ import { AddMultipleContactPage } from '../../../add-multiple-contact/add-multip
 import { PointLocationPage } from '../../../point-location/point-location';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { LmsLeadAddPage } from '../lms-lead-add/lms-lead-add';
+import { ExpenseStatusModalPage } from '../../../expense-status-modal/expense-status-modal';
+import { EndCheckinPage } from '../../end-checkin/end-checkin';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
+import { Geolocation } from '@ionic-native/geolocation';
+import { AttendenceserviceProvider } from '../../../../providers/attendenceservice/attendenceservice';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 
 
@@ -19,10 +25,24 @@ import { LmsLeadAddPage } from '../lms-lead-add/lms-lead-add';
 })
 export class LmsLeadDetailPage {
   
-  constructor(public navCtrl: NavController,public toastCtrl: ToastController,public actionSheetController: ActionSheetController,private camera: Camera ,public navParams: NavParams,public db:MyserviceProvider,public loadingCtrl: LoadingController,public service:MyserviceProvider) {
+  constructor(public navCtrl: NavController,public toastCtrl: ToastController,
+    public modalCtrl: ModalController,public actionSheetController: ActionSheetController,
+     public alertCtrl: AlertController,private camera: Camera ,public navParams: NavParams,
+    public diagnostic : Diagnostic,
+    public locationAccuracy: LocationAccuracy,
+    public platform: Platform, 
+
+    
+     // private  checkinListPage:CheckinListPage,
+     public geolocation: Geolocation,public db:MyserviceProvider,
+      public attendence_serv: AttendenceserviceProvider,
+     public loadingCtrl: LoadingController,public service:MyserviceProvider) {
+      this.last_attendence()
+      this.dr_detail()
   }
   
   ionViewWillEnter() {
+    this.last_attendence()
     
     this.dr_id=this.navParams.get('id');
     console.log(this.dr_id);
@@ -40,14 +60,13 @@ export class LmsLeadDetailPage {
   
   dr_detail()
   {
-    var loading = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: `<img src="./assets/imgs/gif.svg" class="h55" />`,
-    });
+    // var loading = this.loadingCtrl.create({
+    //   spinner: 'hide',
+    //   content: `<img src="./assets/imgs/gif.svg" class="h55" />`,
+    // });
     // this.distributor_detaill.orderType = type
-    
+    this.service.show_loading()
     console.log(this.search);
-    loading.present()
     this.service.addData({'dr_id':this.dr_id,search:this.search},'Lead/getLeadDetail').then((result)=>{
       console.log(result);
       this.lead_detail = result['data'];
@@ -56,10 +75,9 @@ export class LmsLeadDetailPage {
       console.log(this.visiting_image);
       this.contactPerson=result['data']['contactPerson'];
       console.log(this.contactPerson);
-      loading.dismiss();
+    this.service.dismiss()
       
     });
-    loading.dismiss();
   }
   
   lead_followup(type,id,company_name)
@@ -138,8 +156,19 @@ export class LmsLeadDetailPage {
     });
     actionsheet.present();
   }
+  last_attendence_data: any = [];
 
-  
+        last_attendence() 
+    {
+      this.attendence_serv.last_attendence_data().then((result) => {
+        console.log(result);
+        this.last_attendence_data = result['attendence_data'];
+      
+        
+      });
+      // this.get_dealers();
+      
+    }
   takePhoto() {
     console.log("i am in camera function");
     const options: CameraOptions =
@@ -163,7 +192,199 @@ export class LmsLeadDetailPage {
     (err) => {
     });
   }
-
+  checkin_data:any=[]
+  data1:any={}
+  
+  startVisit(type,id,name) {
+            
+    this.platform.ready().then(() => {
+        
+        var whiteList = ['com.package.example','com.package.example2'];
+        
+        (<any>window).gpsmockchecker.check(whiteList, (result) => {
+            
+            console.log(result);
+            
+            if(result.isMock){
+                console.log("DANGER!! Mock is in use");
+                console.log("Apps that use gps mock: ");
+                let alert = this.alertCtrl.create({
+                    title: 'Alert!',
+                    subTitle: 'Please Remove Thirt Party Location Apps',
+                    buttons: [
+                        {
+                            text: 'Ok',
+                            handler: () => 
+                            {
+                                
+                            }
+                        }
+                    ]
+                });
+                console.log(result.mocks);
+            }
+            else
+            {
+                let alert = this.alertCtrl.create({
+                    title: 'Stop Time',
+                    message: 'Do you want to start checkin?',
+                    cssClass: 'alert-modal',
+                    buttons: [
+                        {
+                            text: 'Yes',
+                            handler: () => {
+                                console.log('Yes clicked');
+                                this.startvisit1(type,id,name)
+                             
+                            }
+                        },
+                        {
+                            text: 'No',
+                            role: 'cancel',
+                            handler: () => {
+                                console.log('Cancel clicked');
+                            }
+                        }
+                        
+                    ]
+                });
+                alert.present();
+            }
+            
+            
+        }, (error) => console.log(error));
+        
+    });
+    
+    
+}
+startvisit1(type,id,name){
+  // this.serve.show_loading()
+  this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+    () => {
+      
+      console.log('Request successful');
+      
+      let options = {maximumAge: 10000, timeout: 15000, enableHighAccuracy: true};
+      this.geolocation.getCurrentPosition(options).then((resp) => {
+        
+        
+        var lat = resp.coords.latitude
+        var lng = resp.coords.longitude
+        
+       
+          this.data1.dr_id = id;
+          this.data1.dr_name =name;
+          this.data1.lat = lat;
+          this.data1.lng = lng;
+          this.data1.network = type;
+          
+          this.service.addData({'data':this.data1},'Checkin/start_visit_new').then((result)=>{
+            console.log(result);
+            console.warn("static result console");
+            
+            if(result == 'success')
+            {
+              this.navCtrl.remove(2,1,{animate:false});
+              this.navCtrl.pop({animate:false});
+              this.pending_checkin();
+              if(this.checkin_data != null){
+                this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});  
+              }
+              // this.serve.dismiss();
+              // this.presentToast();
+              // this.checkinListPage.checkin_detail('71');
+              
+              
+              
+              // this.navCtrl.push(CheckinListPage,{'via':'checkinIsCreated'});
+              
+            }
+            else
+            {
+              // this.serve.dismiss();
+            }
+            
+            // loading.dismiss();
+            
+          });
+          // loading.dismiss();
+        
+       
+        
+        
+      }).catch((error) => {
+        console.log('Error getting location', error);
+        // this.saveOrderHandler({});
+        console.log('Error requesting location permissions', error);
+        // this.serve.dismiss();          
+        let toast = this.toastCtrl.create({
+          message: 'Allow Location Permissions',
+          duration: 3000,
+          position: 'bottom'
+        });
+        
+        
+        
+        toast.present();
+      });
+    },
+    error => {
+      console.log('Error requesting location permissions', error);
+      // this.serve.dismiss();          
+      let toast = this.toastCtrl.create({
+        message: 'Allow Location Permissions',
+        duration: 3000,
+        position: 'bottom'
+      });
+      
+      
+      
+      toast.present();
+    });
+}
+show_Error(){
+  console.log("start your attendence first");
+  
+  let alert = this.alertCtrl.create({
+      title: 'Alert',
+      subTitle: 'Please Start Attendence First',
+      buttons: [  
+          {
+              text: 'Ok',
+              handler: () => 
+              {
+                  
+              }
+          }
+      ]
+  });
+  alert.present();
+  
+  
+  
+  
+}
+  pending_checkin()
+        {
+          this.service.pending_data().then((result)=>{
+            console.log(result);
+            this.checkin_data = result['checkin_data'];
+            console.log(this.checkin_data); 
+            // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});      
+          })
+        }
+        presentToast() {
+          let toast = this.toastCtrl.create({
+            message: 'Visit Started Successfully',
+            duration: 3000,
+            position: 'bottom'
+          });
+          
+          
+          
+          toast.present();
+        }
   getImage() {
     const options: CameraOptions =
     {
@@ -196,7 +417,23 @@ export class LmsLeadDetailPage {
     
     
   }
-  
+  statusModal1(type)
+  {
+    this.navCtrl.push(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail' });
+  }
+  // statusModal1(type) 
+  // {
+  //   console.log(type)
+
+  //   let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail'});
+
+  //   modal.onDidDismiss(data =>
+  //   {
+  //     this.dr_detail()
+  //   });
+    
+  //   modal.present();
+  // }
   
   update_visiting_card(){
     var loading = this.loadingCtrl.create({
@@ -209,7 +446,7 @@ export class LmsLeadDetailPage {
       if(result['msg'] == "success"){
         loading.dismiss();
         let toast = this.toastCtrl.create({
-          message: 'Visiting Card Image Updated',
+          message:' Image Updated Successfully',
           duration: 3000,
           position: 'bottom'
         });
@@ -230,5 +467,225 @@ export class LmsLeadDetailPage {
     });
     loading.dismiss();
   }
-  
+
+  statusModal(id)
+  {
+    this.navCtrl.push(ExpenseStatusModalPage,{'drId':id,'from':'leadassign' });
+  }
+
+  presentalert(type,id,name) {
+            
+    this.platform.ready().then(() => {
+        
+        var whiteList = ['com.package.example','com.package.example2'];
+        
+        (<any>window).gpsmockchecker.check(whiteList, (result) => {
+            
+            console.log(result);
+            
+            if(result.isMock){
+                console.log("DANGER!! Mock is in use");
+                console.log("Apps that use gps mock: ");
+                let alert = this.alertCtrl.create({
+                    title: 'Alert!',
+                    subTitle: 'Please Remove Third Party Location Apps',
+                    buttons: [
+                        {
+                            text: 'Ok',
+                            handler: () => 
+                            {
+                                
+                            }
+                        }
+                    ]
+                });
+                console.log(result.mocks);
+            }
+            else
+            {
+               
+                let alert = this.alertCtrl.create({
+                    title: 'Stop Time',
+                    message: 'Do you want to start checkin?',
+                    cssClass: 'alert-modal',
+                    buttons: [
+                        {
+                            text: 'Yes',
+                            handler: () => {
+                                console.log('Yes clicked');
+                                
+                                    this.checkLocationActive(type,id,name);
+                                    
+                               
+                                
+                               
+                            }
+                        },
+                        {
+                            text: 'No',
+                            role: 'cancel',
+                            handler: () => {
+                                console.log('Cancel clicked');
+                            }
+                        }
+                        
+                    ]
+                });
+                alert.present();
+        }
+        
+            
+        }, (error) => console.log(error));
+        
+    });
+    
+    
+}
+checkin(type,id,name)
+{
+    
+    console.log(type);
+    
+    var options = {
+        maximumAge: 15000,
+        timeout: 10000,
+        enableHighAccuracy: true
+    };
+    this.geolocation.getCurrentPosition(options).then((resp) => {
+      var lat = resp.coords.latitude
+      var lng = resp.coords.longitude
+      
+      this.data1.dr_id = id;
+      this.data1.dr_name =name;
+      this.data1.lat = lat;
+      this.data1.lng = lng;
+      this.data1.network = type;
+        
+      this.service.addData({'data':this.data1},'Checkin/start_visit_new').then((result)=>{
+        console.log(result);
+        console.warn("static result console");
+        
+        if(result == 'success')
+        {
+          this.navCtrl.remove(2,1,{animate:false});
+          this.navCtrl.pop({animate:false});
+          this.pending_checkin();
+          if(this.checkin_data != null){
+            this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});  
+          }
+          // this.serve.dismiss();
+          // this.presentToast();
+          // this.checkinListPage.checkin_detail('71');
+          
+          
+          
+          // this.navCtrl.push(CheckinListPage,{'via':'checkinIsCreated'});
+          
+        }
+        else
+        {
+          // this.serve.dismiss();
+        }
+        
+        // loading.dismiss();
+        
+      });
+       
+        
+    }).catch((error) => {
+      let alert = this.alertCtrl.create({
+        title: '',
+        message: 'Please Allow Location||',
+        buttons: [
+        
+          {
+            text: 'OK',
+            handler: () => {
+            }
+          }
+        ]
+      })
+    });
+}
+
+checkLocationActive(type,id,name){
+
+    console.log("Check location");
+    
+        
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+            () => {
+                
+                this.diagnostic.requestLocationAuthorization().then((status)=>{
+                    console.log(status);
+                    
+                    switch (status) {
+                        case this.diagnostic.permissionStatus.NOT_REQUESTED:
+                        console.log("Permission not requested");
+                        break;
+                        case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+                        console.log("Permission denied");
+                        this.throwLocationError()
+                        break;
+                        case this.diagnostic.permissionStatus.DENIED:
+                        console.log("Permission denied");
+                        this.throwLocationError()
+                        break;
+                        case this.diagnostic.permissionStatus.GRANTED:
+                        console.log("Permission granted always");
+                        this.checkin(type,id,name);
+                        break;
+                        case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+                        console.log("Permission granted only when in use");
+                        this.checkin(type,id,name);
+                        break;
+                        
+                        default:
+                        console.log("DEFAULT CASE");
+                        console.log(status);
+                        this.throwLocationError()
+                    }
+                },error=>{
+                    console.log("authorision Error");
+                    
+                    this.diagnostic.locationAuthorizationMode.ALWAYS
+                }) 
+                
+            },
+            error => {
+                console.log("Accuracy Error");
+
+                this.service.dismiss();
+                this.service.presentToast('Please Allow Location!!')
+                this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY
+            });
+            
+        }
+        
+        throwLocationError() {
+            
+            console.log("location error");
+            
+            let alert=this.alertCtrl.create({
+                title:'To access this app please allow location permission from KEI App',
+                cssClass:'action-close',
+                
+                buttons: [{
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => {
+                    }
+                },
+                {
+                    text:'Ok',
+                    cssClass: 'close-action-sheet',
+                    handler:()=>
+                    {
+                        this.diagnostic.switchToLocationSettings();
+                    }
+                }]
+            });
+            alert.present();
+            
+        }
 }

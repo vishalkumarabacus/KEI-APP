@@ -1,4 +1,4 @@
-import { Component, TestabilityRegistry } from '@angular/core';
+import { Component, TestabilityRegistry, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, AlertController, ModalController, LoadingController, PopoverController, ToastController } from 'ionic-angular';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { HomePage } from '../home/home';
@@ -15,6 +15,8 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { FileOpener } from '@ionic-native/file-opener';
 import { File } from '@ionic-native/file';
 import { ConstantProvider } from '../../providers/constant/constant';
+import { IonicSelectableComponent } from 'ionic-selectable';
+import { ExpenseStatusModalPage } from '../expense-status-modal/expense-status-modal';
 
 
 @IonicPage()
@@ -23,6 +25,8 @@ import { ConstantProvider } from '../../providers/constant/constant';
   templateUrl: 'leads-detail.html',
 })
 export class LeadsDetailPage {
+  @ViewChild('selectComponent') selectComponent: IonicSelectableComponent;
+
     dr_id:any;
     distributor_detail:any=[];
     total_checkin:any = [];
@@ -30,10 +34,12 @@ export class LeadsDetailPage {
     type:any
     search:any={}
     date:any
+    data:any
     showRelatedTab:any
     target:any;
     achievement:any;
   image_url:any=''
+  beatCodeList:any=[];
 
     constructor(  public file:File,
         private fileOpener: FileOpener,
@@ -41,13 +47,14 @@ export class LeadsDetailPage {
              private transfer: FileTransfer,private app:App,public navCtrl: NavController,private alertCtrl: AlertController,public db:MyserviceProvider,public modalCtrl: ModalController, public navParams: NavParams,public service:MyserviceProvider,public loadingCtrl: LoadingController,public popoverCtrl: PopoverController,public toastCtrl:ToastController) {
     this.date = moment(this.date).format('YYYY-MM-DD');
         console.log(this.navParams);
+      this.GET_BEAT_CODE_LIST();
+
     this.image_url = this.constant.upload_url1
         
         if(this.navParams.get('dr_id'))
         {
             this.dr_id=this.navParams.get('dr_id');
             console.log(this.dr_id);
-            this.lead_detail();
         }
         
         if(this.navParams.get('showRelatedTab') == 'false')
@@ -75,8 +82,38 @@ export class LeadsDetailPage {
     ionViewDidLoad() {
        
     }
+    GET_BEAT_CODE_LIST() {
+        // this.serve.show_loading();
     
+        this.service.addData({ city: '' }, 'Distributor/assign_beat_code').then((result) => {
+          console.log(result);
+          // this.serve.dismiss()
+          this.beatCodeList = result['data'];
+          for(let i = 0 ;i<this.beatCodeList.length;i++){
+              this.beatCodeList[i].beat_code1=this.beatCodeList[i].beat_code+' '+'( '+this.beatCodeList[i].area+')'
+           
+          }
+        }, err => {
+          // this.serve.dismiss()
+          this.service.errToasr()
+        });
+      }
     loading:any;
+    data1:any
+    assign_beat(){
+        this.service.addData({'dr_id':this.dr_id,'beat_code':this.data1},'Distributor/update_beat_code').then((result)=>{
+            console.log(result);
+    //    this.service.dismiss()
+if(result['msg']=true){
+    this.dr_detail('3')
+    this.service.presentToast('Beat Code Assigned Successfully');
+
+}
+          
+           
+            
+        }); 
+    }
     lodingPersent()
     {
         this.loading = this.loadingCtrl.create({
@@ -87,21 +124,7 @@ export class LeadsDetailPage {
     }
     
     
-    lead_detail()
-    {
-       this.service.show_loading()
-        console.log(this.search);
-        
-        this.service.addData({'dr_id':this.dr_id,search:this.search},'Distributor/lead_detailexec').then((result)=>{
-            console.log(result);
-            this.distributor_detail = result['result'];
-            // this.target=result['total_target'];
-            // this.achievement=result['total_achivement'];
-            // this.total_checkin = result['total_checkin'];
-            console.log(this.distributor_detail);
-            this.service.dismiss();
-        });
-    }
+   
     distributor_detaill:any={}
     secondary:any=[]
     achievement_percent:any=[]
@@ -144,13 +167,13 @@ this.fileOpener.open(url, 'application/pdf')
     {
        
         this.distributor_detaill.orderType = type
-        this.service.show_loading()
+        // this.service.show_loading()
 
         console.log(this.search);
         
         this.service.addData({'dr_id':this.dr_id,search:this.search},'Distributor/dr_detail').then((result)=>{
             console.log(result);
-       this.service.dismiss()
+    //    this.service.dismiss()
 
             this.distributor_detail = result['result'];
             this.document = result['result']['image'];
@@ -174,7 +197,24 @@ this.achievement_percent=parseInt(this.achievement_percent)
         });
 
     }
-    
+    statusModal(id)
+    {
+      this.navCtrl.push(ExpenseStatusModalPage,{'drId':id,'from':'drassign' });
+    }
+    // statusModal(id) 
+    // {
+    //     console.log(id);
+        
+    //   let modal1 = this.modalCtrl.create(ExpenseStatusModalPage,{'drId':id,'from':'drassign' });
+      
+  
+    //   modal1.onDidDismiss(data =>
+    //   {
+    //     this.dr_detail('')
+    //   });
+      
+    //   modal1.present();
+    // }
     checkin_list:any = [];
     load_data:any = "0";
     order_list:any=[];

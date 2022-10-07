@@ -65,7 +65,7 @@
             <ion-list>   
                 <ion-item class="mb0" [ngClass]="{'cs-error':f.submitted && pincode?.invalid}">
                     <ion-label floating><span>Pincode </span></ion-label>
-                    <ion-input placeholder="Enter Pincode"  type="tel" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" (input)="selectAddressOnBehalfOfPincode()"></ion-input>
+                    <ion-input placeholder="Enter Pincode"  type="tel" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" (keyup)="selectAddressOnBehalfOfPincode()"></ion-input>
                 </ion-item>
                 <p  *ngIf="f.submitted && pincode?.invalid" class="error-line">Pincode Is Invalid</p>               
                 <ion-item [ngClass]="{'cs-error':f.submitted && street?.invalid}">

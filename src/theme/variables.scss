@@ -28,6 +28,7 @@ secondary: #32db64,
 danger: #55a9e4,
 light: #f4f4f4,
 dark: #222,
+white: #ffffff,
 warn: #55a9e4);
 $avatar-offset: 52+16;
 // App iOS Variables
@@ -1304,6 +1305,150 @@ ul {
                 }
             }
         }
+        &:nth-child(5) {
+            &:before {
+                background: #28288e;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #33336a;
+                    }
+                }
+            }
+        }
+        &:nth-child(6) {
+            &:before {
+                background: #47717c;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #47717c;
+                    }
+                }
+            }
+        }
+        &:nth-child(7) {
+            &:before {
+                background: #1b6d36;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #1b6d36;
+                    }
+                }
+            }
+        }
+        &:nth-child(8) {
+            &:before {
+                background: #9ee6b6;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #9ee6b6;
+                    }
+                }
+            }
+        }
+        &:nth-child(9) {
+            &:before {
+                background: #985e3f;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #985e3f;
+                    }
+                }
+            }
+        }
+        &:nth-child(10) {
+            &:before {
+                background: #1b4328;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #1b4328;
+                    }
+                }
+            }
+        }
+        &:nth-child(11) {
+            &:before {
+                background: #3e4462;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #3e4462;
+                    }
+                }
+            }
+        }
+        &:nth-child(12) {
+            &:before {
+                background: #43480d;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #43480d;
+                    }
+                }
+            }
+        }
+        &:nth-child(13) {
+            &:before {
+                background: #fe85d0;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #fe85d0;
+                    }
+                }
+            }
+        }
+        &:nth-child(14) {
+            &:before {
+                background: #30878a;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #30878a;
+                    }
+                }
+            }
+        }
+        &:nth-child(15) {
+            &:before {
+                background: #862554;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #862554;
+                    }
+                }
+            }
+        }
+        &:nth-child(16) {
+            &:before {
+                background: #804c19;
+            }
+            .heading {
+                .count {
+                    span {
+                        background: #804c19;
+                    }
+                }
+            }
+        }
     }
     .heading {
         margin: 10px 0px;
@@ -1430,7 +1575,15 @@ ul {
         }
     }
 }
+.app_version {
 
+    padding:5px 10px;
+
+    p {
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
 ion-tabs {
     .tabbar {
         a {
@@ -4200,6 +4353,7 @@ a {
         overflow: inherit;
         // bottom: inherit;
         contain: initial;
+
         .pop-imge {
             padding: 0px;
             margin: 13px;
@@ -4602,6 +4756,7 @@ a {
 
 .scroll-content {
     border-top: inherit !important;
+
 }
 
 .edit-profile {
@@ -9684,7 +9839,7 @@ ion-list {
 
 ion-header {
     .toolbar-background {
-        background: linear-gradient(90deg, #55a9e4) !important;
+        background: linear-gradient(90deg, #55a9e4);
         margin: 0 !important;
     }
     h1,

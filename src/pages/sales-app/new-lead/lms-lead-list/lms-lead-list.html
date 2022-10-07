@@ -1,9 +1,8 @@
-<ion-header>
-    
-    <ion-navbar>
+     <ion-header>
+     <ion-navbar>
         <ion-title>My Leads</ion-title>
-    </ion-navbar>    
-    <ion-toolbar>
+     </ion-navbar>
+     <ion-toolbar>
         <div class="search add-search">
             <div class="filter">
                 <ion-searchbar (ngModelChange)="get_assign_dr(drid)" [(ngModel)]="filter.name" name="name" ></ion-searchbar>
@@ -15,7 +14,7 @@
                 </a> -->
             </div>
         </div>
-    </ion-toolbar> 
+    </ion-toolbar>
 </ion-header>
 <div class="text-line" *ngIf="filter.date">
     <div class="lf-text">
@@ -32,15 +31,38 @@
         <ion-refresher-content  pullingIcon="arrow-dropdown" pullingText="Pull to refresh"     refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
     </ion-refresher>
-    
-    <div class="capsule-tabs">
+
+    <!-- <div class="capsule-tabs">
         <ul>
             <li *ngFor="let row of count" [ngClass]="{'active' : row.id==filter.type_id}"  (click)="start=0;drid=row.id; get_assign_dr(row.id)">
                 <p>{{row.name}}<span>{{row.count}}</span></p>
             </li>
         </ul>
-    </div>
-    
+    </div> -->
+    <div class="capsule-tabs">
+        <ul>
+          <li [ngClass]="{'active' : filter.status=='lead Bank'}" (click)="filter.date='';start=0;filter.status='lead Bank';get_assign_dr()">
+            <p>Lead Bank<span>{{pending_count}}</span></p>
+          </li>
+          <li [ngClass]="{'active' : filter.status=='Qualified'}" (click)="filter.date='';start=0;filter.status='Qualified';get_assign_dr()">
+            <p>Qualified<span>{{upcoming_count}}</span></p>
+          </li>
+          <li [ngClass]="{'active' : filter.status=='Disqualified'}"(click)="filter.date='';start=0;filter.status='Disqualified' ;get_assign_dr()">
+            <p>Disqualified<span>{{complete_count}}</span></p>
+          </li>
+          <li [ngClass]="{'active' : filter.status=='Running'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr()">
+            <p>Running<span>{{complete_count}}</span></p>
+          </li>
+          <li [ngClass]="{'active' : filter.status=='win'}"(click)="filter.date='';start=0;filter.status='win';get_assign_dr()">
+            <p>Win<span>{{complete_count}}</span></p>
+          </li>
+          <li [ngClass]="{'active' : filter.status=='lost'}" (click)="filter.date='';start=0;filter.status='lost';get_assign_dr()">
+            <p>Lost<span>{{complete_count}}</span></p>
+          </li>
+        </ul>
+      </div>
+
+
     <div class="pd-left-right16">
         <div class="list-box mt16" *ngFor="let data of dr_list">
             <div class="upper" (click)="lead_detail(data.id)">
@@ -53,14 +75,16 @@
             </div>
             <div class="mid">
                 <div class="content-info" (click)="lead_detail(data.id)">
-                    <div class="left-info" >
+                    <div class="left-info"*ngIf="data.type!=10" >
                         <div class="circle" >{{data.company_name.substring(0,1).toUpperCase()}}</div>
                     </div>
-                    
+                    <div class="left-info"*ngIf="data.type==10" >
+                        <div class="circle" >{{data.name.substring(0,1).toUpperCase()}}</div>
+                    </div>
                     <div class="right-info">
                         <!-- (Verified) -->
                         <!-- *ngIf="data.dealer_verify!=0" -->
-                        <p>{{data.company_name.toUpperCase()}}</p>
+                        <p *ngIf="data.type!=10">{{data.company_name.toUpperCase()}}</p>
                         <!-- <p *ngIf="data.dealer_verify==0"> {{data.company_name.toUpperCase()}}</p> -->
                         <p > {{data.name | titlecase}} ({{data.mobile}})</p>
                     </div>
@@ -73,11 +97,11 @@
                 <p>Address</p>
                 <p>{{data.address}} {{!data.area ? 'N/A' : data.area | titlecase}} {{!data.district ? '' : ', '+data.district | titlecase}} {{!data.state ? 'N/A' : data.state | titlecase}} </p>
             </div>
-        </div>  
+        </div>
     </div>
-    
+
     <div class="nothing-here" *ngIf="load_data == 1">
-        
+
         <div class="outer">
             <div class="innear">
                 <img src="assets/imgs/no_found.svg" alt="">
@@ -85,16 +109,16 @@
             </div>
         </div>
     </div>
-    
+
     <div class="h50"></div>
 
     <ion-fab right bottom>
-        <button ion-fab color="danger" (click)="addLead()" ><ion-icon name="add"></ion-icon></button>
+        <button ion-fab color="danger" (click)="addLead('add')" ><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
 </ion-content>
 
-<!-- 
+<!--
 
 <div class="cus-fab">
     <button (click)="addLead()">

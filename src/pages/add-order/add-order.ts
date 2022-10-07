@@ -22,16 +22,18 @@ import { CheckinListPage } from '../sales-app/checkin-list/checkin-list'
 })
 export class AddOrderPage {
     @ViewChild(Navbar) navBar: Navbar;
-    
+
     @ViewChild('category') categorySelectable: IonicSelectableComponent;
     @ViewChild('subCategory') subcatSelectable: IonicSelectableComponent;
     @ViewChild('productCode') prod_codeSelectable: IonicSelectableComponent;
     @ViewChild('selectComponent') selectComponent: IonicSelectableComponent;
     @ViewChild('distributorSelectable') distributorSelectable: IonicSelectableComponent;
-    
+
     distributorSelected:any=false
     categoryList:any=[];
     data:any={};
+    qty:any=0;
+
     form:any={};
     catCode_List:any=[];
     user_state:any='';
@@ -81,7 +83,6 @@ export class AddOrderPage {
     order:any={};
     flag:any={};
     sizeList:any={};
-    qty:any;
     mode=0;
     distributorlist:any = [];
     drtype:any;
@@ -100,7 +101,7 @@ export class AddOrderPage {
     item_list:any=[];
     dr_id:any={};
     category_list:any=[];
-    
+
     constructor(
         public navCtrl: NavController,
         public events:Events,
@@ -109,14 +110,20 @@ export class AddOrderPage {
         public viewCtrl: ViewController
         ,public service1:MyserviceProvider,
         public toastCtrl: ToastController,
-        private alertCtrl: AlertController, 
-        public storage: Storage, 
-        public modal: ModalController, 
-        public platform: Platform, 
+        private alertCtrl: AlertController,
+        public storage: Storage,
+        public modal: ModalController,
+        public platform: Platform,
         public service:DbserviceProvider,
         public db:MyserviceProvider,
         public appCtrl: App)
         {
+          this.data.basic_discount=0;
+
+          this.data.sr_discount=0;
+          this.data.other_discount=0;
+          this.data.cd_discount=0;
+
             this.get_distributor_list()
             // this.service.dismiss();
             // this.service1.dismiss();
@@ -128,31 +135,31 @@ export class AddOrderPage {
                 console.log("in if condition");
                 console.log(this.navParams.get('order_data')['id']);
                 this.retailerID=this.navParams.get('order_data')['id'];
-                
+
                 this.tmpdata.assign_distributor=this.navParams.get('order_data')['distributor_name']
                 this.tmpdata.assign_distributor_id=this.navParams.get('order_data')['distributor_id']
                 console.log(this.tmpdata);
-                
-                
+
+
                 // this.get_distributor_list(this.tmpdata);
-                
+
             }
-            
+
             if(this.navParams.get('dr_type') && this.navParams.get('dr_name') && this.navParams.get('order_type')){
-                
+
                 if(this.navParams.get('checkin_id')){
                     this.disableSelectFromCheckin=true;
                 }
-                
+
                 this.drtype=this.navParams.get('order_type');
                 this.data.networkType=this.navParams.get('dr_type');
-                this.get_network_list(this.data.networkType);
+                this.get_network_list(this.data.networkType,'');
                 this.data.type_name=this.navParams.get('dr_name');
                 // this.get_distributor_list(this.data.type_name);
                 console.log(this.data.type_name);
                 // console.log(this.data.networkType);
             }
-            
+
             if(this.navParams.get('for_order'))
             {
                 this.checkinData = this.navParams.get('for_order')
@@ -161,20 +168,20 @@ export class AddOrderPage {
                 this.get_network_listFromCheckin(this.data.networkType);
                 this.get_distributor();
             }
-            
+
             this.order_data = this.navParams.get("order_data");
             this.order_item = this.navParams.get("order_item");
             console.log(this.order_item);
-            
-            
+
+
             if(this.order_data && this.order_item){
-                
+
                 for(let i = 0 ;i<this.order_item.length;i++){
                     console.log("in for");
                     this.order_item[i].total_amount = this.order_item[i].amount
                     this.order_item[i].amount = this.order_item[i].sub_total
                 }
-                
+
                 this.total_gst_amount = parseFloat(this.order_data.order_gst)
                 this.new_grand_total = parseFloat(this.order_data.order_grand_total)
                 this.total_gst_amount = this.total_gst_amount.toFixed()
@@ -185,24 +192,24 @@ export class AddOrderPage {
                 this.new_grand_total = parseInt(this.new_grand_total)
                 console.log(typeof(this.total_gst_amount));
                 console.log(typeof(this.new_grand_total));
-                
+
             }
-            
-            
-            
+
+
+
             console.log(this.order_data);
             console.log(this.order_item);
-            
-            
+
+
             if(this.order_item && this.order_item.length > 0)
             {
                 if(this.order_data && this.order_data.delivery_from!='')
                 this.distributorSelected=true
-                
+
                 this.order_item.map((item)=>
                 {
                     console.log(item);
-                    
+
                     item.subtotal_discounted = item.amount
                     item.discountedAmount = item.discounted_amount
                     item.subtotal_discount = parseFloat(item.sub_total)-parseFloat(item.subtotal_discounted)
@@ -210,7 +217,7 @@ export class AddOrderPage {
                     this.order_discount = parseFloat(this.order_discount) +  parseFloat(item.discount_amount);
                     this.sub_total = parseFloat(this.sub_total) +  parseFloat(item.amount);
                     this.total_qty = parseInt(this.total_qty) +  parseInt(item.qty);
-                    
+
                     item.subTotal = item.sub_total
                     item.product_code = item.cat_no
                     item.rate = parseFloat(item.price)
@@ -218,109 +225,115 @@ export class AddOrderPage {
                     this.type = this.order_data.DiscType
                     this.special_discount = this.order_data.special_discount_percentage
                     // this.cal_grand_total();
-                    
+
                 })
                 this.new_add_list = this.order_item;
-                
+
                 if(this.user_data.type == "3")
                 {
                     this.data.distributor_id = {dr_id:this.order_data.distributor_id,company_name:this.order_data.distributor_name}
                 }
                 this.data.networkType=this.order_data.type
                 this.get_network_listMoreItem(this.data.networkType)
-                
+
             }
             else
             {
-                
+
             }
             console.log(this.navParams);
-            
-            
+
+
             if(this.navParams.get("data"))
             {
                 this.data = this.navParams.get("data");
                 if(this.data.from_product == true)
                 {
                     this.cart_array = this.navParams.get("cart_array");
-                    console.log(this.data); 
+                    console.log(this.data);
                     if(this.data.order_data)
                     {
                         this.order_data = this.data.order_data;
-                    }           
-                    
+                    }
+
                     this.cart_array.map((item)=>
                     {
                         this.product = item
                         this.cal_grand_total();
                     })
-                    
+
                 }
-                
+
             }
-            
+
             if(this.order_data && this.order_data.order_id)
             {
-                
+
                 this.user_data = this.order_data;
             }
-            console.log(this.order_data);       
+            console.log(this.order_data);
             console.log(this.user_data);
-            
+
             if(this.user_data.type == "3")
             {
                 this.get_distributormoreItem();
             }
-            
-            // this.getCategory();  
+
+            // this.getCategory();
             console.log(this.events);
             this.events.subscribe(('AddOrderBackAction'),(data)=>
             {
                 console.log(this.events);
                 this.backAction()
-                
-            })    
-            
+
+            })
+
         }
-        
+
         ionViewDidLoad()
         {
             console.log(this.navParams.get("cart_array"));
-            
+
             this.storage.get('user_type').then((userType) => {
                 console.log(userType);
                 if(userType=='OFFICE')
                 {
                     this.data.networkType=3;
-                    this.get_network_list(this.data.networkType)
+                    this.get_network_list(this.data.networkType,'')
                     this.userType  = userType
                     //   this.get_network_list(1)
                 }
-                
-                
+
+
                 // this.getsizeData();
                 this.get_category();
                 //    this.get_product_Size()
                 console.log(this.navParams);
-                
+                this.order_data2=this.navParams['data'].order_item;
+                for (let index = 0; index < this.order_data2.length; index++) {
+                    this.order_data2[index].amount=this.order_data2[index].total_amount
+                    this.order_data2[index].description=this.order_data2[index].product_name
+
+                }
+                this.new_add_list=this.order_data2
             });
         }
-        
+
         ionViewDidEnter()
         {
             console.log(this.navParams);
-            
+
             // if(this.navParams.get("data"))
             // {
             //     this.data = this.navParams.get("data");
             //     if(this.data.from_product == true)
             //     {
             //         this.cart_array = this.navParams.get("cart_array");
-            //         console.log(this.data); 
+            //         console.log(this.data);
             //         if(this.data.order_data)
             //         {
             //             this.order_data = this.data.order_data;
-            //         }           
+            //         }
             // this.sub_total=0;
             this.dis_amt=0;
             this.gst_amount=0;
@@ -333,50 +346,58 @@ export class AddOrderPage {
                 this.product = item
                 this.cal_grand_total();
             })
-            //     }    
+            //     }
             // }
-            
+
             console.log('back button test called');
             this.navBar.backButtonClick = () => {
                 console.log('back button test');
-                
+
                 this.backAction()
-                
-            };      
-            
+
+            };
+
             let nav = this.appCtrl.getActiveNav();
-            if(nav && nav.getActive()) 
+            if(nav && nav.getActive())
             {
                 let activeView = nav.getActive().name;
                 let previuosView = '';
                 if(nav.getPrevious() && nav.getPrevious().name)
                 {
                     previuosView = nav.getPrevious().name;
-                }  
-                console.log(previuosView); 
-                console.log(activeView);  
+                }
+                console.log(previuosView);
+                console.log(activeView);
                 console.log('its leaving');
-                // if((activeView == 'HomePage' || activeView == 'GiftListPage' || activeView == 'TransactionPage' || activeView == 'ProfilePage' ||activeView =='MainHomePage') && (previuosView != 'HomePage' && previuosView != 'GiftListPage'  && previuosView != 'TransactionPage' && previuosView != 'ProfilePage' && previuosView != 'MainHomePage')) 
+                // if((activeView == 'HomePage' || activeView == 'GiftListPage' || activeView == 'TransactionPage' || activeView == 'ProfilePage' ||activeView =='MainHomePage') && (previuosView != 'HomePage' && previuosView != 'GiftListPage'  && previuosView != 'TransactionPage' && previuosView != 'ProfilePage' && previuosView != 'MainHomePage'))
                 // {
-                
+
                 //     console.log(previuosView);
                 //     this.navCtrl.popToRoot();
                 // }
             }
         }
-        
+        search:any
+        test66(event,network){
+            console.log(event.text);
+                  this.search=event.text
+            console.log(this.search);
+            this.get_network_list(network,this.search)
+            
+                }
+        order_data2:any=[]
         backAction()
         {
             console.log(this.add_list.length);
             console.log(this.order_item);
-            
+
             if(this.add_list.length > 0 )
             {
                 let alert=this.alertCtrl.create({
                     title:'Are You Sure?',
                     subTitle: 'Your Order Data Will Be Discarded ',
                     cssClass:'action-close',
-                    
+
                     buttons: [{
                         text: 'Cancel',
                         role: 'cancel',
@@ -402,8 +423,8 @@ export class AddOrderPage {
                 console.log('Array Blank');
             }
         }
-        
-        MobileNumber(event: any) 
+
+        MobileNumber(event: any)
         {
             const pattern = /[0-9]/;
             let inputChar = String.fromCharCode(event.charCode);
@@ -411,26 +432,26 @@ export class AddOrderPage {
                 event.preventDefault();
             }
         }
-        
-        MobileNumber1(event: any) 
+
+        MobileNumber1(event: any)
         {
             console.log('Decimal Restrit');
-            
+
             const charCode = (event.which) ? event.which : event.keyCode;
             console.log(charCode);
-            
+
             if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                 return false;
             }
             return true;
         }
-        
+
         get_product_data(val)
         {
             console.log(this.data.type_name.id);
-            
+
             // this.service1.show_loading();
-            
+
             this.form.cat_no = val.cat_no;
             this.form.product_name = val.product_name;
             this.form.product_id = val.id;
@@ -438,7 +459,7 @@ export class AddOrderPage {
             this.form.user_district = this.user_data.district;
             this.form.user_id = this.data.type_name.id
             this.form.user_type = this.user_data.type
-            
+
             this.service1.addData({"form":this.form},"dealerData/get_product_dataExecutive").then((result)=>{
                 console.log(result);
                 this.service1.dismiss();
@@ -450,13 +471,13 @@ export class AddOrderPage {
                     this.product.cat_no=this.form.cat_no;
                     this.product.product_name=this.form.product_name;
                 }
-                
+
                 this.brand_list = result['brand_list'];
                 if(this.brand_list && this.brand_list.length == 1)
                 {
                     this.product.brand = this.brand_list[0]['brand_name'];
                 }
-                
+
                 this.color_list = result['color_list'];
                 if(this.color_list && this.color_list.length == 1)
                 {
@@ -464,123 +485,201 @@ export class AddOrderPage {
                 }
                 console.log(this.product)
             })
-        }  
-        
+        }
+
         Lead_retailer_distributor:any=[];
-        get_network_list(network_type)
+        get_network_list(network_type,search)
         {
+        // this.service1.show_loading();
+
             this.data.type_name = '';
-            // this.service1.show_loading();
+            let loading = this.loadingCtrl.create({
+                spinner: 'hide',
+                content: `<img src="./assets/imgs/gif.svg"  />`,
+              });
+              
+              loading.present();
             console.log(network_type);
-            
-            this.service1.addData({'type':network_type,'from':'order'},'DealerData/get_type_list').then((result)=>{
+
+            this.service1.addData({'search':search,'type':network_type,'from':'order'},'DealerData/get_type_list').then((result)=>{
                 console.log(result);
                 this.distributor_network_list = result;
-                if(this.navParams.get('dr_name')){
-                    this.data.type_name= this.distributor_network_list.filter(row=>row.company_name == this.navParams.get('dr_name'));
+                if(!this.navParams['data'].checkin_id){
+
+                for(let i = 0 ;i<this.distributor_network_list.length;i++){
+                    if(this.distributor_network_list[i].name!=""||this.distributor_network_list[i].mobile!=""){
+                      this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name+' '+'('+this.distributor_network_list[i].name+'  '+this.distributor_network_list[i].mobile+')'
+                    }
+                    if(this.distributor_network_list[i].name==""&&this.distributor_network_list[i].mobile==""){
+                      this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name
+                    }
+                  }
+                }
+                console.log(this.navParams);
+                console.log(this.navParams['data'].checkin_id);
+                if(this.navParams['data'].checkin_id){
+                    this.data.type_name= this.distributor_network_list.filter(row=>row.company_name == this.navParams['data'].dr_name);
+                console.log(this.data.type_name);
+
                     this.data.type_name=this.data.type_name[0];
-                    
-                 
+                    console.log(this.data.type_name);
+
+
                 }
                 console.log(this.data.type_name);
-                
-                this.service1.dismiss();
+
+                loading.dismiss();
                 // this.open();
             });
-            
+
+
+        }
+        addtolist2()
+        {
+            this.new_add_list.push({
+                qty:this.data.qty,
+                amount:this.data.amount,
+
+              description:this.data.description
+
+        });
+          
+     
+          console.log( this.total_qty);
+          console.log( this.netamount);
+          console.log( this.total_gst_amount);
+
+        //   this.netamount = parseInt(this.netamount);
+        //   this.total_gst_amount = parseInt(this.total_gst_amount);
+        //   this.netamount = this.netamount.toFixed();
+        //   this.total_gst_amount = this.total_gst_amount.toFixed();
+
+          
+
+             console.log(this.new_add_list);
+
+         this.data.product={};
+         this.data.qty='';
+         this.data.amount='';
+
+        //  this.data.category='';
+        }
+
+
+        distributor:any
+        leadtype:any
+        selectdistributor(type){
+            console.log(type.type);
+            if(type.type=='3'){
+                this.get_distributor_list()
+            }
             
         }
-        distributor:any
         get_distributor_list(){
-            
+
+            if(this.navParams.get('checkin_id')){
+                this.leadtype={'type':3,'id':this.navParams.get('id')}
+                console.log(this.leadtype);
+                
+                                }
+            if(this.navParams.get('checkin_id')){
+                this.data.type_name=this.leadtype
+            }
             console.log(this.data.type_name);
             // this.distributorlist=[];
             console.log(name);
-          
-         
+
+
                 this.service1.addData({'type':this.data.type_name},'Lead/distributor_lists').then((result)=>{
                     console.log(result);
                     this.distributor = result;
-                  
+                    for(let i = 0 ;i<this.distributor.length;i++){
+                        this.data.delivery_from=this.distributor[i]
+
+                    }
                     // this.distributorSelectable.open();
-                    this.service1.dismiss();
+                    // this.service1.dismiss();
                     // this.open();
                 });
-           
-            
+
+
         }
-        
-        onKeyUp(x) { // appending the updated value to the variable 
+
+        onKeyUp(x) { // appending the updated value to the variable
             console.log(x);
             if(x.key!=''){
-                this.mode=1;  
+                this.mode=1;
             }
-        } 
-        
+        }
+
         get_network_listFromCheckin(network_type)
         {
             this.data.type_name = {};
+            this.service1.show_loading();
+
             this.service1.addData({'type':network_type,'from':'order'},'DealerData/get_type_list').then((result)=>{
                 console.log(result);
                 this.distributor_network_list = result;
                 var Index =  this.distributor_network_list.findIndex(row=>row.id==this.checkinData.dr_id)
                 console.log(this.distributor_network_list[Index]);
                 this.data.type_name = this.distributor_network_list[Index]
-                
+                this.service1.dismiss();
+
                 // this.open();
             });
         }
-        
+
         test(test){
             console.log(test);
-            
+
         }
         get_network_listMoreItem(network_type)
         {
             this.data.type_name = {};
-            // this.service.show_loading()
+            this.service1.show_loading()
             this.service1.addData({'type':network_type,'from':'order'},'DealerData/get_type_list').then((result)=>{
                 this.adddMoreItem = true
                 console.log(result);
                 this.distributor_network_list = result;
                 console.log(this.order_data);
-                
+
                 var index = this.distributor_network_list.findIndex(row => row.id == this.order_data.id )
                 console.log(index);
-                
+
                 this.data.type_name = this.distributor_network_list[index]
                 console.log(this.data.type_name);
-                
-                // this.get_dr_marka();        
-                
+                this.service1.dismiss()
+
+                // this.get_dr_marka();
+
             });
         }
-        
+
         cal_grand_total()
         {
             console.log(this.sub_total,this.dis_amt,this.net_total,this.order_gst,this.spcl_dis_amt,this.grand_total);
-            
-          
-            
+
+
+
             this.sub_total = parseFloat(this.sub_total) + parseFloat(this.product.subTotal);
             this.dis_amt = parseFloat(this.dis_amt) + (parseFloat(this.product.subtotal_discount));
             this.net_total = parseFloat(this.net_total) + parseFloat(this.product.amount);
             this.order_gst = parseFloat(this.order_gst) + parseFloat(this.product.gst_amount);
             // console.log(this.special_discount);
-            
+
             this.spcl_dis_amt = (this.net_total * this.special_discount)/100;
-            
+
             this.grand_total = this.grand_total = Math.round(this.net_total - this.spcl_dis_amt);
-            
-        }  
-        
+
+        }
+
         deleteItemFromCartAlertMessage(index)
         {
             let alert=this.alertCtrl.create({
                 title:'Are You Sure?',
                 subTitle: 'You want to remove this item ??',
                 cssClass:'action-close',
-                
+
                 buttons: [{
                     text: 'Cancel',
                     role: 'cancel',
@@ -599,24 +698,24 @@ export class AddOrderPage {
             });
             alert.present();
         }
-        
+
         deleteItemFromCart(index)
         {
             this.sub_total = parseFloat(this.sub_total) -  parseFloat(this.cart_array[index].subTotal) ;
-            
+
             this.dis_amt = parseFloat(this.dis_amt) -  parseFloat(this.cart_array[index].subtotal_discount) ;
-            
+
             // this.net_total = parseFloat(this.net_total) -  parseFloat(this.cart_array[index].subtotal_discounted) ;
-            
+
             this.net_total = parseFloat(this.net_total) -  parseFloat(this.cart_array[index].amount) ;
-            
-            
+
+
             this.spcl_dis_amt = (this.net_total * this.special_discount)/100;
-            
+
             this.order_gst = parseFloat(this.order_gst) - parseFloat(this.cart_array[index].gst_amount)
-            
+
             this.grand_total = Math.round(this.net_total - this.spcl_dis_amt);
-            
+
             if(this.type=='Discount')
             {
                 this.grand_total = Math.round(this.net_total - this.spcl_dis_amt);
@@ -624,17 +723,17 @@ export class AddOrderPage {
             {
                 this.grand_total = Math.round(this.net_total + this.spcl_dis_amt);
             }
-            
+
             this.cart_array.splice(index,1);
-            
+
             this.service1.presentToast('Item removed !!')
         }
-        
+
         openCategory()
         {
             console.log(this.data.networkType);
             console.log(this.data);
-            
+
             if(this.data.networkType!=3)
             {
                 // this.categorySelectable.open();
@@ -649,34 +748,34 @@ export class AddOrderPage {
             this.user_data.transport_name = this.data.type_name.transport_name  ;
             this.user_data.transport_mobile = this.data.type_name.transport_mobile  ;
         }
-        
+
         get_distributormoreItem()
         {
-            // this.service.show_loading();
+            this.service1.show_loading();
             this.service1.addData({'type':1,'from':'order'},'DealerData/get_type_list').then((result)=>{
                 console.log(result);
                 this.distributor_list = result;
-                
-                
+
+
                 var index = this.distributor_list.findIndex(row => row.id == this.order_data.distributor_id )
                 console.log(index);
-                
+
                 console.log(this.distributor_list[index]);
                 this.data.distributor_id = this.distributor_list[index]
-                // this.service.dismiss();
+                this.service1.dismiss();
                 // this.distributorSelectable.open();
-                
+
             });
         }
-        
+
         get_distributor()
         {
-            // this.service1.show_loading();
+            this.service1.show_loading();
             this.service1.addData({'type':1,'from':'order'},'DealerData/get_type_list').then((result)=>{
                 console.log(result);
                 this.distributor_list = result;
-                
-                // this.service1.dismiss();
+
+                this.service1.dismiss();
                 if(this.distributor_list.length==1)
                 {
                     this.data.distributor_id = this.distributor_list[0]
@@ -685,27 +784,29 @@ export class AddOrderPage {
                 {
                     // this.distributorSelectable.open();
                 }
-                
+
             });
         }
-        
+
         save_orderalert(type)
         {
+             this.service1.show_loading();
+
             var str
             console.log(this.grand_total);
-            
+
             if(this.grand_total > 20000000)
             {
                 let alert=this.alertCtrl.create({
                     title:'Max order value reached',
                     subTitle: 'Maximum order value is 2 Cr. !',
                     cssClass:'action-close',
-                    
+
                     buttons: [{
                         text: 'Okay',
                         role: 'Okay',
                         handler: () => {
-                            
+
                         }
                     },
                 ]
@@ -725,12 +826,12 @@ export class AddOrderPage {
             title:'Are You Sure?',
             subTitle: str,
             cssClass:'action-close',
-            
+
             buttons: [{
                 text: 'Cancel',
                 role: 'cancel',
                 handler: () => {
-                    
+
                 }
             },
             {
@@ -743,27 +844,29 @@ export class AddOrderPage {
             }]
         });
         alert.present();
+       this.service1.dismiss();
+
     }
-    
-  
-    
+
+
+
     goToProductPage()
     {
         console.log(this.order_data);
         if(this.order_data)
         this.data.order_data = this.order_data
-        
+
         this.navCtrl.push(ProductsPage,{"order":true,"order_data":this.data,"cart_array":this.cart_array});
-        
+
         //   this.navCtrl.push(ProductsPage,{"order":true,"order_data":this.data,"cart_array":JSON.parse(JSON.stringify(this.cart_array))});
-        
+
     }
-    
-  
-    
-    
-   
-    
+
+
+
+
+
+
     get_category()
     {
         this.db.addData({},"Lead/categoryList").then(resp=>{
@@ -785,22 +888,22 @@ combine:any;
             console.log(this.item_list);
             this.combine= this.item_list['product_name'] + this.item_list['product_code'];
             console.log( this.combine);
-            
+
         },
         err=>
         {
         })
     }
-    
-    
-    
+
+
+
     get_product_Size(product_id, dr_id)
     {
         console.log(this.data.productid);
         console.log(dr_id);
-        
+
         console.log(this.data);
-        
+
         this.db.addData({'dr_id':dr_id},"Lead/getProductSize/"+product_id)
         .then(resp=>{
             console.log(resp);
@@ -815,12 +918,12 @@ combine:any;
             }
         },
         err=>
-        
+
         {
         })
     }
-    
-    
+
+
     loadData(infiniteScroll)
     {
         console.log('loading');
@@ -829,7 +932,7 @@ combine:any;
         dr_id = this.data.type_name.id
         else
         dr_id = this.userId
-        
+
         this.filter.limit=this.cart_array.length;
         this.service.post_rqst({'filter' : this.filter,'order':this.order,'dr_id':dr_id,'userId':this.userId,'userType':this.userType},'Product/productList').subscribe( response =>
             {
@@ -846,64 +949,136 @@ combine:any;
                         console.log(this.cart_array.length +' '+ response.products.length)
                         if(this.order == true)
                         {
-                            for (let i = 0; i < this.cart_array.length; i++) 
+                            for (let i = 0; i < this.cart_array.length; i++)
                             {
-                                this.cart_array[i].qty = 0; 
+                                this.cart_array[i].qty = 0;
                             }
                         }
-                        
+
                         infiniteScroll.complete();
                     },1000);
                 }
             });
         }
-        
+
         getsizeData()
         {
             //   this.service1.show_loading();
-            
+
             this.no_rec=false;
-            
+
             this.service.post_rqst({'userId':this.userId},'Product/sizeList').subscribe((response)=>
             {
                 console.log(response);
                 this.sizeList = response.sizeList;
                 this.service1.dismiss();
-                
+
                 if(!this.sizeList.length)
                 {
                     this.no_rec=true
                 }
-                
+
             },er=>
             {
                 // this.service1.dismiss();
-            });  
+            });
         }
         amount:any;
         gst_amnt:any;
         total_amnt:any;
+        // basic_discount:any={};
+        // sr_discount:any={};
+        // dd_discount:any={};
+        // family_discount:any={};
+        // ss_discount:any={};
+        // cd_discount:any={};
+
+        // basic_discount_amt={}
+
+
         addtolist1()
         {
             console.log(this.data);
             console.log(this.item_list);
-            
-            let existIndex = this.new_add_list.findIndex(row=>row.id == this.data.productid);  
+
+            let existIndex = this.new_add_list.findIndex(row=>row.id == this.data.productid);
             let rowData = this.item_list.findIndex(row=>row.id == this.data.productid)
             if(existIndex==-1)
               {
-                  
-                        let discount_percent = (parseFloat(this.item_list[rowData].discount)).toFixed(2);
-                        let discount_amount ;
-                        let discounted_amount 
-                  
+
+                        let basic_discount = (parseFloat(this.item_list[rowData].basic_discount)).toFixed(2);
+                        let sr_discount = (parseFloat(this.item_list[rowData].sr_discount)).toFixed(2);
+                        let dd_discount = (parseFloat(this.item_list[rowData].dd_discount)).toFixed(2);
+                        let family_discount = (parseFloat(this.item_list[rowData].family_discount)).toFixed(2);
+                        let ss_discount = (parseFloat(this.item_list[rowData].ss_discount)).toFixed(2);
+                        let cd_discount = (parseFloat(this.item_list[rowData].cd_discount)).toFixed(2);
+
+
+                        console.log(basic_discount);
+                        console.log(sr_discount);
+                        console.log(dd_discount);
+                        console.log(family_discount);
+                        console.log(ss_discount);
+                        console.log(cd_discount);
+
+
+
+
+                        let basic_discount_amt;
+                        let basic_discounted_amount;
+                        let sr_discount_amt;
+                        let sr_discounted_amount;
+
+                        let dd_discount_amt;
+                        let dd_discounted_amount;
+
+                        let family_discount_amt;
+                        let family_discounted_amount;
+
+                        let ss_discount_amt;
+                        let ss_discounted_amount;
+
+                        let cd_discount_amt;
+                        let cd_discounted_amount;
+
+
+
+
+
+
+                        let discounted_amount
+
                         this.amount=this.data.qty*this.item_list[rowData].rate;
-                        discount_amount=((parseFloat(this.amount)*parseFloat(discount_percent))/100).toFixed(2)  
-                        discounted_amount=(parseFloat(this.amount) - parseFloat(discount_amount)).toFixed(2);
+
+
+                        basic_discount_amt=((parseFloat( this.amount)*parseFloat(basic_discount))/100).toFixed(2)
+
+                        basic_discounted_amount=(parseFloat( this.amount) - parseFloat(basic_discount_amt)).toFixed(2);
+
+                        sr_discount_amt=((parseFloat(basic_discounted_amount)*parseFloat(sr_discount))/100).toFixed(2)
+
+                        sr_discounted_amount=(parseFloat(basic_discounted_amount) - parseFloat(sr_discount_amt)).toFixed(2);
+
+                        dd_discount_amt=((parseFloat(sr_discounted_amount)*parseFloat(dd_discount))/100).toFixed(2)
+
+                        dd_discounted_amount=(parseFloat(sr_discounted_amount) - parseFloat(dd_discount_amt)).toFixed(2);
+
+                        family_discount_amt=((parseFloat(dd_discounted_amount)*parseFloat(family_discount))/100).toFixed(2)
+
+                        family_discounted_amount=(parseFloat(dd_discounted_amount) - parseFloat(family_discount_amt)).toFixed(2);
+
+                        ss_discount_amt=((parseFloat(family_discounted_amount)*parseFloat(ss_discount))/100).toFixed(2)
+
+                        ss_discounted_amount=(parseFloat(family_discounted_amount) - parseFloat(ss_discount_amt)).toFixed(2);
+
+                        cd_discount_amt=((parseFloat(ss_discounted_amount)*parseFloat(cd_discount))/100).toFixed(2)
+
+                        cd_discounted_amount=(parseFloat(ss_discounted_amount) - parseFloat(cd_discount_amt)).toFixed(2);
+                        discounted_amount=cd_discounted_amount
                         this.gst_amnt=(parseFloat(discounted_amount)* parseFloat(this.item_list[rowData].gst))/100;
                         this.gst_amnt=this.gst_amnt.toFixed(2);
                         this.total_amnt=(parseFloat(this.gst_amnt) + parseFloat(discounted_amount)).toFixed(2);
-                        
+
 
                         this.new_add_list.push({
                             product_type:this.data.product_type,
@@ -915,27 +1090,35 @@ combine:any;
                             qty:this.data.qty,
                             rate:this.item_list[rowData].rate,
                             amount:this.amount,
-                            discount_percent:discount_percent,
-                            discount_amount:discount_amount,
+                            // discount_percent:discount_percent,
+                            discount_amount:discounted_amount,
                             discounted_amount:discounted_amount,
                             gst_amount:this.gst_amnt,
                             total_amount:this.total_amnt,
                             gst_percent:this.item_list[rowData].gst,
+                            basic_discount:this.item_list[rowData].basic_discount,
+                            sr_discount:this.item_list[rowData].sr_discount,
+                            dd_discount:this.item_list[rowData].dd_discount,
+                            family_discount:this.item_list[rowData].family_discount,
+                            ss_discount:this.item_list[rowData].ss_discount,
+                            cd_discount:this.item_list[rowData].cd_discount,
+
+
 
                     });
         }
         else
         {
             this.new_add_list[existIndex].qty= parseInt(this.new_add_list[existIndex].qty) +  parseInt(this.data.qty);
-           
+
             this.new_add_list[existIndex].amount=this.new_add_list[existIndex].qty*this.new_add_list[existIndex].rate;
             this.new_add_list[existIndex].discount_amount=((parseFloat(this.new_add_list[existIndex].amount)*parseFloat(this.new_add_list[existIndex].discount_percent))/100).toFixed(2)
             this.new_add_list[existIndex].discounted_amount=(parseFloat(this.new_add_list[existIndex].amount) - parseFloat(this.new_add_list[existIndex].discount_amount)).toFixed(2);
             this.new_add_list[existIndex].gst_amount=((this.new_add_list[existIndex].discounted_amount)*(this.new_add_list[existIndex].gst))/100;
             this.new_add_list[existIndex].total_amount=this.new_add_list[existIndex].discounted_amount+ this.new_add_list[existIndex].gst_amount;
-            
+
         }
-        
+
         this.total_qty = 0;
         this.sub_total = 0;
         this.netamount = 0;
@@ -950,20 +1133,17 @@ combine:any;
             this.order_discount = (parseFloat(this.order_discount) + parseFloat(this.new_add_list[i].discount_amount)).toFixed(2);
             this.total_gst_amount = (parseFloat(this.new_add_list[i].gst_amount) + parseFloat(this.total_gst_amount)).toFixed(2);
         }
-       
-             
+
+
           console.log( this.total_qty);
           console.log( this.netamount);
           console.log( this.total_gst_amount);
-          
-        //   this.netamount = parseInt(this.netamount);
-        //   this.total_gst_amount = parseInt(this.total_gst_amount);
-        //   this.netamount = this.netamount.toFixed();
-        //   this.total_gst_amount = this.total_gst_amount.toFixed();
-          
+
+       ;
+
           this.new_grand_total=(parseFloat(this.netamount) + parseFloat(this.total_gst_amount)).toFixed(2);
           console.log(this.new_grand_total);
-          
+
              console.log(this.new_add_list);
 
          this.data.product={};
@@ -982,124 +1162,11 @@ combine:any;
 
 
 
-        addtolist2()
-        {
-            console.log(this.data);
-            console.log(this.item_list);
-            
-            let existIndex = this.new_add_list.findIndex(row=>row.id == this.data.productid);  
-            let rowData = this.item_list.findIndex(row=>row.id == this.data.productid)
-            if(existIndex==-1)
-              {
-                  
-                        // let discount_percent = (parseFloat(this.item_list[rowData].discount)).toFixed(2);
-                        let discount_amount0 ;
-                        let discount_amount1 ;
-                        let discount_amount2 ;
-                        let discount_amount3;
+      
 
 
 
 
-
-
-                        this.discount_percent=parseFloat(this.data.basic_discount)
-                        this.discount_percent1=parseFloat(this.data.sr_discount)
-                        this.discount_percent2=parseFloat(this.data.cd_discount)
-                        this.discount_percent3=parseFloat(this.data.other_discount)
-
-                        this.amount=this.data.qty*this.item_list[rowData].rate;
-                        discount_amount0=((parseFloat(this.amount)*parseFloat(this.discount_percent))/100).toFixed(2)  
-                        this.discounted_amount=(parseFloat(this.amount) - parseFloat(discount_amount0)).toFixed(2);
-
-                        discount_amount1=((parseFloat(this.discounted_amount)*parseFloat(this.discount_percent1))/100).toFixed(2)  
-                        this.discounted_amount1 =(parseFloat(this.discounted_amount) - parseFloat(discount_amount1)).toFixed(2);
-
-                        discount_amount2=((parseFloat(this.discounted_amount1)*parseFloat(this.discount_percent2))/100).toFixed(2)  
-                        this.discounted_amount2=(parseFloat(this.discounted_amount1) - parseFloat(discount_amount2)).toFixed(2);
-
-                        discount_amount3=((parseFloat(this.discounted_amount2)*parseFloat(this.discount_percent3))/100).toFixed(2)  
-                        this.discounted_amount3=(parseFloat(this.discounted_amount2) - parseFloat(discount_amount3)).toFixed(2);
-                        this.discount_amount=parseFloat(this.discounted_amount3)
-                        this.gst_amnt=(parseFloat(this.discount_amount)* parseFloat(this.item_list[rowData].gst))/100;
-                        this.gst_amnt=this.gst_amnt.toFixed(2);
-                        this.total_amnt=(parseFloat(this.gst_amnt) + parseFloat(this.discounted_amount3)).toFixed(2);
-                        
-
-                        this.new_add_list.push({
-                            product_type:this.data.product_type,
-                            product_name:this.item_list[rowData].product_name,
-                            id: this.data.productid,
-                            category:this.item_list[rowData].category,
-                            gst:this.item_list[rowData].gst,
-                            product_code:this.item_list[rowData].product_code,
-                            qty:this.data.qty,
-                            rate:this.item_list[rowData].rate,
-                            amount:this.amount,
-                            basic_discount:this.data.basic_discount,
-                            cd_discount:this.data.cd_discount,
-                            other_discount:this.data.other_discount,
-                            sr_discount:this.data.sr_discount,
-
-                            discount_percent:this.discount_percent,
-                            discount_amount:this.discount_amount,
-                            discounted_amount:this.discounted_amount3,
-                            gst_amount:this.gst_amnt,
-                            total_amount:this.total_amnt,
-                            gst_percent:this.item_list[rowData].gst,
-
-                    });
-        }
-        else
-        {
-            this.new_add_list[existIndex].qty= parseInt(this.new_add_list[existIndex].qty) +  parseInt(this.data.qty);
-           
-            this.new_add_list[existIndex].amount=this.new_add_list[existIndex].qty*this.new_add_list[existIndex].rate;
-            this.new_add_list[existIndex].discount_amount=((parseFloat(this.new_add_list[existIndex].amount)*parseFloat(this.new_add_list[existIndex].discount_percent))/100).toFixed(2)
-            this.new_add_list[existIndex].discounted_amount=(parseFloat(this.new_add_list[existIndex].amount) - parseFloat(this.new_add_list[existIndex].discount_amount)).toFixed(2);
-            this.new_add_list[existIndex].gst_amount=((this.new_add_list[existIndex].discounted_amount)*(this.new_add_list[existIndex].gst))/100;
-            this.new_add_list[existIndex].total_amount=this.new_add_list[existIndex].discounted_amount+ this.new_add_list[existIndex].gst_amount;
-            
-        }
-        
-        this.total_qty = 0;
-        this.sub_total = 0;
-        this.netamount = 0;
-        this.total_gst_amount = 0;
-        this.order_discount =0;
-
-        for(let i = 0; i < this.new_add_list.length; i++)
-        {
-            this.total_qty = (parseInt(this.total_qty) + parseInt(this.new_add_list[i].qty));
-            this.sub_total = (parseFloat(this.sub_total) +  parseFloat(this.new_add_list[i].amount)).toFixed(2);
-            this.netamount = (parseFloat(this.netamount) +  parseFloat(this.new_add_list[i].discounted_amount)).toFixed(2)
-            this.order_discount = (parseFloat(this.order_discount) + parseFloat(this.new_add_list[i].discount_amount)).toFixed(2);
-            this.total_gst_amount = (parseFloat(this.new_add_list[i].gst_amount) + parseFloat(this.total_gst_amount)).toFixed(2);
-        }
-       
-             
-          console.log( this.total_qty);
-          console.log( this.netamount);
-          console.log( this.total_gst_amount);
-          
-        //   this.netamount = parseInt(this.netamount);
-        //   this.total_gst_amount = parseInt(this.total_gst_amount);
-        //   this.netamount = this.netamount.toFixed();
-        //   this.total_gst_amount = this.total_gst_amount.toFixed();
-          
-          this.new_grand_total=(parseFloat(this.netamount) + parseFloat(this.total_gst_amount)).toFixed(2);
-          console.log(this.new_grand_total);
-          
-             console.log(this.new_add_list);
-
-         this.data.product={};
-         this.data.qty='';
-        //  this.data.category='';
-        }
-        
-     
-        
-        
         listdelete(i)
         {
             this.new_add_list.splice(i, 1);
@@ -1109,7 +1176,7 @@ combine:any;
             // this.total_gst_amount = 0;
             // console.log( this.new_add_list);
 
-            
+
             // for(let i = 0; i < this.new_add_list.length; i++)
             // {
             //     this.total_qty = parseInt(this.total_qty + this.new_add_list[i]['qty']);
@@ -1122,7 +1189,7 @@ combine:any;
             this.netamount = 0;
             this.total_gst_amount = 0;
             this.order_discount =0;
-    
+
             for(let i = 0; i < this.new_add_list.length; i++)
             {
                 this.total_qty = (parseInt(this.total_qty) + parseInt(this.new_add_list[i].qty));
@@ -1131,21 +1198,21 @@ combine:any;
                 this.order_discount = (parseFloat(this.order_discount) + parseFloat(this.new_add_list[i].discount_amount)).toFixed(2);
                 this.total_gst_amount = (parseFloat(this.new_add_list[i].gst_amount) + parseFloat(this.total_gst_amount)).toFixed(2);
             }
-              
+
               this.new_grand_total=(parseFloat(this.netamount) + parseFloat(this.total_gst_amount)).toFixed(2);
-            
+
             // this.new_grand_total=parseInt(this.netamount) + parseInt(this.total_gst_amount);
-            
+
         }
-        
-        
+
+
         save_order(type)
         {
             console.log(this.data);
-            
+
             this.leave=1
             this.user_data.type = this.data.networkType;
-            
+
             console.log(type);
             console.log(this.user_data);
             console.log(this.data);
@@ -1154,17 +1221,17 @@ combine:any;
                 console.log(this.data.delivery_from)
 
             }
-            if(this.data['type_name']&& (this.data['type_name'].type=="3"&&this.data['type_name'].type=="5"||this.data['type_name'].type=="9"||this.data['type_name'].type=="11"||this.data['type_name'].type=="12"||this.data['type_name'].type=="13"||this.data['type_name'].type=="14"||this.data['type_name'].type=="15"||this.data['type_name'].type=="16")){
+            if(this.data['type_name']&& (this.data['type_name'].type=="3"&&this.data['type_name'].type=="5"||this.data['type_name'].type=="9"||this.data['type_name'].type=="11"||this.data['type_name'].type=="13"||this.data['type_name'].type=="14"||this.data['type_name'].type=="15"||this.data['type_name'].type=="16")){
                 this.data.delivery_from=this.data.delivery_from.id;
 
             }
-           
-            
+
+
             console.log(this.data);
-            
-            
-            
-            if(this.user_data.type == "3"||this.user_data.type == "5" ||this.user_data.type == "9"||this.user_data.type == "11"||this.user_data.type == "12"||this.user_data.type == "13"||this.user_data.type == "14"||this.user_data.type == "15"||this.user_data.type == "16")
+
+
+
+            if(this.user_data.type == "3"||this.user_data.type == "5" ||this.user_data.type == "9"||this.user_data.type == "11"||this.user_data.type == "13"||this.user_data.type == "14"||this.user_data.type == "15"||this.user_data.type == "16")
             {
                 if(!this.data.delivery_from)
                 {
@@ -1177,7 +1244,7 @@ combine:any;
                 }
                 this.user_data.distributor_id = this.data.delivery_from
             }
-            
+
             this.special_discount = this.special_discount;
             this.user_data.special_discount_amount = this.spcl_dis_amt;
             this.user_data.Disctype = this.type;
@@ -1185,12 +1252,12 @@ combine:any;
             this.user_data.dr_id = this.data.type_name.id
             if(this.data.distributor_id && this.data.delivery_from)
             this.user_data.distributor_id = this.data.delivery_from
-            
+
             var orderData = {'sub_total':this.sub_total,'dis_amt':this.order_discount,'grand_total':this.new_grand_total,'total_gst_amount':this.total_gst_amount,'total_qty':this.total_qty,'net_total':this.netamount,'special_discount':this.special_discount,'special_discount_amount':this.spcl_dis_amt}
             console.log(orderData);
             console.log(this.add_list);
             console.log(this.user_data);
-            
+
             this.service1.addData({"cart_data":this.new_add_list,"user_data":this.user_data,'orderData':orderData,'checkin_id':this.checkin_id},"dealerData/save_orderExecutive").then(resp=>{
                 console.log(resp);
                 if(resp['msg'] == "success")
@@ -1204,58 +1271,63 @@ combine:any;
                     {
                         toastString='Order Placed Successfully !'
                     }
-                    
+
                     console.log(this.user_data.distributor_id);
-                    
+
                     if(this.navParams.get('dr_type') && this.navParams.get('dr_name') && this.navParams.get('order_type')){
-                        
+
                         this.navCtrl.pop();
-                        
+
                     }
                     else{
                         if(this.order_data) {
-                            
+
                             if(this.order_data.type == 1 || this.order_data.type == 7 ) {
-                                
+
                                 this.navCtrl.push(OrderListPage,{'type':'Primary'})
-                                
-                                
+
+
                             } else {
-                                
+
                                 this.navCtrl.push(OrderListPage,{'type':'Secondary'})
-                                
+
                             }
-                            
-                            
+
+
                         } else {
-                            
-                            
+
+
                             if(this.data.networkType == 1 ||  this.data.networkType == 7)
                             {
-                                
+
                                 console.log('Primary');
-                                
+
                                 this.navCtrl.push(OrderListPage,{'type':'Primary'})
-                                
+
                             }
                             else
                             {
-                                
+
                                 console.log('Secondary');
-                                
+
                                 this.navCtrl.push(OrderListPage,{'type':'Secondary'})
                             }
                         }
                     }
-                    
+
                     this.service1.presentToast(toastString)
                 }
             })
-            
-            
+
+
         }
-        
-        
+
+
+
+
+
+
+
         editRate(id,index) {
             console.log(id);
             this.active[index] = Object.assign({'qty':"1"});
@@ -1266,10 +1338,10 @@ combine:any;
             // this.showError=true;
             this.product_list[index].edit_true = false;
         }
-        
-        
+
+
         updateRate(editedRate,index){
-            
+
             console.log(editedRate);
             this.idMode = 0;
             this.active = {};
@@ -1280,7 +1352,6 @@ combine:any;
         {
             this.data.productid=this.data.product.id;
           console.log(this.data.productid);
-          
+
         }
     }
-    

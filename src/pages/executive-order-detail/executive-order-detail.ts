@@ -31,6 +31,8 @@ export class ExecutiveOrderDetailPage {
     order_id1:any = '';
     currentDate:any='';
     orderDate:any='';
+    orderDate1:any;
+
     dispatch:boolean = false;
     loginData:any={};
     upload_url:any='';
@@ -52,6 +54,8 @@ export class ExecutiveOrderDetailPage {
     order_item_discount :any ={};
     value:any = {};
     user_data:any={};
+     today_date = new Date().toISOString().slice(0,10);
+
     brand_assign:any = [];
     loading:any;
     
@@ -59,6 +63,8 @@ export class ExecutiveOrderDetailPage {
     {
         this.pdfUrl = this.constant.upload_url1 +'orderPdf/';
         console.log(constant);
+        console.log(this.today_date);
+        
         
     }
     ionViewWillEnter()
@@ -148,62 +154,42 @@ export class ExecutiveOrderDetailPage {
         console.log('ionViewDidLoad OrderDetailPage');
     }
     
-   
+    orderitem:any=[]
     getOrderDetail(order_id)
     {
         console.log(order_id);
-        this.lodingPersent();
         this.service.addData({"order_id":order_id},"Order/order_detail").then((result)=>{
             console.log(result);
-            this.orderDetail=result['detail'];
-            if(this.orderDetail.length>0){
-                // for(let i=0;i<this.orderDetail.length;i++){
-                //     this.orderDetail[i].sub_total=this.orderDetail[i].amount;
-                // }
-                console.log(this.orderDetail);
-                
-            }
-
-            if(this.orderDetail[0]['sub_total'] == null){
-                console.log(this.orderDetail[0]['sub_total']);
-            }
-            
             this.userDetail=result['data'];
-            // this.userDetail.order_total = Math.round(parseFloat(this.userDetail.order_total))
-            this.userDetail.order_grand_totalAfterRoundOff = Math.round(parseFloat(this.userDetail.order_grand_total))
-            this.userDetail.netBreakup = (parseFloat(this.userDetail.order_grand_total)/1.18)
-            this.userDetail.gstBreakup = parseFloat(this.userDetail.order_grand_total)-parseFloat(this.userDetail.netBreakup)
-            this.userDetail.disc_percentage = Math.round((parseFloat(this.userDetail.order_discount)*100)/parseFloat(this.userDetail.sub_total));
-            console.log(this.userDetail);
-            console.log(this.userDetail.delivery_from);
+        
+            this.orderitem=result['data']['item_data'];
+            this.orderDate1=this.userDetail.order_date_created
+            console.log(this.orderDate1);
             
-            
-            
-            this.image = result['images'];
-            this.orderDetail.map((item)=>{
-                // item.afterDiscount = parseFloat(item.price)-((parseFloat(item.price)/100)*parseInt(item.discount_percent))
-                item.afterDiscount = parseFloat(item.price)-parseFloat(item.discount_amount)
-                item.amountAfterRoundOff =Math.round(item.amount)
-                item.edit_true = true;
-                if(item.dispatch_qty!="0")
-                {
-                    this.show_image = true;
-                }
-                console.log(this.userDetail.delivery_from);
-                
+
+            this.orderitem.map(row=>{
+                row.edit_true = true;
             })
-            if(this.userDetail.company_name)
-            {
-                this.tag=this.userDetail.company_name[0].toUpperCase();
-                console.log(this.userDetail.delivery_from);
+            this.orderitem.map(row=>{
+                row.edit_true1 = true;
+            })
+            console.log(this.orderDetail);
+            this.image = result['images'];
+
+            this.orderDate1 = moment(this.orderDate1).format("Y-MM-DD");
+            console.log(this.orderDate1);
+            console.log(this.today_date);
+
+
+            if(this.today_date==this.orderDate1){
+
+                console.log('donnnneeeee');
+                
+
+            }else{
+                console.log('faillll');
                 
             }
-            this.orderDate=moment(this.userDetail.order_date_created).format("YY:MM:DD");
-            console.log(this.orderDate);
-            
-            
-            this.loading.dismiss();
-            
         })
     }
     
@@ -220,27 +206,37 @@ export class ExecutiveOrderDetailPage {
     
     edit_order(index,order_item_id,category,dr_id,type,cat_no)
     {
-        this.active[index] = Object.assign({'qty':"1"});
+        // this.active[index] = Object.assign({'qty':"1"}); 
         console.log(this.active);
-        this.orderDetail[index].edit_true = false;
+        console.log(this.orderitem[index]);
+        this.orderitem[index].edit_true = false;
         
-        this.service.addData({'category':category, 'dr_id':dr_id, 'type':type, 'cat_no':cat_no},'Order/order_item_discount')
-        .then((result)=>{
-            console.log(result);
-            if(result)
-            {
-                if(result['data'] == null)
-                {
-                    this.order_item_discount = null;
-                }else{
-                    this.order_item_discount = result['data'][0];
-                    console.log(this.order_item_discount);
-                }
+        // this.service.addData({'category':category, 'dr_id':dr_id, 'type':type, 'cat_no':cat_no},'order/update_order_item_new')
+        // .then((result)=>{
+        //     console.log(result);
+        //     if(result)
+        //     {
+        //         if(result['data'] == null)
+        //         {
+        //             this.order_item_discount = null;
+        //         }else{
+        //             this.order_item_discount = result['data'][0];
+        //             console.log(this.order_item_discount);
+        //         }
                 
-                this.value = result['data1'][0];
-                console.log(this.value);
-            }
-        });
+        //         this.value = result['data1'][0];
+        //         console.log(this.value);
+        //     }
+        // });
+    }
+    edit_order1(index,order_item_id,category,dr_id,type,cat_no)
+    {
+        // this.active[index] = Object.assign({'qty':"1"}); 
+        console.log(this.active);
+        console.log(this.orderitem[index]);
+        this.orderitem[index].edit_true1 = false;
+        
+       
     }
     
     edit_order_executive(index,order_item_id,category,dr_id,type,cat_no)
@@ -248,7 +244,7 @@ export class ExecutiveOrderDetailPage {
        
         this.active[index] = Object.assign({'qty':"1"});
         console.log(this.active);
-        // this.orderDetail[index].edit_true = false;
+        this.orderitem[index].edit_true = false;
         
         this.service.addData({'category':category, 'dr_id':dr_id, 'type':type, 'cat_no':cat_no},'Order/order_item_discount')
         .then((result)=>{
@@ -271,81 +267,7 @@ export class ExecutiveOrderDetailPage {
     
    
     
-    calculateAmount(qty,index,del,data:any)
-    {
-        console.log(this.orderDetail);
-        
-        var itemData =  this.orderDetail[index]
-        console.log(itemData);
-        this.userDetail.special_discount_amount =0
-        
-        this.orderDetail[index].sub_total = this.orderDetail[index].price * this.orderDetail[index].qty;
-        this.orderDetail[index].discount_amount = this.orderDetail[index].price * this.orderDetail[index].discount_percent / 100;
-        this.orderDetail[index].discounted_amount = this.orderDetail[index].sub_total - this.orderDetail[index].discount_amount;
-        this.orderDetail[index].gst_amount = this.orderDetail[index].discounted_amount * this.orderDetail[index].gst_percent / 100;
-        // this.orderDetail[index].amount = parseFloat(this.orderDetail[index].discounted_amount) *  this.orderDetail[index].qty +  this.orderDetail[index].gst_amount;
-        
-        this.orderDetail[index].amount = parseFloat(this.orderDetail[index].sub_total) +  this.orderDetail[index].gst_amount;
-        
-        this.orderDetail[index].sub_total = parseFloat(this.orderDetail[index].sub_total);
-        this.orderDetail[index].discount_amount = parseFloat(this.orderDetail[index].discount_amount);
-        this.orderDetail[index].discounted_amount = parseFloat(this.orderDetail[index].discounted_amount);
-        this.orderDetail[index].gst_amount = parseFloat(this.orderDetail[index].gst_amount);
-        this.orderDetail[index].amount = parseFloat(this.orderDetail[index].amount);
-        this.orderDetail[index].amountAfterRoundOff = (this.orderDetail[index].amount).toFixed();
-
-        
-        this.order_data.sub_total = 0;
-        this.order_data.discount = 0;
-        this.order_data.gst = 0;
-        this.order_data.order_total = 0;
-        // this.order_data.special_discount_amount =0
-        console.log(this.orderDetail[index]);
-        console.log(this.userDetail);
-        
-        for(var i=0; i<this.orderDetail.length;i++)
-        { 
-            this.order_data.sub_total += parseFloat(this.orderDetail[i]['sub_total']);
-            this.order_data.order_total += parseFloat(this.orderDetail[i]['amount']);
-            // this.order_data.discount += parseFloat(this.orderDetail[index].sub_total)-parseFloat(this.orderDetail[index].amount);
-            this.order_data.discount += parseFloat(this.orderDetail[index].amount) - parseFloat(this.orderDetail[index].sub_total)- this.orderDetail[index].gst_amount;
-            this.order_data.gst += parseFloat(this.orderDetail[i]['gst_amount']);
-            
-            
-            console.log(this.order_data);
-            
-            this.userDetail.sub_total = this.order_data.sub_total.toFixed();
-            this.userDetail.order_total = this.order_data.order_total.toFixed();
-            this.userDetail.order_discount = this.order_data.discount;
-            this.userDetail.order_gst = this.order_data.gst.toFixed();
-        }
-        this.order_data.special_discount_amount = (this.order_data.order_total * parseFloat(this.userDetail.special_discount_percentage) )/100
-        this.userDetail.special_discount_amount = this.order_data.special_discount_amount;
-        
-        // if(this.userDetail.DiscType=='Discount')
-        // {
-        //     this.order_data.order_grand_total = this.order_data.order_total - this.order_data.special_discount_amount
-        // }
-        // else
-        // {
-        //     this.order_data.order_grand_total = this.order_data.order_total + this.order_data.special_discount_amount
-        
-        // }
-        
-        this.order_data.order_grand_total = this.order_data.order_total - this.order_data.special_discount_amount
-        console.log(this.order_data);
-        
-        this.userDetail.order_grand_total = this.order_data.order_grand_total;
-        this.userDetail.order_grand_totalAfterRoundOff = Math.round(this.userDetail.order_grand_total)
-        // this.userDetail.netBreakup = (parseFloat(this.userDetail.order_grand_total)/1.18)
-        // this.userDetail.gstBreakup = parseFloat(this.userDetail.order_grand_total)-parseFloat(this.userDetail.netBreakup)
-        
-        if(del==true)
-        {
-            
-            this.update_order(data.index,data.order_id,data.order_item_id,true)
-        }
-    }
+   
     
    
     
@@ -495,51 +417,135 @@ export class ExecutiveOrderDetailPage {
         
         toast.present();
     }
+    update_order1(index,order_id,order_item_id,del:any)
+
+  {
     
+    if(!this.orderitem[index].qty && del==false)
+    {
+        this.service.presentToast('Please Enter Valid Quantity')
+        return;
+    }
+    this.lodingPersent();
+    
+    this.service.addData({'order_id':order_id, 'order_item_id':order_item_id, 'item':this.orderitem[index], 'order':this.userDetail,delete:del},'order/update_order_item_new').then((result)=>{
+      console.log(result);
+      if(result == 'success')
+      { 
+        // this.loading.dismiss();
+        // this.presentToast();
+        this.getOrderDetail(order_id);
+        this.loading.dismiss();
+
+      }
+    })
+    this.active = {};
+    this.orderitem[index].edit_true = true;
+  }
+  update_order2(index,order_id,order_item_id,del:any)
+  {
+    if(!this.orderitem[index].qty && del==false)
+    {
+        this.service.presentToast('Please Enter Valid Quantity')
+        return;
+    }
+    this.lodingPersent();
+    
+    this.service.addData({'order_id':order_id, 'order_item_id':order_item_id, 'item':this.orderitem[index], 'order':this.userDetail},'Order/update_order_item').then((result)=>{
+      console.log(result);
+      if(result == 'success')
+      { 
+        // this.loading.dismiss();
+        // this.presentToast();
+        this.getOrderDetail(order_id);
+      }
+    })
+    this.active = {};
+    this.orderitem[index].edit_true1 = true;
+  }
+    updateitem(index,order_id,order_item_id,del:any){
+        let alert = this.alertCtrl.create({
+            title: 'Confirm ',
+            message: 'Are you sure you want to update this item ?',
+            buttons: [
+                {
+                    text: 'No',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.update_order(index,order_id,order_item_id,del)
+                        // this.delete_order_item(index,order_id,order_item_id);
+                    }
+                }
+            ]
+        })
+    }
+
     update_order(index,order_id,order_item_id,del:any)
     {
-
-        if(!this.orderDetail[index].qty && del==false)
-        {
-            this.service.presentToast('Please Enter Valid Quantity')
-            return;
-        }
-        // this.lodingPersent();
-        console.log(order_id);
-        console.log(order_item_id);
-        console.log(this.orderDetail[index]);
-        console.log(this.userDetail);
-        console.log(del);
-        console.log(this.constant.UserLoggedInData.id);
-        
-        
-        this.service.addData({'order_id':order_id, 'order_item_id':order_item_id, 'item':this.orderDetail[index], 'order':this.userDetail , delete:del,loginId:this.constant.UserLoggedInData.id},'Order/update_order_item')
-        .then((result)=>{
-            console.log(result);
-            if(result[1]===0)
-            {
-                this.navCtrl.pop()
-                this.loading.dismiss();
-                
-                this.service.presentToast('Order Deleted Sucessfully')
-                return
-                
-            }
-            if(result[0] == 'success')
-            { 
-                this.loading.dismiss();
-                if(del==false)
+        let alert = this.alertCtrl.create({
+            title: 'Confirm ',
+            message: 'Are you sure you want to update this item ?',
+            buttons: [
                 {
-                    this.presentToast();
+                    text: 'No',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        if(!this.orderitem[index].qty && del==false)
+                        {
+                            this.service.presentToast('Please Enter Valid Quantity')
+                            return;
+                        }
+                        this.lodingPersent();
+                        console.log(order_id);
+                        console.log(order_item_id);
+                        console.log(this.orderitem[index]);
+                        console.log(this.userDetail);
+                        console.log(del);
+                        console.log(this.constant.UserLoggedInData.id);
+                        
+                        
+                        this.service.addData({'order_id':order_id, 'order_item_id':order_item_id, 'item':this.orderitem[index], 'order':this.userDetail , delete:del,loginId:this.constant.UserLoggedInData.id},'Order/update_order_item')
+                        .then((result)=>{
+                            console.log(result);
+                            if(result[1]===0)
+                            {
+                                this.navCtrl.pop()
+                                this.loading.dismiss();
+                                
+                                this.service.presentToast('Order Deleted Sucessfully')
+                                return
+                                
+                            }
+                            if(result[0] == 'success')
+                            { 
+                                this.loading.dismiss();
+                                if(del==false)
+                                {
+                                    this.presentToast();
+                                }
+                                else{
+                                    this.service.presentToast('Order Item Deleted Sucessfully')
+                                }
+                                this.getOrderDetail(order_id);
+                            }
+                        })
+                        this.active = {};
+                        this.orderitem[index].edit_true = true;
+                    }
                 }
-                else{
-                    this.service.presentToast('Order Item Deleted Sucessfully')
-                }
-                this.getOrderDetail(order_id);
-            }
+            ]
         })
-        this.active = {};
-        this.orderDetail[index].edit_true = true;
+       
     }
     
     
@@ -562,9 +568,10 @@ export class ExecutiveOrderDetailPage {
                 {
                     text: 'Yes',
                     handler: () => {
-                        this.orderDetail[index].qty=0
-                        var data = { index:index , order_id:order_id , order_item_id:order_item_id }
-                        this.calculateAmountExecutive(0,index,true,data)
+                        // this.orderDetail[index].qty=0
+                        // var data = { index:index , order_id:order_id , order_item_id:order_item_id }
+   this.update_order1(index,order_id,order_item_id,true)
+
                         // this.delete_order_item(index,order_id,order_item_id);
                     }
                 }
@@ -799,7 +806,7 @@ export class ExecutiveOrderDetailPage {
         this.orderDetail.map(row=>{
             row.discount = row.discount_percent;
         })
-        this.navCtrl.push(AddOrderPage,{"order_item":this.orderDetail,"order_data":this.userDetail});
+        this.navCtrl.push(AddOrderPage,{"order_item":this.orderitem,"order_data":this.userDetail});
     }
     collObject:any={}
     collapse(index)

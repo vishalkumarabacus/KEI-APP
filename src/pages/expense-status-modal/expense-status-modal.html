@@ -1,90 +1,158 @@
-<ion-content  class="transprant-bg" *ngIf="from_page == 'travel'||from_page == 'expense'">
-  <div class="work-modal">
-    <div class="work-modal-bg">
+
+
+
+
+
+<ion-header>
+  <ion-navbar>
+      <ion-title *ngIf="from_page == 'travel'||from_page == 'expense'||from_page == 'leave'">Change Status</ion-title>
+      <ion-title *ngIf="from_page =='leadassign'">Assign Users</ion-title>
+      <ion-title *ngIf="from_page =='drassign'">Assign Users</ion-title>
+      <ion-title *ngIf="from_page != 'travel'&&from_page != 'expense'&&from_page != 'leave'&&from_page=='leaddetail'">Change Status</ion-title>
+
+
+
+
+     
+
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content style="background: #f8f8f8;"*ngIf="from_page == 'travel'||from_page == 'expense'||from_page == 'leave'">
+
+  <div class="edit mt10 ml10 mr10">
+    <ion-list>
       <div>
-        
-        <div class="head">
-          <h2>Change Status</h2>
-          <a class="close" (click)="dismiss()"><i class="material-icons">close</i></a>
-        </div>
-        <div class="edit mt10 ml0 mr0">
-          <ion-list>
-            <div>
-    
-                <ion-item class="cs-normal-select mt16">
-                    <ion-label>Status</ion-label>
-                    <ion-select name="status" [(ngModel)]="data.status">
-                        <ion-option value="Approved">Approved</ion-option>
-                        <ion-option value="Reject">Reject</ion-option>
-                    </ion-select>
-                </ion-item>
-    
-                <ion-item class="cs-textarea1" *ngIf="data.status == 'Reject'">
-                    <ion-label floating><span>Reason For Reject</span></ion-label>
-                    <ion-textarea name="reason" [(ngModel)]="data.reason"></ion-textarea>
-                </ion-item>
-            </div>          
-          </ion-list>
-    
-      </div>
-        
-        <div class="text-right mt32">
-          <button ion-button color="secondary" [disabled]="!data.status || (data.status == 'Reject' && !data.reason)" (click)="update_status()">Update</button>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-</ion-content>
 
-
-<ion-content  class="transprant-bg" *ngIf="this.data.type=='teamreport'">
-  <div class="work-modal">
-    <div class="work-modal-bg">
-      <div>
-        
-        <div class="head">
-          <h2>Search </h2>
-          <a class="close" (click)="dismiss()"><i class="material-icons">close</i></a>
-        </div>
-        <div class="edit mt10 ml0 mr0">
-          <ion-list>
-            <div>
-    
-              <ion-item class="cs-normal-select" >
-                <ion-label> Select Users <strong>*</strong></ion-label>
-                <ion-select name="users" [(ngModel)]="filter.team_id" >
-                    <ion-option *ngFor="let list of team" [value]="list.id">{{list.name}}</ion-option>
-                    <!-- <ion-option value="two">Palwal</ion-option> -->
-                </ion-select>
-                </ion-item>
-               
-              <ion-item class="cs-normal-select mt16">
-                <ion-label floating>Date From</ion-label>
-                <ion-input type="date"class="calander" type="date" name="date_to" #date_from="ngModel" [(ngModel)]="filter.date_to" class="calander"  >  <i class="material-icons">date_range</i> </ion-input>
-              
-
-               
-            </ion-item>
-            <ion-item class="cs-normal-select mt16">
-              <ion-label floating>Date to</ion-label>
-              <ion-input type="date"class="calander" type="date" name="date_from" #date_from="ngModel" [(ngModel)]="filter.date_from" class="calander"  >  <i class="material-icons">date_range</i> </ion-input>
-            
-
-             
+          <ion-item class="cs-normal-select mt16">
+              <ion-label>Status</ion-label>
+              <ion-select name="status" [(ngModel)]="data.status">
+                  <ion-option value="Approved">Approved</ion-option>
+                  <ion-option value="Reject">Reject</ion-option>
+              </ion-select>
           </ion-item>
-            </div>          
-          </ion-list>
-    
-      </div>
-        
-        <div class="text-right mt32">
-          <button ion-button color="secondary" (click)="ondismiss()">SEARCH</button>
-        </div>
-      </div>
-    </div>
-    
+
+          <ion-item class="cs-textarea1" *ngIf="data.status == 'Reject'">
+              <ion-label floating><span>Reason For Reject</span></ion-label>
+              <ion-textarea name="reason" [(ngModel)]="data.reason"></ion-textarea>
+          </ion-item>
+      </div>          
+    </ion-list>
+
+</div>
+  
+  <div class="text-right mt32">
+    <button ion-button color="secondary" [disabled]="!data.status || (data.status == 'Reject' && !data.reason)" (click)="update_status()">Update</button>
   </div>
+
+
 </ion-content>
+<ion-content style="background: #f8f8f8;"*ngIf="from_page == 'leadassign'">
+
+  <div class="edit mt10 ml10 mr10">
+    <ion-list>
+      <div>
+
+        <ion-item class="cs-normal-select" >
+          <ion-label> Select Users <strong>*</strong></ion-label>
+          <ion-select name="users" [(ngModel)]="data.users" multiple="true" required >
+              <ion-option *ngFor="let list of user" [value]="list.id">{{list.name}}</ion-option>
+              <!-- <ion-option value="two">Palwal</ion-option> -->
+          </ion-select>
+      </ion-item> 
+      </div>          
+    </ion-list>
+
+</div>
+  
+  <div class="text-right mt32">
+    <button ion-button color="secondary" (click)="status()">Update</button>
+  </div>
 
 
+</ion-content>
+<ion-content style="background: #f8f8f8;"*ngIf="from_page == 'drassign'">
+
+  <div class="edit mt10 ml10 mr10">
+    <ion-list>
+      <div>
+
+        <ion-item class="cs-normal-select" >
+          <ion-label> Select Users <strong>*</strong></ion-label>
+          <ion-select name="users" [(ngModel)]="data.users" multiple="true" required >
+              <ion-option *ngFor="let list of user" [value]="list.id">{{list.name}}</ion-option>
+              <!-- <ion-option value="two">Palwal</ion-option> -->
+          </ion-select>
+      </ion-item> 
+      </div>          
+    </ion-list>
+
+</div>
+  
+  <div class="text-right mt32" >
+    <button ion-button color="secondary"  (click)="status1()">Update</button>
+  </div>
+
+
+</ion-content>
+<ion-content style="background: #f8f8f8;"*ngIf="from_page != 'travel'&&from_page != 'expense'&&from_page != 'leave'&&from_page=='leaddetail'">
+
+  <div class="edit mt10 ml10 mr10">
+    <ion-list>
+      <div>
+
+          <ion-item class="cs-normal-select mt16">
+              <ion-label>Status</ion-label>
+              <ion-select name="status" [(ngModel)]="data.status1">
+                <ion-option *ngIf="data.status!='qualified'"value="qualified">Qualified</ion-option>
+                <ion-option *ngIf="data.status!='qualified'"value="Disqualified">Disqualified</ion-option>
+                <ion-option  *ngIf="data.status=='qualified'"value="Win">Win</ion-option>
+                <ion-option  *ngIf="data.status=='qualified'"value="Lost">Lost</ion-option>
+              </ion-select>
+          </ion-item>
+          <ion-item class="cs-textarea1"  *ngIf="data.status1 == 'Lost'||data.status1=='Disqualified'">
+            <ion-label floating><span>Reason For Lost</span></ion-label>
+            <ion-textarea name="reason" placeholder="Reason is Required" [(ngModel)]="data.reason" required></ion-textarea>
+        </ion-item>
+
+         
+      </div>          
+    </ion-list>
+
+</div>
+ 
+  
+  <div class="text-right mt32" *ngIf="data.status1 == 'Lost'||data.status1=='Disqualified'">
+    <button ion-button color="secondary"  [disabled]="!data.reason"  (click)="update_status()">Update</button>
+  </div>
+  <div class="text-right mt32" *ngIf="data.status1 == 'Win'||data.status1=='qualified'">
+    <button ion-button color="secondary"   (click)="update_status()">Update</button>
+  </div>
+
+
+</ion-content>
+<!-- <ion-content style="background: #f8f8f8;"*ngIf="from_page != 'travel'&&from_page != 'expense'&&from_page != 'leave'&&from_page=='leaddetail'">
+
+  <div class="edit mt10 ml10 mr10">
+    <ion-list>
+
+        <ion-item class="cs-normal-select" >
+          <ion-label> Status <strong>*</strong></ion-label>
+          <ion-select name="status" [(ngModel)]="data.status1" multiple="true" required >
+            <ion-option *ngIf="data.status!='qualified'"value="qualified">Qualified</ion-option>
+        <ion-option *ngIf="data.status!='qualified'"value="Disqualified">Disqualified</ion-option>
+        <ion-option  *ngIf="data.status=='qualified'"value="Win">Win</ion-option>
+        <ion-option  *ngIf="data.status=='qualified'"value="Lost">Lost</ion-option>
+          </ion-select>
+      </ion-item> 
+    </ion-list>
+
+</div>
+  
+  <div class="text-right mt32">
+    <button ion-button color="secondary" (click)="update_status()">Update</button>
+  </div>
+
+
+</ion-content> -->

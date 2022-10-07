@@ -50,14 +50,14 @@ export class LoginPage {
                 return;
             }
             
-            if(this.form.phone == '7070183423' || this.form.phone == '9899394985'|| this.form.phone =='9000000000' || this.form.phone =='9667686942' )
+            if(this.form.phone == '7983938203' || this.form.phone == '9899394985'|| this.form.phone =='9000000000' || this.form.phone =='9667686942' )
             {
                 this.form.otp = 123456;
             }
             else
             {
-                // this.form.otp = Math.floor(100000 + Math.random() * 900000);
-                this.form.otp = 123456;
+                this.form.otp = Math.floor(100000 + Math.random() * 900000);
+                // this.form.otp = 123456;
 
             }
             

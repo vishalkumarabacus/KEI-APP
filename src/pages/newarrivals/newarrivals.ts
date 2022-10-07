@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 import { ProductSubdetailPage } from '../product-subdetail/product-subdetail';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { SQLite } from '@ionic-native/sqlite';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { ProductDetailPage } from '../product-detail/product-detail';
@@ -35,7 +35,7 @@ export class NewarrivalsPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public service:DbserviceProvider,
-              public offlineService: OfflineDbProvider,
+              // public offlineService: OfflineDbProvider,
               public service1: MyserviceProvider,
               private sqlite: SQLite,
               public constant:ConstantProvider,

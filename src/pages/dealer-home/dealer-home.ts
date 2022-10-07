@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events, ToastController } from 'ionic-angular';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { NewarrivalsPage } from '../newarrivals/newarrivals';
 import { ContactPage } from '../contact/contact';
 import { AboutPage } from '../about/about';
@@ -34,7 +34,7 @@ export class DealerHomePage {
                 public events: Events,
                 public constant:ConstantProvider,
                 public navParams: NavParams, 
-                public offlineService: OfflineDbProvider,
+                // public offlineService: OfflineDbProvider,
                 public service:DbserviceProvider ,
                 public db:MyserviceProvider,
                 public locationAccuracy: LocationAccuracy,
@@ -86,11 +86,11 @@ export class DealerHomePage {
 
     onProcessSQLDataHandler() 
     {
-        if(this.offlineService.localDBCallingCount === 0) 
-        {
-            this.offlineService.localDBCallingCount++;
-            this.offlineService.onValidateLocalDBSetUpTypeHandler();
-        }
+        // if(this.offlineService.localDBCallingCount === 0) 
+        // {
+        //     this.offlineService.localDBCallingCount++;
+        //     this.offlineService.onValidateLocalDBSetUpTypeHandler();
+        // }
     }
 
     open_menu()

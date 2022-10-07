@@ -169,8 +169,8 @@ page-checkin-new {
                 position: relative;
                 padding-bottom: 30px;
                 position: relative;
-
-
+                
+                
                 span.km {
                     position: absolute;
                     top: 0;
@@ -200,6 +200,11 @@ page-checkin-new {
                     font-size: 12px;
                     top: calc(50% - 15px);
                     transform: translateY(-50%);
+
+
+                    i{
+                        font-size: 14px;
+                    }
                 }
                 
                 .counter {
@@ -226,7 +231,7 @@ page-checkin-new {
                         position: relative;
                         
                         span {
-                            font-size: 11px;
+                            font-size: 10px;
                             color: #a0a0a0;
                             font-weight: 600;
                         }
@@ -257,7 +262,46 @@ page-checkin-new {
                     }
                 }
                 
-                
+                .type-visit1 {
+                    display: flex;
+                    
+                    
+                    padding: 5px;
+                    background: #f9f9f9;
+                    
+                    .types {
+                        padding: 0px 5px;
+                        position: relative;
+                        font-size: 10px;
+                        text-align: center;
+                        display: flex;
+                    
+                        grid-column-gap: 3px;
+                        
+                       
+                        
+                        
+                        
+                        &:after{
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            width: 1px;
+                            height: 20px;
+                            transform: translateY(-50%);
+                            background: #ccc;
+                            
+                        }
+                        
+                        &:first-child{
+                            &:after{
+                                background: transparent;
+                            }
+                        }
+                        
+                    }
+                }
                 .type-visit {
                     display: flex;
                     align-items: center;
@@ -293,11 +337,11 @@ page-checkin-new {
                                     margin: 0px;
                                     top: 50%;
                                     left: 3px;
-                                    left: -6px;
+                                    left: 0px;
                                     font-family: 'Material Icons';
                                     font-weight: normal;
                                     font-style: normal;
-                                    font-size: 13px;
+                                    font-size: 8px;
                                     line-height: 1;
                                     letter-spacing: normal;
                                     text-transform: none;
@@ -306,8 +350,8 @@ page-checkin-new {
                                     word-wrap: normal;
                                     color: #000000;
                                     transform: translateY(-50%);
-                                    width: 15px;
-                                    height: 16px;
+                                    width: 10px;
+                                    height: 10px;
                                     background: #3fc002;
                                     color: #fff;
                                     display: flex;
@@ -356,7 +400,7 @@ page-checkin-new {
                         transform: inherit;
                     }
                 }
-
+                
                 &:last-child{
                     &:after{
                         border: 0px;
@@ -472,6 +516,9 @@ page-checkin-new {
                                                                 font-weight: 500;
                                                                 color: #292828;
                                                                 opacity: 0.8;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: center;
                                                                 
                                                                 &.active {
                                                                     background-color: #d6d2d2;

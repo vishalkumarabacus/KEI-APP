@@ -10,17 +10,17 @@ import { LmsLeadDetailPage } from '../lms-lead-detail/lms-lead-detail';
     templateUrl: 'lms-lead-list.html',
 })
 export class LmsLeadListPage {
-    
+
     constructor(public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider,public loadingCtrl: LoadingController) {
         // this.get_assign_dr(1);
     }
-    
+
     load_data:any
     start:any=0;
     filter:any={};
     dr_list:any=[];
     count:any=[];
-    drid:any;
+    drid:any=9
     networkType:any=[]
     getNetworkType(){
         this.db.addData3('', "Dashboard/distributionNetworkModule").then((result => {
@@ -35,24 +35,24 @@ export class LmsLeadListPage {
         this.load_data=0;
         this.filter.type_id = type_id;
         // this.db.show_loading();
-        
+
         this.db.addData({"search":this.filter,},"Lead/getLeadList")
         .then(resp=>{
-            
+
             console.log(resp);
         // this.db.dismiss();
-            
+
             this.dr_list = resp['dr_list'];
-            
+
             this.count = resp['count'];
             for (let index = 0; index < this.count.length; index++) {
-                if(this.count[index].name=='Distributor'){
-                    this.count[index].name='Distributor';
+                if(this.count[index].name=='Online'){
+                    this.count[index].name='Online';
                 }
                 // if(this.count[index].name=='Dealer'){
                 //     this.count[index].name='Retailer';
                 // }
-                
+
             }
             console.log(this.count);
             console.log(this.dr_list);
@@ -67,7 +67,7 @@ export class LmsLeadListPage {
         })
 
     }
-    
+
     loadData(infiniteScroll)
     {
         console.log('loading');
@@ -75,6 +75,7 @@ export class LmsLeadListPage {
         this.db.addData({"start":this.start,"search":this.filter},"dealerData/get_assign_dr")
         .then((r) =>{
             console.log(r);
+
             if(r['dr_list']=='')
             {
                 // this.flag=1;
@@ -89,36 +90,36 @@ export class LmsLeadListPage {
             }
         });
     }
-    
+
     lead_detail(id)
     {
         console.log(id);
         this.navCtrl.push(LmsLeadDetailPage,{'id':id,'type':'Lead'})
     }
-    
-    addLead()
+
+    addLead(add)
     {
-        this.navCtrl.push(LmsLeadAddPage)
-    }
-    
+        this.navCtrl.push(LmsLeadAddPage,{'from':add})
+     }
+
     ionViewWillEnter() {
         console.log('ionViewDidLoad LmsLeadListPage');
-        this.get_assign_dr(1);
+        this.get_assign_dr(9);
         // this.doRefresh(Refresher);
-        
+
     }
-    
-    doRefresh (refresher)
-    {   
+
+    doRefresh(refresher)
+    {
         this.filter.master=null
         this.filter={}
         this.start=0
         console.log(refresher);
-        
-        this.get_assign_dr(1) 
+
+        this.get_assign_dr(9)
         setTimeout(() => {
             refresher.complete();
         }, 1000);
     }
-    
+
 }

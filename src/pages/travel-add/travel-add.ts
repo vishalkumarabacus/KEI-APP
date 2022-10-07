@@ -16,8 +16,13 @@ import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 })
 export class TravelAddPage {
   @ViewChild('district_Selectable') district_Selectable: IonicSelectableComponent;
-  
+  filter_state_active:any = false;
+    filter_district_active:any = false;
+    filter_city_active:any = false;
   travel_data:any={};
+  filter_active:any = false;
+  filter :any = {};
+
   today_date = new Date().toISOString().slice(0,10);
   state_list:any=[]
   district_list:any=[];
@@ -155,7 +160,6 @@ export class TravelAddPage {
   
   getDstrictList()
   {
-    this.travel_data.district = [];
 
     
     this.service.addData({'state_name':this.travel_data.state},'TravelPlan/district_list').then((result)=>
@@ -167,29 +171,40 @@ export class TravelAddPage {
       
     }); 
   }
-
+city1:any=[]
+city2:any=[]
+district2:any=[]
 
   selectarea(){
+    this.getChannelPartner();
+
     console.log(this.travel_data);
 
 
-    if(this.navParams.get('data')){
-      
-      // this.form1.district=this.travel_data.travel_list[0].district;
-
-    }
-
-    else{
+    
       this.form1.district=this.travel_data.district;
-    }
+      this.city1.push(this.travel_data.city);
+console.log(this.city1);
+
+      for (let i = 0; i < this.travel_data.city.length; i++) {
+        this.city2.push(this.travel_data.city[i].city)
+      }
+      for (let i = 0; i < this.travel_data.district.length; i++) {
+        this.district2.push(this.travel_data.district[i].district_name)
+      }
+console.log(this.city2);
+
+      this.form1.city=this.city2;
+      this.form1.district=this.district2;
+
     
     this.form1.state=this.travel_data.state;
    console.log(this.form1);
 
-    this.service.addData3(this.form1,"User/area_user_list")
+    this.service.addData(this.form1,"TravelPlan/area_list")
     .then(resp=>{
       console.log(resp);
-      this.area_list = resp['query']['area'];
+      this.area_list = resp;
       console.log(this.area_list);
       
       // this.district_list = resp['district_list'];
@@ -198,21 +213,55 @@ export class TravelAddPage {
       this.service.errToasr()
     })
   }
-  
+  refresh(){
+    this.travel_data.state=[];
+    this.travel_data.city=[];
+    this.travel_data.district=[];
+
+    this.getChannelPartner()
+  }
   getChannelPartner()
   {
-    
-    this.service.addData({},'TravelPlan/distributors_list').then((result)=>
+   console.log(this.travel_data.district);
+   
+
+   if(this.travel_data.district){
+   
+    for (let i = 0; i < this.travel_data.district.length; i++) {
+      this.district2.push(this.travel_data.district[i].district_name)
+    }
+  }
+    if(this.travel_data.city){
+    for (let i = 0; i < this.travel_data.city.length; i++) {
+      this.city2.push(this.travel_data.city[i].city_name)
+    }
+  }
+  console.log(this.district2);
+  console.log(this.city2);
+  
+   
+    this.service.addData({'state':this.travel_data.state,'district':this.district2,'city':this.city2},'TravelPlan/distributors_list').then((result)=>
     {
       console.log(result);
       this.channel_partners=result;
-      
+   for (let i = 0; i < this.channel_partners.length; i++) {
+     if(this.channel_partners[i].type=="3"){
+     this.channel_partners[i].type='Retailer'
+    this.channel_partners[i].company_name=this.channel_partners[i].company_name+' '+'('+this.channel_partners[i].type+')'
+     }
+     if(this.channel_partners[i].type=="1"){
+      this.channel_partners[i].type='Distributor'
+     this.channel_partners[i].company_name=this.channel_partners[i].company_name+' '+'('+this.channel_partners[i].type+')'
+      }
+   }
     },err=>
     {
       
     });
   }
   district:any=[]
+  area:any=[]
+
   addTravelPlan()
   {
     // var planExist = false
@@ -251,14 +300,39 @@ export class TravelAddPage {
     //   this.travel_data.district ='';
     // }
    console.log(this.travel_data.district)
-   if(this.travel_data.district.length>0){
-   for (let i = 0; i < this.travel_data.district.length; i++) {
-this.district.push(this.travel_data.district[i].district_name)
+
+   console.log(this.travel_data.city)
+
+   console.log(this.travel_data.area)
+   console.log(this.travel_data.type);
+
+   if(this.travel_data.travel_type=="Area Visit"){
+     
+   if(this.travel_data.district.length>0)
+   {
+        console.log(this.travel_data.district)
+
+        for (let i = 0; i < this.travel_data.district.length; i++) 
+        {
+            this.district.push(this.travel_data.district[i].district_name)
+            console.log(this.district)
+
+        }
+        for (let i = 0; i < this.travel_data.area.length; i++) {
+          this.area.push(this.travel_data.area[i].area)
+        }
+        for (let i = 0; i < this.travel_data.city.length; i++) {
+          this.city2.push(this.travel_data.city[i].city)
+        }
+  
    }
-   
-   }
+  
+  }
    console.log(this.district);
    this.travel_data.district=this.district
+   this.travel_data.area=this.area
+   this.travel_data.city=this.city2
+
    console.log(this.travel_data.district)
    
 if(this.navParams.get('data')){
@@ -289,7 +363,9 @@ if(this.navParams.get('data')){
         this.travel_data.dr_id =''; 
         this.travel_data.state ='';
         this.travel_data.district ='';
-        this.navCtrl.push(DashboardPage);
+        // this.navCtrl.push(DashboardPage);
+        this.navCtrl.push(TravelListPage);
+
       }
       if(result=='success' && this.travel_data.id)
       { 
@@ -417,7 +493,8 @@ if(this.navParams.get('data')){
 
   getCityList()
   {
-    this.travel_data.city = [];
+    this.getChannelPartner();
+
     console.log(this.travel_data);
     // this.show_loading()
     

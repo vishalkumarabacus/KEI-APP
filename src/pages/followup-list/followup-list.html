@@ -1,6 +1,12 @@
 <ion-header>
     <ion-navbar>
         <ion-title>Followup List</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="presentPopover($event)">
+                <ion-icon name="more"></ion-icon>
+                <!-- <ion-icon name="ellipsis-vertical"></ion-icon> -->
+            </button>
+            </ion-buttons>
     </ion-navbar>
     
     <!-- <ion-toolbar>
@@ -109,6 +115,11 @@
                     </div> -->
                     
                     <div class="right-info">
+                        <!-- <p>Created By<span>{{data.name}}</span> </p> -->
+                        <span style="font-size: 10px;">Created By :</span>
+                        <p style="font-size: 9px;">{{data.name}}</p>
+
+                        
                         <p>{{data.company_name}}<span *ngIf="data.lead_type=='Lead'">(lead)</span></p>
                         <p >{{data.dr_name | titlecase}} ({{data.mobile}})</p>
                     </div>
@@ -126,10 +137,14 @@
                     
                 </div>
             </div>
+
+
+            
+          
         </div>  
     </div>
     
-    <ion-fab right bottom *ngIf="!userId">
+    <ion-fab right bottom >
         <button ion-fab color="danger" (click)="goOnAddFollowup()" ><ion-icon name="add"></ion-icon></button>
     </ion-fab>
     

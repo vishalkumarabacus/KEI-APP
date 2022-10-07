@@ -5,8 +5,8 @@ import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 import { errorHandler } from '@angular/platform-browser/src/browser';
 import { ProductDetailPage } from '../product-detail/product-detail';
 import { NewarrivalsPage } from '../newarrivals/newarrivals';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 
 
@@ -31,8 +31,9 @@ export class CategoryPage {
               public service1: MyserviceProvider,
               public loadingCtrl:LoadingController,
               private app:App,
-              public offlineService: OfflineDbProvider,
-              private sqlite: SQLite) 
+              
+              // private sqlite: SQLite
+              ) 
   {
         this.skelton = new Array(10);
   }

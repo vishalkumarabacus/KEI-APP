@@ -12,6 +12,7 @@ import {FollowupListPage} from '../followup-list/followup-list';
 })
 export class FollowupAddPage 
 {
+  disableSelect:boolean = false;
 
   followup_data:any={};
   today_date = new Date().toISOString().slice(0,10);
@@ -34,6 +35,10 @@ export class FollowupAddPage
       
       console.log(this.navParams);
       this.checkin_id=this.navParams.get('checkin_id')
+      if(this.checkin_id){
+        this.disableSelect=true;
+
+      }
      this.getNetworkType()
       
     }
@@ -43,7 +48,7 @@ export class FollowupAddPage
     }
     networkType:any=[]
     getNetworkType(){
-        this.service.addData3('', "Dashboard/distributionNetworkModule").then((result => {
+        this.service.addData3('', "Dashboard/allNetworkModule").then((result => {
           console.log(result);
           this.networkType = result['modules'];
         }))
@@ -131,6 +136,8 @@ export class FollowupAddPage
           this.followup_data.type = '';
           this.followup_data.dr_type = '';
           this.followup_data.description = '';
+          // this.followup_data.amount = '';
+
           this.followup_data.dr_id = '';
           this.drList = [];
         this.loading.dismiss();
