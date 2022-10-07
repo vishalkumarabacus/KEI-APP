@@ -6,6 +6,14 @@
         <div class="search add-search">
             <div class="filter">
                 <ion-searchbar (ngModelChange)="get_assign_dr(drid)" [(ngModel)]="filter.name" name="name" ></ion-searchbar>
+                <ion-buttons end>
+                    <button ion-button icon-only (click)="presentPopover($event)">
+
+                        <ion-icon name="funnel"></ion-icon>
+
+                        <!-- <ion-icon name="ellipsis-vertical"></ion-icon> -->
+                    </button>
+                </ion-buttons>
                 <!-- <a class="date-pick">
                     <label class="chedate">
                         <input type="date" name="date"  [max]="date" name="date" [(ngModel)]="filter.date" (ngModelChange)="get_assign_drsearch()" />
@@ -13,6 +21,21 @@
                     </label>
                 </a> -->
             </div>
+        </div>
+
+
+
+        <div class="round-tab mt6">
+            <ul>
+                <li>
+                    <a>Online ({{count.count}})</a>
+                </li>
+                <li>
+                    <a>Sight Tracking ({{count.count}})</a>
+                </li>
+
+            </ul>
+
         </div>
     </ion-toolbar>
 </ion-header>
@@ -41,24 +64,24 @@
     </div> -->
     <div class="capsule-tabs">
         <ul>
-          <li [ngClass]="{'active' : filter.status=='lead Bank'}" (click)="filter.date='';start=0;filter.status='lead Bank';get_assign_dr()">
-            <p>Lead Bank<span>{{pending_count}}</span></p>
+          <li [ngClass]="{'active' : filter.status=='lead Bank'}" (click)="filter.date='';start=0;filter.status='lead Bank';get_assign_dr(drid)">
+            <p>Lead Bank<span>{{allCount.leadbank||'0'}}</span></p>
           </li>
-          <li [ngClass]="{'active' : filter.status=='Qualified'}" (click)="filter.date='';start=0;filter.status='Qualified';get_assign_dr()">
+          <!-- <li [ngClass]="{'active' : filter.status=='Qualified'}" (click)="filter.date='';start=0;filter.status='Qualified';get_assign_dr(drid)">
             <p>Qualified<span>{{upcoming_count}}</span></p>
+          </li> -->
+          <li [ngClass]="{'active' : filter.status=='Qualified'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr(drid)">
+            <p>Running<span>{{allCount.qualified?allCount.qualified:'0'}}</span></p>
           </li>
-          <li [ngClass]="{'active' : filter.status=='Disqualified'}"(click)="filter.date='';start=0;filter.status='Disqualified' ;get_assign_dr()">
-            <p>Disqualified<span>{{complete_count}}</span></p>
-          </li>
-          <li [ngClass]="{'active' : filter.status=='Running'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr()">
-            <p>Running<span>{{complete_count}}</span></p>
-          </li>
-          <li [ngClass]="{'active' : filter.status=='win'}"(click)="filter.date='';start=0;filter.status='win';get_assign_dr()">
-            <p>Win<span>{{complete_count}}</span></p>
-          </li>
-          <li [ngClass]="{'active' : filter.status=='lost'}" (click)="filter.date='';start=0;filter.status='lost';get_assign_dr()">
-            <p>Lost<span>{{complete_count}}</span></p>
-          </li>
+          <li [ngClass]="{'active' : filter.status=='win'}"(click)="filter.date='';start=0;filter.status='win';get_assign_dr(drid)">
+              <p>Win<span>{{allCount.win?allCount.win:'0'}}</span></p>
+            </li>
+            <li [ngClass]="{'active' : filter.status=='lost'}" (click)="filter.date='';start=0;filter.status='lost';get_assign_dr(drid)">
+                <p>Lost<span>{{allCount.lost?allCount.lost:'0'}}</span></p>
+            </li>
+            <li [ngClass]="{'active' : filter.status=='Disqualified'}"(click)="filter.date='';start=0;filter.status='Disqualified' ;get_assign_dr(drid)">
+              <p>Disqualified<span>{{allCount.disqualified?allCount.disqualified:'0'}}</span></p>
+            </li>
         </ul>
       </div>
 

@@ -1,9 +1,45 @@
 
-<ion-list class="popover_list" *ngIf="page_from">
+<ion-list class="popover_list" *ngIf="page_from&&page_from!='lead_list'">
   <button ion-item (click)="close('My')">My {{page_from}}</button>
   <button ion-item (click)="close('Team')">Team {{page_from}}</button>
 </ion-list>
 
+<ion-list class="popover_list" *ngIf="page_from=='lead_list'">
+  <div class="work-modal">
+    <div class="work-modal-bg">
+      <div>
+        
+        <div class="head">
+          <span>Search</span>
+          <a class="close" (click)="dismiss()"><i class="material-icons">close</i></a>
+        </div>
+        <div class="edit mt10 ml0 mr0">
+          <ion-list>            
+                <h1 style="font-size: 12px;">Date From :</h1>
+                <ion-item class="cs-normal-select mt16">
+                <ion-input class="calander" type="date" [max]="date" name="date_from" #date_from="ngModel" [(ngModel)]="filter.date_from">  <i class="material-icons">date_range</i> </ion-input>
+               
+            </ion-item>
+            <h1 style="font-size: 12px;">Date To :</h1>
+            <ion-item class="cs-normal-select mt16">
+              <ion-input class="calander"  type="date"  [max]="date"  name="date_to" #date_to="ngModel" [(ngModel)]="filter.date_to">  <i class="material-icons">date_range</i> </ion-input>
+            
+
+             
+          </ion-item>
+                 
+          </ion-list>
+    
+      </div>
+        
+        <div style="padding: 0px 8px 8px 8px;">
+          <button style="width: 100% !important;" ion-button color="secondary" (click)="ondismiss()">SEARCH</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</ion-list>
 
 <ion-list class="popover_list"  *ngIf="via">
   <button *ngIf="(checkInData.dr_type== '1') || (checkInData.dr_type== '7')" ion-item (click)="goto('Primary Orders')"><img src="assets/imgs/product.svg"> Orders</button>

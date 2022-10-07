@@ -1,3 +1,36 @@
 page-lms-lead-add {
-
+    .cs-heading1{
+        p{
+            background-color: rgba(3, 172, 229, .1);
+            border: 1px solid #ddd;
+            border-bottom: 0;
+            padding: 4px;
+            border-radius: 5px 5px 0 0;
+            font-style: normal;
+        }
+    }
+    .infoTable{
+        
+        td{
+            span{
+                display: block;
+                &:nth-child(2){
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: #999;
+                }
+            }
+            padding: 4px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            &:nth-child(1){
+                width: 40%;
+            }
+            &:nth-child(2){
+                color: #999;
+                
+            }
+        }
+        border: 1px solid black; font-size:12px; width: 100%;
+    }
 }

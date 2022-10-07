@@ -1,274 +1,126 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title *ngIf="page_from!='add'">
-            <h1> Update Lead</h1>
-        </ion-title>
-        <ion-title *ngIf="page_from=='add'">
-          <h1> Add New Site Lead</h1>
+  <ion-navbar>
+      <ion-title *ngIf="page_from!='add'">
+          <h1> Update Lead</h1>
       </ion-title>
-    </ion-navbar>
+      <ion-title *ngIf="page_from=='add'">
+        <h1> Add New Site Lead</h1>
+    </ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content  *ngIf="page_from!='add'">
-    <form name="f" #f="ngForm" >
-        <div class="cs-heading1">
-            <p>Basic information</p>
-        </div>
-        <div class="edit">
-            <ion-list>
-
-                <ion-item [ngClass]="{'cs-error':(f.submitted && ( mobile?.invalid ||  form.mobile?.length!=10 )) || checkExist==true}" >
-                    <ion-label floating><span>Mobile No.<strong>*</strong></span></ion-label>
-                    <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)=" check_num()"  required readonly disabled=""></ion-input>
-                </ion-item>
-
-
-
-                <ng-container >
-                    <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && select_type?.invalid}"*ngIf="!form.id">
-                        <ion-label><span>Select Type<strong>*</strong></span></ion-label>
-
-                        <ion-select   name="select_type" name="select_type" #select_type="ngModel" [(ngModel)]="form.type_id">
-                            <ion-option *ngFor="let row of networkType" value="{{row.type}}"  >{{row.module_name}}</ion-option>
-                        </ion-select>
-                    </ion-item>
-                    <p  *ngIf="f.submitted && select_type?.invalid" class="error-line">Select Type Is Required</p>
-
-                    <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && source?.invalid}"*ngIf="!form.id">
-                        <ion-label><span>Source<strong>*</strong></span></ion-label>
-                        <ion-select   name="source" name="source" #source="ngModel" [(ngModel)]="form.source" >
-                            <ion-option *ngFor="let row of source_list" value="{{row.source}}"  >{{row.source}}</ion-option>
-                        </ion-select>
-                        <!-- <ion-select name="source"  #source="ngModel" [(ngModel)]="form.source" required>
-                            <ion-option value="Website">Website</ion-option>
-                            <ion-option value="Facebook">Facebook</ion-option>
-                            <ion-option value="Call">Call</ion-option>
-                            <ion-option value="Walking">Walking</ion-option>
-                            <ion-option value="SMS">SMS</ion-option>
-                            <ion-option value="Toll Free">Toll Free</ion-option>
-                            <ion-option value="Others">Others</ion-option>
-                            <ion-option value="Instagram">Instagram</ion-option>
-                            <ion-option value="Linked-in">Linked-in</ion-option>
-                            <ion-option value="Reference">Reference</ion-option>
-                            <ion-option value="Whatsapp">Whatsapp</ion-option>
-                            <ion-option value="Facebook">Facebook</ion-option>
-                            <ion-option value="Mail">Mail</ion-option>
-                            <ion-option value="IndiaMart">IndiaMart</ion-option>
-                            <ion-option value="JustDial">JustDial</ion-option>
-
-
-
-                        </ion-select> -->
-                    </ion-item>
-                    <p  *ngIf="f.submitted && source?.invalid" class="error-line">Source Is Required</p>
-
-
-                     <ng-container  *ngIf="form.type_id !=10">
-                    <ion-item >
-                        <ion-label floating><span>Company Name <strong>*</strong></span></ion-label>
-                        <ion-input type="text" placeholder="Enter Company Name"  name="company_name" #company_name="ngModel"  [(ngModel)]="form.company_name" [ngClass]="{'is-invalid':f.submitted && company_name?.invalid}" readonly disabled=""></ion-input>
-                    </ion-item>
-                </ng-container>
-
-                    <ion-item [ngClass]="{'cs-error':f.submitted && name?.invalid}">
-                        <ion-label floating><span> Contact Person Name <strong>*</strong></span></ion-label>
-                        <ion-input type="text" placeholder="Enter Name"  name="name" #name="ngModel" [(ngModel)]="form.name" required [ngClass]="{'is-invalid':f.submitted && name?.invalid}" readonly disabled=""></ion-input>
-                    </ion-item>
-
-
-
-                    <ion-item [ngClass]="{'cs-error':f.submitted && email?.invalid && !form.DealerExist}">
-                        <ion-label floating><span>Email ID </span></ion-label>
-                        <ion-input type="email"  placeholder="Enter Email"   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email"  #email="ngModel" [(ngModel)]="form.email"  readonly  disabled=""></ion-input>
-                    </ion-item>
-
-
-
-
-                </ng-container>
-            </ion-list>
-        </div>
-
-
-        <div class="cs-heading1" >
-            <p>Address information </p>
-        </div>
-
-        <div class="edit" >
-            <ion-list>
-                <ion-item class="mb0"  >
-                    <ion-label floating><span>Pincode </span></ion-label>
-                    <ion-input placeholder="Enter Pincode"  type="tel" (keypress)="MobileNumber($event)" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" readonly disabled=""></ion-input>
-                </ion-item>
-                <ion-item class="mb0"  >
-                    <ion-label floating><span>State  </span></ion-label>
-                    <ion-input placeholder="State"  type="text" name="State"  #state="ngModel" [(ngModel)]="form.state" readonly disabled=""></ion-input>
-                </ion-item>
-                <ion-item class="mb0"  >
-                    <ion-label floating><span>District </span></ion-label>
-                    <ion-input placeholder="District"  type="text" name="District"  #district="ngModel" [(ngModel)]="form.district" readonly disabled=""></ion-input>
-                </ion-item>
-                <ion-item class="mb0">
-                    <ion-label floating><span>City </span></ion-label>
-                    <ion-input placeholder="City"  type="text" name="City"  #city="ngModel" [(ngModel)]="form.city" readonly disabled="" ></ion-input>
-                </ion-item>
-
-
-
-
-                <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && street?.invalid}">
-                    <ion-label floating><span>Street </span></ion-label>
-                    <ion-textarea  placeholder="Address"  type="text" name="address" #address="ngModel" [(ngModel)]="form.address" readonly disabled=""></ion-textarea>
-                </ion-item>
-                <p  *ngIf="f.submitted && street?.invalid" class="error-line">Street Is Invalid</p>
-
-                <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && description?.invalid}">
-                    <ion-label floating><span>Description</span></ion-label>
-                    <ion-textarea  placeholder="Enter Description"  type="text" name="description" #description="ngModel" [(ngModel)]="form.description" ></ion-textarea>
-                </ion-item>
-            </ion-list>
-
-            <div class="upload-doc"*ngIf="!form.id">
-                <p class="">Upload  Image</p>
-                <ul class="no-padding">
-                    <li class="image-upload" *ngFor="let pic of image_data;let i = index;">
-                        <img src="{{pic}}">
-                        <button class="del"><i class="material-icons" (click)="remove_image(i)">delete_sweep</i></button>
-                    </li>
-
-                    <li class="add-image" (click)="this.takePhoto()" *ngIf="image_data.length==0">
-                        <i class="material-icons">add</i>
-                    </li>
-                </ul>
-            </div>
-
-
-        </div>
-
-        <div class="padding16">
-            <!-- <button *ngIf="!form.DealerExist && form.mobile && form.mobile.length==10 && form.state && form.district && form.area.length>0" ion-button class="cs-btn" style="margin: 16px 0px !important;">Save</button> -->
-            <button *ngIf=" form.id"  ion-button class="cs-btn" style="margin: 16px 0px !important;"(click)="update()">Update</button>
-            <button *ngIf=" !form.id" ion-button class="cs-btn" style="margin: 16px 0px !important;" (click)="submit()">Save</button>
-
-        </div>
-    </form>
-</ion-content>
-<ion-content  *ngIf="page_from=='add'">
   <form name="f" #f="ngForm" >
       <div class="cs-heading1">
-          <p>Lead Source information</p>
+          <p>Basic information</p>
       </div>
       <div class="edit">
           <ion-list>
-            <ng-container>
-              <!-- <ion-item >
-                  <ion-label floating><span>S/O Name <strong>*</strong></span></ion-label>
-                  <ion-input type="text" placeholder="Enter S/O Name"  name="so_name" #so_name="ngModel"  [(ngModel)]="form.so_name" [ngClass]="{'is-invalid':f.submitted && so_name?.invalid}" ></ion-input>
-              </ion-item> -->
-          </ng-container>
-          <ion-item [ngClass]="{'cs-error':f.submitted && date_of_lead?.invalid}" >
-            <ion-label floating> <span>Date Of Lead *</span></ion-label>
-            <ion-datetime display-format="MMM DD, YYYY" placeholder ="Select Date Of Lead" name="date_of_lead" [(ngModel)]="form.date_of_lead" #date_of_lead="ngModel" [ngClass]="{'is-invalid':f.submitted && date_of_lead?.invalid}" required></ion-datetime>
-        </ion-item>
-        <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && type_id?.invalid}">
-          <ion-label><span>Lead Souce Type<strong>*</strong></span></ion-label>
-          <ion-select name="source_type" #source_type="ngModel" [(ngModel)]="form.type_id" required>
-              <ion-option  value="Electrician">Electrician</ion-option>
-              <ion-option  value="Architect/Interio Designer">Architect/Interior Designer</ion-option>
-              <ion-option  value="Retailer" >Retailer</ion-option>
-              <ion-option  value="Others" >Others</ion-option>
-          </ion-select>
-      </ion-item>
-               <p  *ngIf="f.submitted && stage_of_project?.invalid" class="error-line">Select Type Is Required</p>
-       <ion-item >
-            <ion-label floating><span>Lead Source Contact  Name<strong>*</strong></span></ion-label>
-            <ion-input type="text" placeholder="Enter Lead Source Contact Name"  name="lead_source_contact" #lead_source_contact="ngModel"  [(ngModel)]="form.name" [ngClass]="{'is-invalid':f.submitted && lead_source_contact?.invalid}" required></ion-input>
-        </ion-item>
-        <ion-item >
-          <ion-label floating><span>Lead Source Contact No.<strong>*</strong></span></ion-label>
-          <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.source_mobile" minLength="10" maxLength="10"  required></ion-input>
-       </ion-item>
-   </ion-list>
+
+              <ion-item [ngClass]="{'cs-error':(f.submitted && ( mobile?.invalid ||  form.mobile?.length!=10 )) || checkExist==true}" >
+                  <ion-label floating><span>Mobile No.<strong>*</strong></span></ion-label>
+                  <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)=" check_num()"  required readonly disabled=""></ion-input>
+              </ion-item>
+
+
+
+              <ng-container >
+                  <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && select_type?.invalid}"*ngIf="!form.id">
+                      <ion-label><span>Select Type<strong>*</strong></span></ion-label>
+
+                      <ion-select   name="select_type" name="select_type" #select_type="ngModel" [(ngModel)]="form.type_id">
+                          <ion-option *ngFor="let row of networkType" value="{{row.type}}"  >{{row.module_name}}</ion-option>
+                      </ion-select>
+                  </ion-item>
+                  <p  *ngIf="f.submitted && select_type?.invalid" class="error-line">Select Type Is Required</p>
+
+                  <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && source?.invalid}"*ngIf="!form.id">
+                      <ion-label><span>Source<strong>*</strong></span></ion-label>
+                      <ion-select   name="source" name="source" #source="ngModel" [(ngModel)]="form.source" >
+                          <ion-option *ngFor="let row of source_list" value="{{row.source}}"  >{{row.source}}</ion-option>
+                      </ion-select>
+                      <!-- <ion-select name="source"  #source="ngModel" [(ngModel)]="form.source" required>
+                          <ion-option value="Website">Website</ion-option>
+                          <ion-option value="Facebook">Facebook</ion-option>
+                          <ion-option value="Call">Call</ion-option>
+                          <ion-option value="Walking">Walking</ion-option>
+                          <ion-option value="SMS">SMS</ion-option>
+                          <ion-option value="Toll Free">Toll Free</ion-option>
+                          <ion-option value="Others">Others</ion-option>
+                          <ion-option value="Instagram">Instagram</ion-option>
+                          <ion-option value="Linked-in">Linked-in</ion-option>
+                          <ion-option value="Reference">Reference</ion-option>
+                          <ion-option value="Whatsapp">Whatsapp</ion-option>
+                          <ion-option value="Facebook">Facebook</ion-option>
+                          <ion-option value="Mail">Mail</ion-option>
+                          <ion-option value="IndiaMart">IndiaMart</ion-option>
+                          <ion-option value="JustDial">JustDial</ion-option>
+
+
+
+                      </ion-select> -->
+                  </ion-item>
+                  <p  *ngIf="f.submitted && source?.invalid" class="error-line">Source Is Required</p>
+
+
+                   <ng-container  *ngIf="form.type_id !=10">
+                  <ion-item >
+                      <ion-label floating><span>Company Name <strong>*</strong></span></ion-label>
+                      <ion-input type="text" placeholder="Enter Company Name"  name="company_name" #company_name="ngModel"  [(ngModel)]="form.company_name" [ngClass]="{'is-invalid':f.submitted && company_name?.invalid}" readonly disabled=""></ion-input>
+                  </ion-item>
+              </ng-container>
+
+                  <ion-item [ngClass]="{'cs-error':f.submitted && name?.invalid}">
+                      <ion-label floating><span> Contact Person Name <strong>*</strong></span></ion-label>
+                      <ion-input type="text" placeholder="Enter Name"  name="name" #name="ngModel" [(ngModel)]="form.name" required [ngClass]="{'is-invalid':f.submitted && name?.invalid}" readonly disabled=""></ion-input>
+                  </ion-item>
+
+
+
+                  <ion-item [ngClass]="{'cs-error':f.submitted && email?.invalid && !form.DealerExist}">
+                      <ion-label floating><span>Email ID </span></ion-label>
+                      <ion-input type="email"  placeholder="Enter Email"   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email"  #email="ngModel" [(ngModel)]="form.email"  readonly  disabled=""></ion-input>
+                  </ion-item>
+
+
+
+
+              </ng-container>
+          </ion-list>
       </div>
 
 
       <div class="cs-heading1" >
-          <p>Site information </p>
+          <p>Address information </p>
       </div>
 
       <div class="edit" >
           <ion-list>
-            <ion-item >
-              <ion-label floating><span>Name Of Customer/IB <strong>*</strong></span></ion-label>
-             <ion-input type="text" placeholder="Enter Customer/IB"  name="CustomerIB" #CustomerIB="ngModel"  [(ngModel)]="form.CustomerIB" [ngClass]="{'is-invalid':f.submitted && CustomerIB?.invalid}" required ></ion-input>
-         </ion-item>
-            <!-- <ion-item >
-              <ion-label floating><span>Site City/Town <strong>*</strong></span></ion-label>
-              <ion-input type="text" placeholder="Enter Site City/Town"  name="Site_CityTown" #Site_CityTown="ngModel"  [(ngModel)]="form.Site_CityTown" [ngClass]="{'is-invalid':f.submitted && Site_CityTown?.invalid}" required></ion-input>
-          </ion-item> -->
-          <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && address?.invalid}">
-            <ion-label floating><span>Contact Address </span></ion-label>
-              <ion-textarea  placeholder="Address"  type="text" name="address" #address="ngModel" [(ngModel)]="form.address" ></ion-textarea>
-                 </ion-item>
               <ion-item class="mb0"  >
                   <ion-label floating><span>Pincode </span></ion-label>
-                  <ion-input placeholder="Enter Pincode"  type="tel" (keypress)="MobileNumber($event)" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" ></ion-input>
+                  <ion-input placeholder="Enter Pincode"  type="tel" (keypress)="MobileNumber($event)" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" readonly disabled=""></ion-input>
               </ion-item>
               <ion-item class="mb0"  >
                   <ion-label floating><span>State  </span></ion-label>
-                  <ion-input placeholder="State"  type="text" name="State"  #state="ngModel" [(ngModel)]="form.state" ></ion-input>
+                  <ion-input placeholder="State"  type="text" name="State"  #state="ngModel" [(ngModel)]="form.state" readonly disabled=""></ion-input>
               </ion-item>
               <ion-item class="mb0"  >
                   <ion-label floating><span>District </span></ion-label>
-                  <ion-input placeholder="District"  type="text" name="District"  #district="ngModel" [(ngModel)]="form.district" ></ion-input>
+                  <ion-input placeholder="District"  type="text" name="District"  #district="ngModel" [(ngModel)]="form.district" readonly disabled=""></ion-input>
               </ion-item>
               <ion-item class="mb0">
                   <ion-label floating><span>City </span></ion-label>
-                  <ion-input placeholder="City"  type="text" name="City"  #city="ngModel" [(ngModel)]="form.city"  ></ion-input>
+                  <ion-input placeholder="City"  type="text" name="City"  #city="ngModel" [(ngModel)]="form.city" readonly disabled="" ></ion-input>
               </ion-item>
-           <!-- <ion-item [ngClass]="{'cs-error':(f.submitted && ( mobile?.invalid ||  form.mobile?.length!=10 )) || checkExist==true}" >
-               <ion-label floating><span> Contact Mobile No.<strong>*</strong></span></ion-label>
-               <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)="check_num()"  required></ion-input>
-           </ion-item> -->
-           <ng-container >
-               <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && stage_of_project?.invalid}">
-                   <ion-label><span>Stage Of Project<strong>*</strong></span></ion-label>
-                   <ion-select name="stage_of_project" #stage_of_project="ngModel" [(ngModel)]="form.stage_of_project" required>
-                       <ion-option  value="Foundation">Foundation</ion-option>
-                       <ion-option  value="Brickwork">Brickwork</ion-option>
-                       <ion-option  value="Plaster(Pipes)">Plaster(Pipes)</ion-option>
-                       <ion-option  value="Wireing" >Wireing</ion-option>
-                   </ion-select>
-               </ion-item>
-               <!-- <p  *ngIf="f.submitted && stage_of_project?.invalid" class="error-line">Select Type Is Required</p> -->
-               <ion-item [ngClass]="{'cs-error':f.submitted && expected_order_month?.invalid}">
-                   <ion-label floating><span>Expected Order Month <strong>*</strong></span></ion-label>
-                   <ion-input type="text" placeholder="Enter Order Month"  name="expected_order_month " #expected_order_month="ngModel" [(ngModel)]="form.expected_order_month" required [ngClass]="{'is-invalid':f.submitted && expected_order_month?.invalid}" required></ion-input>
-               </ion-item>
-               <ion-item [ngClass]="{'cs-error':f.submitted && coil_requirment?.invalid}">
-                <ion-label floating><span>90m,180m Coil Requirment<strong>*</strong></span></ion-label>
-                <ion-input type="text" placeholder="Enter 90m,180m Coil Requirment"  name="coil_requirment " #coil_requirment="ngModel" [(ngModel)]="form.coil_requirment" required [ngClass]="{'is-invalid':f.submitted && coil_requirment?.invalid}" required></ion-input>
-            </ion-item>
-            <ion-item [ngClass]="{'cs-error':f.submitted && attached_retailer_name?.invalid}">
-              <ion-label floating><span>Attached Retailer Name<strong>*</strong></span></ion-label>
-              <ion-input type="text" placeholder="Enter Attached Retailer Name"  name="attached_retailer_name " #attached_retailer_name="ngModel" [(ngModel)]="form.attached_retailer_name" required [ngClass]="{'is-invalid':f.submitted && attached_retailer_name?.invalid}" required></ion-input>
-          </ion-item>
-
-               <!-- <ion-item [ngClass]="{'cs-error':f.submitted && email?.invalid && !form.DealerExist}">
-                   <ion-label floating><span>Email ID </span></ion-label>
-                   <ion-input type="email"  placeholder="Enter Email"   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email"  #email="ngModel" [(ngModel)]="form.email"  readonly  disabled=""></ion-input>
-               </ion-item> -->
-
-           </ng-container>
 
 
 
 
-              <!-- <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && street?.invalid}">
+              <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && street?.invalid}">
                   <ion-label floating><span>Street </span></ion-label>
-                  <ion-textarea  placeholder="Address"  type="text" name="address" #address="ngModel" [(ngModel)]="form.address" ></ion-textarea>
-              </ion-item> -->
-              <!-- <p  *ngIf="f.submitted && street?.invalid" class="error-line">Street Is Invalid</p> -->
+                  <ion-textarea  placeholder="Address"  type="text" name="address" #address="ngModel" [(ngModel)]="form.address" readonly disabled=""></ion-textarea>
+              </ion-item>
+              <p  *ngIf="f.submitted && street?.invalid" class="error-line">Street Is Invalid</p>
 
               <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && description?.invalid}">
                   <ion-label floating><span>Description</span></ion-label>
@@ -295,8 +147,156 @@
 
       <div class="padding16">
           <!-- <button *ngIf="!form.DealerExist && form.mobile && form.mobile.length==10 && form.state && form.district && form.area.length>0" ion-button class="cs-btn" style="margin: 16px 0px !important;">Save</button> -->
-          <button ion-button class="cs-btn" style="margin: 16px 0px !important;" (click)="submit()">Save</button>
+          <button *ngIf=" form.id"  ion-button class="cs-btn" style="margin: 16px 0px !important;"(click)="update()">Update</button>
+          <button *ngIf=" !form.id" ion-button class="cs-btn" style="margin: 16px 0px !important;" (click)="submit()">Save</button>
 
       </div>
   </form>
+</ion-content>
+<ion-content  *ngIf="page_from=='add'">
+<form name="f" #f="ngForm" >
+    <div class="cs-heading1">
+        <p>Lead Source information</p>
+    </div>
+    <div class="edit">
+        <ion-list>
+          <ng-container>
+            <!-- <ion-item >
+                <ion-label floating><span>S/O Name <strong>*</strong></span></ion-label>
+                <ion-input type="text" placeholder="Enter S/O Name"  name="so_name" #so_name="ngModel"  [(ngModel)]="form.so_name" [ngClass]="{'is-invalid':f.submitted && so_name?.invalid}" ></ion-input>
+            </ion-item> -->
+        </ng-container>
+        <ion-item [ngClass]="{'cs-error':f.submitted && date_of_lead?.invalid}" >
+          <ion-label floating> <span>Date Of Lead *</span></ion-label>
+          <ion-datetime display-format="MMM DD, YYYY" placeholder ="Select Date Of Lead" name="date_of_lead" [(ngModel)]="form.date_of_lead" #date_of_lead="ngModel" [ngClass]="{'is-invalid':f.submitted && date_of_lead?.invalid}" required></ion-datetime>
+      </ion-item>
+      <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && type_id?.invalid}">
+        <ion-label><span>Lead Souce Type<strong>*</strong></span></ion-label>
+        <ion-select name="source_type" #source_type="ngModel" [(ngModel)]="form.type_id" required>
+            <ion-option  value="Electrician">Electrician</ion-option>
+            <ion-option  value="Architect/Interio Designer">Architect/Interior Designer</ion-option>
+            <ion-option  value="Retailer" >Retailer</ion-option>
+            <ion-option  value="Others" >Others</ion-option>
+        </ion-select>
+    </ion-item>
+             <p  *ngIf="f.submitted && stage_of_project?.invalid" class="error-line">Select Type Is Required</p>
+     <ion-item >
+          <ion-label floating><span>Lead Source Contact Name<strong>*</strong></span></ion-label>
+          <ion-input type="text" placeholder="Enter Lead Source Contact Name"  name="lead_source_contact" #lead_source_contact="ngModel"  [(ngModel)]="form.source_contact_name" [ngClass]="{'is-invalid':f.submitted && source_contact_name?.invalid}" required></ion-input>
+      </ion-item>
+      <ion-item >
+        <ion-label floating><span>Lead Source Contact No.<strong>*</strong></span></ion-label>
+        <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.source_mobile" minLength="10" maxLength="10"  required></ion-input>
+     </ion-item>
+ </ion-list>
+    </div>
+
+
+    <div class="cs-heading1" >
+        <p>Site information </p>
+    </div>
+
+    <div class="edit" >
+        <ion-list>
+          <ion-item >
+            <ion-label floating><span>Name Of Customer/IB <strong>*</strong></span></ion-label>
+           <ion-input type="text" placeholder="Enter Customer/IB"  name="name" #name="ngModel"  [(ngModel)]="form.name" [ngClass]="{'is-invalid':f.submitted && name?.invalid}" required ></ion-input>
+       </ion-item>
+          <!-- <ion-item >
+            <ion-label floating><span>Site City/Town <strong>*</strong></span></ion-label>
+            <ion-input type="text" placeholder="Enter Site City/Town"  name="Site_CityTown" #Site_CityTown="ngModel"  [(ngModel)]="form.Site_CityTown" [ngClass]="{'is-invalid':f.submitted && Site_CityTown?.invalid}" required></ion-input>
+        </ion-item> -->
+        <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && address?.invalid}">
+          <ion-label floating><span>Contact Address </span></ion-label>
+            <ion-textarea  placeholder="Address"  type="text" name="address" #address="ngModel" [(ngModel)]="form.address" ></ion-textarea>
+               </ion-item>
+            <ion-item class="mb0"  >
+                <ion-label floating><span>Pincode </span></ion-label>
+                <ion-input placeholder="Enter Pincode"  type="tel" (keypress)="MobileNumber($event)" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" ></ion-input>
+            </ion-item>
+            <ion-item class="mb0"  >
+                <ion-label floating><span>State  </span></ion-label>
+                <ion-input placeholder="State"  type="text" name="State"  #state="ngModel" [(ngModel)]="form.state" ></ion-input>
+            </ion-item>
+            <ion-item class="mb0"  >
+                <ion-label floating><span>District </span></ion-label>
+                <ion-input placeholder="District"  type="text" name="District"  #district="ngModel" [(ngModel)]="form.district" ></ion-input>
+            </ion-item>
+            <ion-item class="mb0">
+                <ion-label floating><span>City </span></ion-label>
+                <ion-input placeholder="City"  type="text" name="City"  #city="ngModel" [(ngModel)]="form.city"  ></ion-input>
+            </ion-item>
+         <!-- <ion-item [ngClass]="{'cs-error':(f.submitted && ( mobile?.invalid ||  form.mobile?.length!=10 )) || checkExist==true}" >
+             <ion-label floating><span> Contact Mobile No.<strong>*</strong></span></ion-label>
+             <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)="check_num()"  required></ion-input>
+         </ion-item> -->
+         <ng-container >
+             <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && stage_of_project?.invalid}">
+                 <ion-label><span>Stage Of Project<strong>*</strong></span></ion-label>
+                 <ion-select name="stage_of_project" #stage_of_project="ngModel" [(ngModel)]="form.stage_of_project" required>
+                     <ion-option  value="Foundation">Foundation</ion-option>
+                     <ion-option  value="Brickwork">Brickwork</ion-option>
+                     <ion-option  value="Plaster(Pipes)">Plaster(Pipes)</ion-option>
+                     <ion-option  value="Wireing" >Wireing</ion-option>
+                 </ion-select>
+             </ion-item>
+             <!-- <p  *ngIf="f.submitted && stage_of_project?.invalid" class="error-line">Select Type Is Required</p> -->
+             <ion-item [ngClass]="{'cs-error':f.submitted && expected_order_month?.invalid}">
+                 <ion-label floating><span>Expected Order Month <strong>*</strong></span></ion-label>
+                 <ion-input type="text" placeholder="Enter Order Month"  name="expected_order_month " #expected_order_month="ngModel" [(ngModel)]="form.expected_order_month" required [ngClass]="{'is-invalid':f.submitted && expected_order_month?.invalid}" required></ion-input>
+             </ion-item>
+             <ion-item [ngClass]="{'cs-error':f.submitted && coil_requirment?.invalid}">
+              <ion-label floating><span>90m,180m Coil Requirment<strong>*</strong></span></ion-label>
+              <ion-input type="text" placeholder="Enter 90m,180m Coil Requirment"  name="coil_requirment " #coil_requirment="ngModel" [(ngModel)]="form.coil_requirment" required [ngClass]="{'is-invalid':f.submitted && coil_requirment?.invalid}" required></ion-input>
+          </ion-item>
+          <ion-item [ngClass]="{'cs-error':f.submitted && attached_retailer_name?.invalid}">
+            <ion-label floating><span>Attached Retailer Name<strong>*</strong></span></ion-label>
+            <ion-input type="text" placeholder="Enter Attached Retailer Name"  name="attached_retailer_name " #attached_retailer_name="ngModel" [(ngModel)]="form.attached_retailer_name" required [ngClass]="{'is-invalid':f.submitted && attached_retailer_name?.invalid}" required></ion-input>
+        </ion-item>
+
+             <!-- <ion-item [ngClass]="{'cs-error':f.submitted && email?.invalid && !form.DealerExist}">
+                 <ion-label floating><span>Email ID </span></ion-label>
+                 <ion-input type="email"  placeholder="Enter Email"   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email"  #email="ngModel" [(ngModel)]="form.email"  readonly  disabled=""></ion-input>
+             </ion-item> -->
+
+         </ng-container>
+
+
+
+
+            <!-- <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && street?.invalid}">
+                <ion-label floating><span>Street </span></ion-label>
+                <ion-textarea  placeholder="Address"  type="text" name="address" #address="ngModel" [(ngModel)]="form.address" ></ion-textarea>
+            </ion-item> -->
+            <!-- <p  *ngIf="f.submitted && street?.invalid" class="error-line">Street Is Invalid</p> -->
+
+            <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && description?.invalid}">
+                <ion-label floating><span>Description</span></ion-label>
+                <ion-textarea  placeholder="Enter Description"  type="text" name="description" #description="ngModel" [(ngModel)]="form.description" ></ion-textarea>
+            </ion-item>
+        </ion-list>
+
+        <div class="upload-doc"*ngIf="!form.id">
+            <p class="">Upload  Image</p>
+            <ul class="no-padding">
+                <li class="image-upload" *ngFor="let pic of image_data;let i = index;">
+                    <img src="{{pic}}">
+                    <button class="del"><i class="material-icons" (click)="remove_image(i)">delete_sweep</i></button>
+                </li>
+
+                <li class="add-image" (click)="this.takePhoto()" *ngIf="image_data.length==0">
+                    <i class="material-icons">add</i>
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <div class="padding16">
+        <!-- <button *ngIf="!form.DealerExist && form.mobile && form.mobile.length==10 && form.state && form.district && form.area.length>0" ion-button class="cs-btn" style="margin: 16px 0px !important;">Save</button> -->
+        <button ion-button class="cs-btn" style="margin: 16px 0px !important;" (click)="submit()">Save</button>
+
+    </div>
+</form>
 </ion-content>
