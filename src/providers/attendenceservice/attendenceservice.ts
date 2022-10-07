@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 import { NavController, NavParams } from 'ionic-angular';
 import { ConstantProvider } from '../constant/constant';
 import { Storage } from '@ionic/storage';
-import {MyApp} from '../../app/app.component';
+import { MyApp } from '../../app/app.component';
 /*
   Generated class for the FollowupserviceProvider provider.
   See https://angular.io/guide/dependency-injection for more info on providers
@@ -12,23 +12,23 @@ import {MyApp} from '../../app/app.component';
 @Injectable()
 export class AttendenceserviceProvider {
 
-  constructor(public http: Http, public constant: ConstantProvider, public storage: Storage ) {
+  constructor(public http: Http, public constant: ConstantProvider, public storage: Storage) {
     console.log('Hello AttendenceService Provider');
   }
 
-  public start_attend(data){
+  public start_attend(data) {
     console.log(data);
     return new Promise((resolve, reject) => {
-      
+
       this.storage.get('token').then((token) => {
 
         console.log(token);
 
         let header = new Headers();
         header.append('Content-Type', 'application/json');
-        header.append('Authorization', 'Bearer '+token);
+        header.append('Authorization', 'Bearer ' + token);
 
-        this.http.post(this.constant.rootUrlSfa+'Attendence/start_attend',JSON.stringify(data),{headers: header}).map((res)=>res.json()).subscribe(res=>{
+        this.http.post(this.constant.rootUrlSfa + 'Attendence/start_attend', JSON.stringify(data), { headers: header }).map((res) => res.json()).subscribe(res => {
           console.log(res);
           resolve(res);
         }, (err) => {
@@ -41,96 +41,96 @@ export class AttendenceserviceProvider {
 
 
 
-  public stop_attend(data){
+  public stop_attend(data) {
     console.log(data);
     return new Promise((resolve, reject) => {
-      
+
       this.storage.get('token').then((token) => {
 
         let header = new Headers();
         header.append('Content-Type', 'application/json');
-        header.append('Authorization', 'Bearer '+token);
+        header.append('Authorization', 'Bearer ' + token);
 
-        this.http.post(this.constant.rootUrlSfa+'Attendence/stop_attend',JSON.stringify(data),{headers: header }).map(res=>res.json())
-        .subscribe(res=>{
-          console.log(res);
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
+        this.http.post(this.constant.rootUrlSfa + 'Attendence/stop_attend', JSON.stringify(data), { headers: header }).map(res => res.json())
+          .subscribe(res => {
+            console.log(res);
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
       });
     });
   }
 
 
-  public last_attendence_data(){
+  public last_attendence_data() {
     return new Promise((resolve, reject) => {
-      
+
       this.storage.get('token').then((token) => {
 
         let header = new Headers();
         header.append('Content-Type', 'application/json');
-        header.append('Authorization', 'Bearer '+token);
+        header.append('Authorization', 'Bearer ' + token);
         console.log(header);
-        
-        this.http.get(this.constant.rootUrlSfa+'Attendence/last_attendence_data',{headers: header }).map(res=>res.json())
-        .subscribe(res=>{
-          console.log(res);
-          // this.loginapp.hit({chk:'LoggedIn'});
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
+
+        this.http.get(this.constant.rootUrlSfa + 'Attendence/last_attendence_data', { headers: header }).map(res => res.json())
+          .subscribe(res => {
+            console.log(res);
+            // this.loginapp.hit({chk:'LoggedIn'});
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
       });
     });
   }
 
-// reslog:any;
-//   public tabhide(){
-//    console.log(this.constant);
-   
-//           // this.loginapp.hit({chk:'LoggedIn'});
-//       this.reslog=this.constant.UserLoggedInData.userLoggedInChk;
-//       console.log(this.reslog);
-      
-//   }
+  // reslog:any;
+  //   public tabhide(){
+  //    console.log(this.constant);
 
-  public get_attendance(userId){
+  //           // this.loginapp.hit({chk:'LoggedIn'});
+  //       this.reslog=this.constant.UserLoggedInData.userLoggedInChk;
+  //       console.log(this.reslog);
+
+  //   }
+
+  public get_attendance(userId) {
     return new Promise((resolve, reject) => {
-      
+
       this.storage.get('token').then((token) => {
 
         let header = new Headers();
         header.append('Content-Type', 'application/json');
-        header.append('Authorization', 'Bearer '+token);
+        header.append('Authorization', 'Bearer ' + token);
 
-        this.http.post(this.constant.rootUrlSfa+'Attendence/get_attendence',JSON.stringify(userId),{headers: header }).map(res=>res.json())
-        .subscribe(res=>{
-          console.log(res);
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
+        this.http.post(this.constant.rootUrlSfa + 'Attendence/get_attendence', JSON.stringify(userId), { headers: header }).map(res => res.json())
+          .subscribe(res => {
+            console.log(res);
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
       });
     });
   }
 
-  public getWorkingType(){
+  public getWorkingType() {
     return new Promise((resolve, reject) => {
-      
+
       this.storage.get('token').then((token) => {
 
         let header = new Headers();
         header.append('Content-Type', 'application/json');
-        header.append('Authorization', 'Bearer '+token);
+        header.append('Authorization', 'Bearer ' + token);
 
-        this.http.get(this.constant.rootUrlSfa+'attendence/get_working_type',{headers: header }).map(res=>res.json())
-        .subscribe(res=>{
-          console.log(res);
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
+        this.http.get(this.constant.rootUrlSfa + 'attendence/get_working_type', { headers: header }).map(res => res.json())
+          .subscribe(res => {
+            console.log(res);
+            resolve(res);
+          }, (err) => {
+            reject(err);
+          });
       });
     });
   }

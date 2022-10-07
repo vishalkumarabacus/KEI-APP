@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, App, ModalController } from 'ionic-angular';
 import { ProductDetailPage } from '../product-detail/product-detail';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { SQLite } from '@ionic-native/sqlite';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { ConstantProvider } from '../../providers/constant/constant';
@@ -49,7 +49,7 @@ export class ProductsPage
         public service1: MyserviceProvider,
         public loadingCtrl:LoadingController,
         private app:App,
-        public offlineService: OfflineDbProvider,
+        // public offlineService: OfflineDbProvider,
         public modalCtrl: ModalController,
         public constant:ConstantProvider,
         private sqlite: SQLite,

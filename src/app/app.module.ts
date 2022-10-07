@@ -67,10 +67,12 @@ import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-na
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { EditProfilePageModule } from '../pages/edit-profile/edit-profile.module';
+// import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
 // import { ComplaintRemarksPageModule } from '../pages/complaint-remarks/complaint-remarks.module';
 import { AppVersion } from '@ionic-native/app-version';
 import { CategoryPageModule } from '../pages/category/category.module';
 import { SocialSharing } from '@ionic-native/social-sharing';
+// import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 // import { SelectRegistrationTypePage } from '../pages/select-registration-type/select-registration-type';
 import { SelectRegistrationTypePageModule } from '../pages/select-registration-type/select-registration-type.module';
 import { LoginPageModule } from '../pages/login/login.module';
@@ -111,8 +113,8 @@ import { TimeCounterPipe } from '../pipes/time-counter/time-counter';
 // import { OtpverifyPage } from '../pages/otpverify/otpverify';
 import { NearestDealerPageModule } from '../pages/nearest-dealer/nearest-dealer.module';
 import { VideoCategoryPageModule } from '../pages/video-category/video-category.module';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { OfflineDbProvider } from '../providers/offline-db/offline-db';
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+// import { OfflineDbProvider } from '../providers/offline-db/offline-db';
 import { Network } from '@ionic-native/network';
 import { DealerHomePageModule } from '../pages/dealer-home/dealer-home.module';
 import { DealerCheckInPageModule } from '../pages/dealer-check-in/dealer-check-in.module';
@@ -194,7 +196,14 @@ import { CheckinNewPageModule } from '../pages/checkin-new/checkin-new.module';
 import { TravelListNewPageModule } from '../pages/travel-list-new/travel-list-new.module';
 import { TravelAddNewPage } from '../pages/travel-add-new/travel-add-new';
 import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.module';
-
+import { TravelEditNewPageModule } from '../pages/travel-edit-new/travel-edit-new.module';
+import { UploadFilePageModule } from '../pages/upload-file/upload-file.module';
+import { UploadFilePage } from '../pages/upload-file/upload-file';
+import { TravelPopOverPageModule } from '../pages/travel-pop-over/travel-pop-over.module';
+import { ChangeStatusModelPage } from '../pages/change-status-model/change-status-model';
+import { ChangeStatusModelPageModule } from '../pages/change-status-model/change-status-model.module';
+import { TravelNewlistPageModule } from '../pages/travel-newlist/travel-newlist.module';
+// import { CacheModule } from "ionic-cache";
 @NgModule({
     declarations: [
         MyApp,
@@ -215,6 +224,7 @@ import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.m
         // ContractorModalPage ,
         ],
     imports: [
+        // CacheModule.forRoot(),
         AddRetailerPageModule,
         VisitingCardModalPageModule,
         OtpPageModule,
@@ -223,6 +233,7 @@ import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.m
         LoginScreenPageModule,
         ExpenseStatusModalPageModule,
         ExpensePopoverPageModule,
+        TravelPopOverPageModule,
         DealerExecutiveAppPageModule,
         ExecutivDetailPageModule,
         TaskClosePageModule,
@@ -358,7 +369,11 @@ import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.m
         LoadingCntrlPageModule,
         CheckinNewPageModule,
         TravelListNewPageModule,
-        TravelAddNewPageModule
+        TravelAddNewPageModule,
+        TravelEditNewPageModule,
+        UploadFilePageModule,
+        ChangeStatusModelPageModule,
+        TravelNewlistPageModule,
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -377,6 +392,7 @@ import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.m
         // VisitingCardModalPage,
         // ContractorModalPage,
         AnnouncementListPage,
+        UploadFilePage
 
         // CancelationPolicyPage
         // ExecutivePopoverPage
@@ -385,6 +401,7 @@ import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.m
         StatusBar,
         DbserviceProvider,
         LoginserviceProvider,
+        // BackgroundGeolocation,
         SplashScreen,
         // FileChooser,
         ConstantProvider,
@@ -412,12 +429,13 @@ import { TravelAddNewPageModule } from '../pages/travel-add-new/travel-add-new.m
         MyserviceProvider,
         LocationAccuracy,
         AttendenceserviceProvider,
-        SQLite,
+        // SQLite,
         VideoPlayer,
         // InfiniteScroll,
         Network,
-        {provide: ErrorHandler, useClass: IonicErrorHandler},
-        OfflineDbProvider,
+        DbserviceProvider ,
+        {provide: ErrorHandler, useClass: IonicErrorHandler,},
+        // OfflineDbProvider,
         // DocumentViewer
         FileOpener
     ]

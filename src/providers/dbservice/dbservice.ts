@@ -4,7 +4,7 @@ import { ConstantProvider } from '../constant/constant';
 import * as jwt_decode from "jwt-decode";
 import { Storage } from '@ionic/storage';
 import { LoadingController, Loading, AlertController ,ToastController } from 'ionic-angular';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 
 @Injectable()
@@ -19,7 +19,7 @@ export class DbserviceProvider {
   userlogin:any;
   url:any='';
   protected token_data : any;
-  constructor(public http: HttpClient, private toastCtrl: ToastController  ,public alertCtrl:AlertController, private constant:ConstantProvider,public loadingCtrl:LoadingController,public http1:HttpClient, public storage: Storage, private sqlite: SQLite)
+  constructor(public http: HttpClient, private toastCtrl: ToastController  ,public alertCtrl:AlertController, private constant:ConstantProvider,public loadingCtrl:LoadingController,public http1:HttpClient, public storage: Storage,)
   {
     console.log('Hello DbserviceProvider Provider');
     this.token();

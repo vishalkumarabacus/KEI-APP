@@ -1,0 +1,45 @@
+
+
+<ion-header>
+  <ion-navbar>
+      <ion-title >Change Status</ion-title>
+
+
+
+
+     
+
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content style="background: #f8f8f8;">
+
+  <div class="edit mt10 ml10 mr10">
+    <ion-list>
+      <div>
+
+        <ion-item class="cs-normal-select mt16">
+          <ion-label>Travel Status</ion-label>
+          <ion-select placeholder="status" name="status" [(ngModel)]="data.status">
+            <ion-option value="Pending" >Pending</ion-option>
+            <ion-option value="Approve">Approve</ion-option>
+            <ion-option value="Reject">Reject</ion-option>
+          </ion-select>
+        </ion-item>
+        
+        <ion-item class="cs-textarea1" *ngIf="data.status == 'Reject'">
+          <ion-label floating><span>Reject reason</span></ion-label>
+          <ion-textarea name="reason" placeholder="Enter reason" [(ngModel)]="data.reason"></ion-textarea>
+        </ion-item>
+      </div>          
+    </ion-list>
+
+</div>
+  
+  <div class="text-right mt32">
+    <button ion-button color="secondary" [disabled]="!data.status || (data.status == 'Reject' && !data.reason)" (click)="updateStatus()">Update</button>
+  </div>
+
+
+</ion-content>

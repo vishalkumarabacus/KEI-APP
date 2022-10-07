@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, App } from 'ionic-angular';
 import { ProductSubdetailPage } from '../product-subdetail/product-subdetail';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { SQLite } from '@ionic-native/sqlite';
 import { ConstantProvider } from '../../providers/constant/constant';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
@@ -31,7 +31,7 @@ export class FavoriteProductPage
     user_data:any={};
     constructor(public navCtrl: NavController,
         public storage: Storage
-        ,public navParams: NavParams,public service:DbserviceProvider,public loadingCtrl:LoadingController,private app:App,public offlineService: OfflineDbProvider,private sqlite: SQLite,public constant:ConstantProvider,public db:MyserviceProvider) {
+        ,public navParams: NavParams,public service:DbserviceProvider,public loadingCtrl:LoadingController,private app:App,private sqlite: SQLite,public constant:ConstantProvider,public db:MyserviceProvider) {
         
         this.skelton = new Array(10);
     }

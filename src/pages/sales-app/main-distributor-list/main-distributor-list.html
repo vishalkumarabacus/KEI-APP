@@ -4,6 +4,19 @@
         <ion-title *ngIf="DrType==1">My Distributor</ion-title>
         <ion-title *ngIf="DrType==2">My Dealers</ion-title>
         <ion-title *ngIf="DrType==3">My Retailers</ion-title>
+        <ion-title *ngIf="DrType==4">My Projects</ion-title>
+        <ion-title *ngIf="DrType==5">My Architect</ion-title>
+        <ion-title *ngIf="DrType==6">My Constructor</ion-title>
+        <ion-title *ngIf="DrType==7">My Contractor</ion-title>
+        <ion-title *ngIf="DrType==8">My Interior Designer</ion-title>
+        <ion-title *ngIf="DrType==10">My Electrician</ion-title>
+        <ion-title *ngIf="DrType==12">My Direct Customer</ion-title>
+        <ion-title *ngIf="DrType==13">My Builders</ion-title>
+        <ion-title *ngIf="DrType==14">My Consultant</ion-title>
+        <ion-title *ngIf="DrType==15">My Govt Department</ion-title>
+        <ion-title *ngIf="DrType==16">My Industry</ion-title>
+        <ion-title *ngIf="DrType==17">My Infra</ion-title>
+        <ion-title *ngIf="DrType==18">My MEPM</ion-title>
     </ion-navbar>  
     <ion-toolbar>
         <ion-searchbar (keyup.enter)="get_distributor_list()" [(ngModel)]="search" name="search" ></ion-searchbar>
@@ -13,6 +26,22 @@
 
 
 <ion-content>
+    <div class="sticky bg-white"*ngIf="this.team_count!=null">
+        <div  class="round-tab">
+          <ul>
+            <li [ngClass]="{'active':expenseStatus == 'My'}" (click)="expenseStatus = 'My';get_distributor_list()">
+              <a>Direct Assigned  ({{this.team_list}})</a>
+            </li>
+            <li [ngClass]="{'active':expenseStatus == 'Team'}" (click)="expenseStatus = 'Team';get_distributor_list()">
+              <a>Team Assigned  ({{this.direct_list}})</a>
+            </li>
+           
+            <!-- <li [ngClass]="{'active':expenseStatus == 'Cancel'}" (click)="expenseStatus = 'Cancel';getExpenseList()">
+              <a>Cancel</a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
     <ion-refresher (ionRefresh)="doRefresh($event)">
         <ion-refresher-content  pullingIcon="arrow-dropdown" pullingText="Pull to refresh"  refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
@@ -32,24 +61,56 @@
             
             <div class="mid mt0">
                 <div class="content-info" >
-                    <div class="left-info" >
-                        <div class="circle">{{data.company_name.substring(0,1).toUpperCase()}}</div>
+                    <div class="left-info">
+                        <div class="circle" *ngIf="DrType!=10">{{data.company_name?.substring(0,1).toUpperCase()}}</div>
+                        <div class="circle" *ngIf="DrType==10">--</div>
+
+
                     </div>
                     
                     <div class="right-info">
-                        <p>{{data.company_name.toUpperCase()}}</p>
+                        <p style="font-weight: 800;font-size: 12px;">{{data.company_name?.toUpperCase()}}</p>
                         <!-- <p *ngIf="data.creator">{{data.name | titlecase}} ({{data.mobile}})</p> -->
-                        <p >{{data.name | titlecase}} ({{data.mobile}})</p>
+                        <p>{{data.name | titlecase}} ({{data.mobile}}) </p>
+                        <!-- Beat code: <span>{{data.name}}</span>z -->
                     </div>
                 </div>
                 <div class="tag-info">
                     <a href="tel:{{data.mobile}}"><i class="material-icons">phone</i></a>
                 </div>
             </div>
-            <div class="lower"  *ngIf=" data.address  || data.state  || data.district  || data.city  || data.area  || data.pincode">
-                <p>Address</p>
+
+          
+            <div class="lower" style="display: flex;" *ngIf="data.checkin_active!='1'" >
+                 <p>Status -</p> 
+                <p> Active</p>
+            </div>
+            <div class="lower" style="display: flex;" *ngIf="data.checkin_active=='1'" >
+                <p> Status -  </p>
+                <p> Not Active </p>
+            </div>
+            <div class="lower" style="display: flex;" *ngIf=" data.user_name&& expenseStatus != 'My'">
+                <p>SO Name :</p>
+                <p>{{data.user_name | titlecase}}</p>
+            </div>
+           
+            <div class="lower" style="display: flex;" *ngIf=" data.address  || data.state  || data.district  || data.city  || data.area  || data.pincode">
+                <p>Address - </p>
                 <p>{{data.address}} {{data.area_details | titlecase}} {{data.district | titlecase}} {{data.state | titlecase}} </p>
             </div>
+            <div class="lower" style="display: flex;" *ngIf="DrType==3">
+                <p>Distributor -</p>
+                <p> {{data.distributor_name| titlecase}} </p>
+            </div>
+
+            <div class="lower" style="display: flex;" *ngIf="data.beat_code!='' && DrType==3">
+                <p>Beat Code - </p>
+                <p>{{data.beat_code}}</p>
+            </div>
+            <div class="lower" style="display: flex;" *ngIf="data.beat_code!='' && DrType==3">
+                <p> Name - </p>
+                <p>{{data.area}}</p>
+            </div> 
         </div>  
     </div>
     
@@ -62,8 +123,8 @@
     </ion-infinite-scroll>
     <!-- infinite scroll end -->
     
-    <ion-fab right bottom *ngIf="DrType==3">
-        <button ion-fab color="danger" (click)="addretailer()" ><ion-icon name="add"></ion-icon></button>
+    <ion-fab right bottom>
+        <button ion-fab color="danger" (click)="addretailer(DrType)" ><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 </ion-content>
 

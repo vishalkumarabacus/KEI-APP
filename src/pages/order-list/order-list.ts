@@ -58,7 +58,7 @@ export class OrderListPage {
         this.searchData = this.navParams.get("dr_name");
 
         if(this.searchData){
-            this.filter.order_status='Pending'
+            // this.filter.order_status='Pending'
             this.order_type = this.navParams.get("type");
             console.log(this.order_type);
             this.filter.master=this.searchData;
@@ -66,7 +66,7 @@ export class OrderListPage {
             this.order_type = this.navParams.get("type");
         }
         else{
-            this.filter.order_status='Pending'
+            // this.filter.order_status='Pending'
             this.order_type = this.navParams.get("type");
             console.log(this.order_type);
             
@@ -96,7 +96,7 @@ export class OrderListPage {
         this.sendRequest=false
         this.db.show_loading();
         
-        this.db.addData({"search":this.filter,"user_id":this.user_id,"start":this.start,"limit":this.limit,'status':this.filter.order_status,type:this.user_data.type,'userId':this.userId},"dealerData/get_ordersExecutive").then(resp=>
+        this.db.addData({"search":this.filter,"user_id":this.user_id,"start":this.start,"limit":this.limit,type:this.user_data.type,'userId':this.userId},"dealerData/get_ordersExecutive").then(resp=>
         {
             console.log(resp);
             this.order_list = resp['order_list'];

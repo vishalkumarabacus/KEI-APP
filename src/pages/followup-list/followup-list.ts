@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController, LoadingController, Loading, PopoverController } from 'ionic-angular';
 import { FollowupAddPage } from '../followup-add/followup-add';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
+import { Storage } from '@ionic/storage';
+
 import moment from 'moment';
 import { AttendenceserviceProvider } from '../../providers/attendenceservice/attendenceservice';
 import { FollowupDetailPage } from '../followup-detail/followup-detail';
+import { ExpensePopoverPage } from '../expense-popover/expense-popover';
 
 
 
@@ -26,28 +29,46 @@ export class FollowupListPage
   filter:any={};
   complete_count:any;
   pending_count:any; 
+  followType:any="My";
+  load_data:any=0
+
+
   upcoming_count:any; 
   
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
+    public popoverCtrl: PopoverController,
     public service: MyserviceProvider, 
     public loadingCtrl: LoadingController,
     public alertCtrl:AlertController,
     public toastCtrl: ToastController,
-    public attendence_serv: AttendenceserviceProvider) 
+    public storage: Storage,
+    public attendence_serv: AttendenceserviceProvider
+    ) 
     {
-      this.userId = this.navParams.get('userId');
-      console.log(this.userId);
+
+      this.storage.get('userId').then((id) => {
+        this.userId = id;
+        console.log(this.userId);
+      });
+      // if(this.followType=='My'){
+      //   this.getFollowup();
+      //   }
+      // this.userId = this.navParams.get('userId');
+      // console.log(this.userId);
       
       // this.last_attendence(); 
+      setTimeout(() => {
       this.getFollowup();
+        
+      }, 100);
     }
     
     ionViewWillEnter() 
     {  
       this.filter.status='pending'
-      this.getFollowup();
+      // this.getFollowup();
     }
     
     goOnAddFollowup(){
@@ -93,8 +114,9 @@ export class FollowupListPage
       // this.service.show_loading();
       
       // this.requestSend=false
-      // this.show_loading();
-      this.service.addData({'filter':this.filter},'Followup/followup_list').then((result)=>
+      this.load_data=0
+    this.show_loading();
+      this.service.addData({'filter':this.filter,'type':this.followType,'user_id':this.userId},'Followup/followup_list').then((result)=>
       {
         console.log(result);
       // this.service.dismiss();.
@@ -106,6 +128,8 @@ export class FollowupListPage
         this.upcoming_count = result['count']['upcoming_count'];
         this.id= result['followup_list']['id'];
         console.log(this.id);
+        this.loading.dismiss();
+        this.load_data=1
         
       },err=>
       {
@@ -115,6 +139,31 @@ export class FollowupListPage
       })
       
     }
+
+    presentPopover(myEvent) 
+  {
+    let popover = this.popoverCtrl.create(ExpensePopoverPage,{'from':'followup'});
+    
+    popover.present({
+      ev: myEvent
+    });
+
+    popover.onDidDismiss(resultData => {
+
+      console.log(resultData);
+      if( resultData)
+      {
+        this.followType = resultData.TabStatus;
+        console.log(this.followType);
+       this.getFollowup()
+        // this.checkin_list();
+        
+        // this.getTravelPlan();
+      }
+     
+     })
+  
+  }
     
     go_to_followup_detail(id){
       console.log("go_to_followup_detail method call");
@@ -160,6 +209,15 @@ export class FollowupListPage
       alert.present();
       
     }
+    show_loading()
+  {
+    this.loading = this.loadingCtrl.create({
+      spinner: 'hide',
+      content: `<img src="./assets/imgs/gif.svg"/>`,
+      dismissOnPageChange: true
+    });
+    this.loading.present();
+  }
     
    
     

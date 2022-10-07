@@ -1,12 +1,13 @@
 
 <ion-header>
   <ion-navbar>
-    <ion-title>{{expenseType}} Expense List</ion-title>
-    
+    <ion-title *ngIf="expenseType=='My'">{{expenseType}}  My Expense List</ion-title>
+    <ion-title *ngIf="expenseType!='My'"><h1 text-wrap>Team's Expense List</h1></ion-title>
+
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="more"></ion-icon>
-        
+
         <!-- <ion-icon name="ellipsis-vertical"></ion-icon> -->
       </button>
     </ion-buttons>
@@ -14,95 +15,66 @@
 </ion-header>
 
 <ion-content >
-  
-  <div  class="capsule-tabs">
-    <ul>
-      <li [ngClass]="{'active':expenseStatus == 'Pending'}" (click)="expenseStatus = 'Pending';getExpenseList()">
-        <p>Pending</p>
-      </li>
-      <li [ngClass]="{'active':expenseStatus == 'Approved'}" (click)="expenseStatus = 'Approved';getExpenseList()">
-        <p>Approved</p>
-      </li>
-      <li [ngClass]="{'active':expenseStatus == 'Reject'}" (click)="expenseStatus = 'Reject';getExpenseList()"> 
-        <p>Reject</p>
-      </li>
-      <!-- <li [ngClass]="{'active':expenseStatus == 'Cancel'}" (click)="expenseStatus = 'Cancel';getExpenseList()">
-        <a>Cancel</a>
-      </li> -->
-    </ul>
+  <div class="sticky bg-white">
+    <div  class="round-tab">
+      <ul>
+        <li [ngClass]="{'active':expenseStatus == 'Pending'}" (click)="expenseStatus = 'Pending';getExpenseList()">
+          <a>Pending</a>
+        </li>
+        <li [ngClass]="{'active':expenseStatus == 'Approved'}" (click)="expenseStatus = 'Approved';getExpenseList()">
+          <a>Approved</a>
+        </li>
+        <li [ngClass]="{'active':expenseStatus == 'Reject'}" (click)="expenseStatus = 'Reject';getExpenseList()"> 
+          <a>Reject</a>
+        </li>
+        <!-- <li [ngClass]="{'active':expenseStatus == 'Cancel'}" (click)="expenseStatus = 'Cancel';getExpenseList()">
+          <a>Cancel</a>
+        </li> -->
+      </ul>
+    </div>
   </div>
-  
   
   <div padding class="pb80">
     <div class="cs-list-item" (click)="deatilPage(row.id)" *ngFor="let row of expenseList">
       <div class="cs-top">
-        <div class="list-content">
+        <div class="list-content af-none">
           <p>{{row.dateCreated | date:'d MMM y'}}</p>
           <span>Date Created</span>
         </div>
-        
         <div class="list-content af-none">
-          <p>{{row.expenseType}}</p>
-          <span>Expense Type</span>
+          <p>{{row.userName}}</p>
+          <span>Created by</span>
         </div>
-        
         <div class="left-auto">
           <p class="inr-rupy"> &#x20B9; {{row.totalAmt}}</p>
         </div>
       </div>
-      <div class="mid">
-        <div class="content-info" >
-          <div class="left-info" >
-            <div class="circle" >{{row.userName.substring(0,1).toUpperCase()}}</div>
-          </div>
-          <div class="right-info">
-            <p>{{row.userName}}</p>
-            <p>{{row.user_contact}}</p>
-          </div>
-        </div>
-        <div class="tag-info">
-          <a href="tel:{{row.user_contact}}"><i class="material-icons">phone</i></a>
-      </div>
-      </div>
-      
+      <div class="travel-type">{{row.expenseType}}</div>
       <div class="middle-content">
         <div class="col-box">
           <p>Senior Status</p>
-          <!-- <span>{{row.seniorStatus}}</span> -->
-          <span *ngIf="row.seniorStatus=='Pending'" class="yellow-clr">{{row.seniorStatus}}</span>
-          <span *ngIf="row.seniorStatus=='Approved'" class="green-clr">{{row.seniorStatus}}</span>
-          <span *ngIf="row.seniorStatus=='Reject'" class="red-clr">{{row.seniorStatus}}</span>
-
+          <span>{{row.seniorStatus}}</span>
         </div>
         <div class="col-box">
           <p>A/C Status</p>
-          <span *ngIf="row.acStatus=='Pending'" class="yellow-clr">{{row.acStatus}}</span>
-          <span *ngIf="row.acStatus=='Approved'" class="green-clr">{{row.acStatus}}</span>
-          <span *ngIf="row.acStatus=='Reject'" class="red-clr">{{row.acStatus}}</span>
-
-
-         
-        </div>
-        <div class="col-box" *ngIf="row.acStatus=='Approved'">
-          <p>Approved Amount</p>
-          <span>{{row.totalApprovedAmount}}</span>
+          <span>{{row.acStatus}}</span>
         </div>
         <div class="col-box">
-          <p>Ref ID</p>
-          <span>#CLM-{{row.id}}</span>
+          <p>Expense ID</p>
+          <span>{{row.id}}</span>
         </div>
       </div>
     </div>
     
   </div>
-  
+
   <div class="nothing-here" style="height: 50%;" *ngIf="!expenseList?.length && sendRequest">
-    <div class="outer">
-      <div class="innear">
-        <img src="assets/imgs/no_found.svg" alt="">
-        <p>Data not Available</p>
+      <div class="outer">
+          <div class="innear">
+              <img src="assets/imgs/no_found.svg" alt="">
+              <p>Data not Available</p>
+          </div>
       </div>
-    </div>
   </div>
   
   <ion-fab right bottom>

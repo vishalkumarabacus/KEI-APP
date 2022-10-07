@@ -25,12 +25,12 @@ export class LmsActivityAddPage {
 
     
     ionViewWillEnter() {
-        // this.type=this.navParams.get('type');
-        // this.form.lead_type = this.type;
-        // console.log(this.type);
+        this.type=this.navParams.get('type');
+        this.form.lead_type = this.type;
+        console.log(this.type);
         
-        // this.form.dr_id={id:this.navParams.get('id'),company_name:this.navParams.get('company_name')};
-        // console.log(this.form.dr_id);
+        this.form.dr_id={id:this.navParams.get('id'),company_name:this.navParams.get('company_name')};
+        console.log(this.form.dr_id);
         
         // this.form.dr_id=this.navParams.get('id');
         // console.log(this.form.dr_id);
@@ -40,6 +40,8 @@ export class LmsActivityAddPage {
         
         // this.today_date = new Date().toISOString().slice(0,10);
         // console.log(this.today_date);
+        this.today_date = new Date().toISOString().slice(0,10);
+        console.log(this.today_date);
         
     }
     
@@ -67,7 +69,7 @@ export class LmsActivityAddPage {
     }
     networkType:any=[]
     getNetworkType(){
-        this.db.addData3('', "Dashboard/distributionNetworkModule").then((result => {
+        this.db.addData('', "lead/leadNetworkModule").then((result => {
           console.log(result);
           this.networkType = result['modules'];
         }))

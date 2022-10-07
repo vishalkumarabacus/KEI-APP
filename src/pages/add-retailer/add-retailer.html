@@ -5,12 +5,28 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar *ngIf="!form.id">
-    <ion-title>Add Retailers</ion-title>
-  </ion-navbar>
+ 
   <ion-navbar *ngIf="form.id">
     <ion-title>Update Retailers</ion-title>
   </ion-navbar>
+  <ion-navbar>
+    <ion-title *ngIf="DrType==1">Add Distributor</ion-title>
+    <ion-title *ngIf="DrType==2">Add Dealers</ion-title>
+    <ion-title *ngIf="DrType==3">Add Retailers</ion-title>
+    <ion-title *ngIf="DrType==4">Add Projects</ion-title>
+    <ion-title *ngIf="DrType==5">Add Architect</ion-title>
+    <ion-title *ngIf="DrType==6">Add Constructor</ion-title>
+    <ion-title *ngIf="DrType==7">Add Contractor</ion-title>
+    <ion-title *ngIf="DrType==8">Add Interior Designer</ion-title>
+    <ion-title *ngIf="DrType==10">Add Electrician</ion-title>
+    <ion-title *ngIf="DrType==12">Add Direct Customer</ion-title>
+    <ion-title *ngIf="DrType==13">Add Builders</ion-title>
+    <ion-title *ngIf="DrType==14">Add Consultant</ion-title>
+    <ion-title *ngIf="DrType==15">Add Govt Department</ion-title>
+    <ion-title *ngIf="DrType==16">Add Industry</ion-title>
+    <ion-title *ngIf="DrType==17">Add Infra</ion-title>
+    <ion-title *ngIf="DrType==18">Add MEPM</ion-title>
+</ion-navbar> 
 </ion-header>
 
 <ion-content >
@@ -21,7 +37,7 @@
 <div class="edit">
   <ion-list>
 
-  <ion-item>
+  <ion-item *ngIf="DrType!=10">
     <ion-label floating><span>Company Name <strong>*</strong></span></ion-label>
     <ion-input type="text" placeholder="Enter Company Name"  name="company_name" #company_name="ngModel"  [(ngModel)]="form.company_name" required></ion-input>
 </ion-item>
@@ -36,6 +52,49 @@
   <ion-label floating><span>Mobile Number <strong>*</strong></span></ion-label>
   <ion-input type="tel" placeholder="Enter MobileNumber"  (keypress)="MobileNumber($event)" name="mobile" #mobile="ngModel" minLength="10" maxLength="10" [(ngModel)]="form.mobile" (ngModelChange)="check_num()" required ></ion-input>
 </ion-item>
+
+<p  *ngIf="checkExist==true &&(error.type=='1'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Distributor in customer network </p>
+<p  *ngIf="checkExist==true &&(error.type=='1'&&error.lead_type=='Lead'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Distributor in lead network </p>
+
+<p  *ngIf="checkExist==true &&(error.type=='2'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Dealer in customer network </p>
+<p  *ngIf="checkExist==true &&(error.type=='2'&&error.lead_type=='Lead'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Dealer in customer network </p>
+
+<p  *ngIf="checkExist==true &&(error.type=='3'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Retailer  </p>
+<p  *ngIf="checkExist==true &&(error.type=='4'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Project </p>
+<p  *ngIf="checkExist==true &&(error.type=='12'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Direct Customer </p>
+<p  *ngIf="checkExist==true &&(error.type=='5'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Architect  </p>
+<p  *ngIf="checkExist==true &&(error.type=='6'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Constructor </p>
+<p  *ngIf="checkExist==true &&(error.type=='7'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Contractor </p>
+<p  *ngIf="checkExist==true &&(error.type=='8'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Interior Designer </p>
+<p  *ngIf="checkExist==true &&(error.type=='9'&&error.lead_type=='Lead'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Online in Leads </p>
+<p  *ngIf="checkExist==true &&(error.type=='10'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with  Electrician</p>
+<p  *ngIf="checkExist==true &&(error.type=='13'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Builders </p>
+<p  *ngIf="checkExist==true &&(error.type=='14'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with  Consultant</p>
+<p  *ngIf="checkExist==true &&(error.type=='15'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with  Govt. Department</p>
+<p  *ngIf="checkExist==true &&(error.type=='16'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with  Industry</p>
+<p  *ngIf="checkExist==true &&(error.type=='17'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with Infra</p>
+<p  *ngIf="checkExist==true &&(error.type=='18'&&error.lead_type=='Dr'&&error.checkin_active=='0'&&form.mobile!='')" class="error-line">Same Mobile No. Already Exists with MEPM</p>
+
+			
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='1')" class="error-line">This Account is Disabled in Distributor ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='2')" class="error-line">This Account is Disabled in Dealer ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='3')" class="error-line">This Account is Disabled in Retailer ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='4')" class="error-line">This Account is Disabled in Project ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='5')" class="error-line">This Account is Disabled in Architect ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='6')" class="error-line">This Account is Disabled in Constructor ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='7')" class="error-line">This Account is Disabled in Contractor ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='8')" class="error-line">This Account is Disabled in Interior Designer ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='10')" class="error-line">This Account is Disabled in Electrician ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='12')" class="error-line">This Account is Disabled in Direct Customer  ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='13')" class="error-line">This Account is Disabled in Builder ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='14')" class="error-line">This Account is Disabled in Consultant ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='15')" class="error-line">This Account is Disabled in Govt.Department,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='16')" class="error-line">This Account is Disabled in Industry ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='17')" class="error-line">This Account is Disabled in Infra ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='18')" class="error-line">This Account is Disabled in MEPM ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='9' && lead_type=='Lead')" class="error-line">This Account is Disabled in online lead ,Kindly Contact with HO</p>
+
+       
 
 
 <ion-item >
@@ -53,10 +112,25 @@
     <ion-input type="text" placeholder="Enter GST"  name="gst" [(ngModel)]="form.gst"  minLength="16" maxLength="16" onkeypress="return ((event.charCode >= 48 && event.charCode <= 57) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 65 && event.charCode <= 90))"></ion-input>
 </ion-item>
 
-<div *ngIf="!form.id">
+<div *ngIf="!form.id && DrType==3">
+  <ion-item class="cs-normal-select mt16">
+    <ion-label>Assign Beat Code</ion-label>
+    <ionic-selectable
+    item-content
+    [(ngModel)]="form.assign_beat_code"
+    [items]="beatCodeList"
+    itemValueField="beat_code"
+    name="beat_code1"
+    value="beat_code"
+    itemTextField="beat_code1"
+    [canSearch]="true"
+    #selectComponent >
+</ionic-selectable>
+   
+  </ion-item>
 <ion-item class="cs-selectable mt16">
   <ion-label><span>Select Distributor</span></ion-label>
-  <ion-select   name="assign_dr_id" name="assign_dr_id" #assign_dr_id="ngModel" [(ngModel)]="form.assign_dr_id" >
+  <ion-select   name="assign_dr_id" name="assign_dr_id" #assign_dr_id="ngModel" [(ngModel)]="form.assign_dr_id" required>
     <ion-option *ngFor="let row of distributor_list;let i=index;" value="{{row.id}}" required>{{row.company_name | titlecase}}</ion-option>
 </ion-select>
 </ion-item>	
@@ -66,42 +140,75 @@
   <ion-input type="email"  placeholder="Enter Address"    name="address"  #address="ngModel" [(ngModel)]="form.address"  ></ion-input>
 </ion-item>
 
-<ion-item class="mb0"  required>
-  <ion-label floating><span>Pincode </span></ion-label>
-  <ion-input placeholder="Enter Pincode"  type="tel" (keypress)="MobileNumber($event)" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" (input)="selectAddressOnBehalfOfPincode()" ></ion-input>
-</ion-item>
+<div class="edit" >
+  <ion-list>
+      <ion-item class="mb0"  >
+          <ion-label floating><span>Pincode </span></ion-label>
+          <ion-input placeholder="Enter Pincode"  type="tel" (keypress)="MobileNumber($event)" minLength="6" maxLength="6" name="pincode"  #pincode="ngModel" [(ngModel)]="form.pincode" (input)="selectAddressOnBehalfOfPincode()" ></ion-input>
+      </ion-item>
+   
+      
+      <ion-item class="cs-normal-select mt15">
+          <ion-label><span>State</span></ion-label>
+          <ion-select   name="state" name="state" #state="ngModel" [(ngModel)]="form.state" (ionChange)="get_district()"  >
+              <ion-option *ngFor="let row of state_list;let i=index;" value="{{row.state_name}}">{{row.state_name | titlecase}}</ion-option>
+          </ion-select>
+      </ion-item>
+      
+      <ion-item class="cs-normal-select mt10" >
+          <ion-label><span>District </span></ion-label>
+          <ion-select   name="district" name="district" #district="ngModel" [(ngModel)]="form.district"  (ionChange)="getCityList()">
+              <ion-option *ngFor="let row of district_list" value="{{row.district_name}}" >{{row.district_name}}</ion-option>
+          </ion-select>
+      </ion-item>
+      <ion-item class="cs-normal-select mt10" >
+          <ion-label><span>City </span></ion-label>
+          <ion-select   name="city1" name="city1" #city1="ngModel" [(ngModel)]="form.city1"  (ionChange)="selectarea()">
+              <ion-option *ngFor="let row of city_list" value="{{row.city}}"  >{{row.city}}</ion-option>
+          </ion-select>
+      </ion-item>
+      <ion-item class="cs-normal-select mb0">
+          <ion-label><span>Area </span></ion-label>
+          <ion-select   name="area" name="area" #area="ngModel" [(ngModel)]="form.area">
+              <ion-option *ngFor="let row of area_list" value="{{row.area}}">{{row.area}}</ion-option>
+          </ion-select>
+      </ion-item>
+      <!-- <ion-item [ngClass]="{'cs-error':f.submitted && city?.invalid}">
+          <ion-label floating ><span>City </span></ion-label>
+          <ion-input placeholder="Enter City"   type="text" name="city" #city="ngModel" [(ngModel)]="form.city"></ion-input>
+      </ion-item>
+      <p  *ngIf="f.submitted && city?.invalid" class="error-line">City Is Required</p> -->
+      
+      
+      
+      <!-- <h2>{{form.area}}</h2> -->
+      <!-- <p  *ngIf="f.submitted && area?.invalid" class="error-line">Area Is Invalid</p> -->
+      
+    
+      <!-- <p  *ngIf="f.submitted && description?.invalid" class="error-line">Description Is Invalid</p> -->
+  </ion-list>
+
+ 
 
 
-<ion-item class="cs-normal-select mt15" >
-  <ion-label><span>State <strong>*</strong></span></ion-label>
-  <ion-select   name="state" name="state" #state="ngModel" [(ngModel)]="form.state" (ionChange)="get_district()"  >
-      <ion-option *ngFor="let row of state_list;let i=index;" value="{{row.state_name}}" required>{{row.state_name | titlecase}}</ion-option>
-  </ion-select>
-</ion-item>
-
-<ion-item class="cs-normal-select mb0" >
-  <ion-label><span>District <strong>*</strong></span></ion-label>
-  <ion-select   name="district" name="district" #district="ngModel" [(ngModel)]="form.district" >
-      <ion-option *ngFor="let row of district_list" value="{{row.district_name}}" required >{{row.district_name}}</ion-option>
-  </ion-select>
-</ion-item>
-
-<ion-item>
-  <ion-label floating ><span>City </span></ion-label>
-  <ion-input placeholder="Enter City"   type="text" name="city" #city="ngModel" [(ngModel)]="form.city"></ion-input>
-</ion-item>
+</div>
 
 
-<ion-item >
+<!-- <ion-item >
   <ion-label floating><span>Area</span></ion-label>
   <ion-input   placeholder="Enter Area"   type="text"  name="area" #area="ngModel" [(ngModel)]="form.area">
   </ion-input>
-</ion-item>
+</ion-item> -->
 </ion-list>
 </div>
-<div class="padding16">
-  <button ion-button class="cs-btn" *ngIf="!form.id" (click)="save_retailer()" style="margin: 16px 0px !important;">Save</button>
+<div class="padding16"*ngIf="form.mobile!=''&& error">
+  <button ion-button class="cs-btn" *ngIf="!form.id" (click)="check_mobile()" style="margin: 16px 0px !important;">Save</button>
   <button ion-button class="cs-btn" *ngIf="form.id" (click)="update()" style="margin: 16px 0px !important;">Update</button>
 
 </div>	
+<div class="padding16"*ngIf="!error">
+  <button ion-button class="cs-btn" *ngIf="!form.id" (click)="save_retailer()" style="margin: 16px 0px !important;">Save</button>
+  <button ion-button class="cs-btn" *ngIf="form.id" (click)="update()" style="margin: 16px 0px !important;">Update</button>
+
+</div>
 </ion-content>

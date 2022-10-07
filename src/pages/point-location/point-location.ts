@@ -73,7 +73,7 @@ export class PointLocationPage {
           this.service.show_loading()          
           this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
             () => {
-              let options = {maximumAge: 10000, timeout: 15000, enableHighAccuracy: true};
+              let options = {maximumAge: 0, timeout: 15000, enableHighAccuracy: true};
               this.geolocation.getCurrentPosition(options).then((resp) => {
                 
                 this.data.lat = resp.coords.latitude
@@ -135,6 +135,7 @@ export class PointLocationPage {
 
           getUserPosition(){
             this.options = {
+               
                 enableHighAccuracy : true
             };
         

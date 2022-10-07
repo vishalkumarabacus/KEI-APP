@@ -73,6 +73,9 @@ export class TravelDetailPage {
       {
           console.log(resp);
           this.detail= resp['travel'];
+          if( this.detail.travel_type=="Distributor Visit"){
+            this.detail.travel_type="Partywise Visit"
+          }
           this.travel_area_list=resp['travel']['travel_list'];
           this.travel_dr_list=resp['travel']['area_dealer_list'];
 

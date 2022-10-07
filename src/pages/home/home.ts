@@ -23,8 +23,8 @@ import { NearestDealerPage } from '../nearest-dealer/nearest-dealer';
 
 import { SocialSharing } from '@ionic-native/social-sharing';
 
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { TabsPage } from '../tabs/tabs';
@@ -54,7 +54,7 @@ export class HomePage {
     plumber_installation:any='';
     
     
-    constructor(public toastCtrl: ToastController,public socialSharing:SocialSharing ,public navCtrl: NavController,public nav:NavParams,public service:DbserviceProvider,public loadingCtrl:LoadingController,public storage:Storage, private barcodeScanner: BarcodeScanner,public alertCtrl:AlertController,public modalCtrl: ModalController,private push: Push , public events: Events, private sqlite: SQLite, public offlineService: OfflineDbProvider, public fileTransfer: FileTransfer, public file: File) {
+    constructor(public toastCtrl: ToastController,public socialSharing:SocialSharing ,public navCtrl: NavController,public nav:NavParams,public service:DbserviceProvider,public loadingCtrl:LoadingController,public storage:Storage, private barcodeScanner: BarcodeScanner,public alertCtrl:AlertController,public modalCtrl: ModalController,private push: Push , public events: Events, public fileTransfer: FileTransfer, public file: File) {
         this.loginBanner();
         this.get_countWithLiveServer()
         events.subscribe('getCountProducts',(data)=>

@@ -1,19 +1,24 @@
 page-cancelpolicy-modal {
 
-	ion-header
-	{
-		display: none;
-	}
+	.no-connection{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 85vh;
+		flex-direction: column;
+		grid-row-gap: 16px;
 
-	ion-content
-	{
-		&.popup-modal
-		{
-			background: rgba(0, 0, 0, 0.5) !important;
-			display: flex;
-		    align-items: center;
-		    justify-content: center;
+		img{
+			height: 100px;
+		}
+
+		h2{
+			font-size: 14px;
+		}
+
+		button{
+			text-transform: capitalize;
+			margin-top: 150px !important;
 		}
 	}
-
 }

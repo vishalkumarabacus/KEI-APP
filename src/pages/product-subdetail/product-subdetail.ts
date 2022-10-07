@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, Loading, LoadingController, App } 
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 import { EnquiryPage } from '../enquiry/enquiry';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { SQLite } from '@ionic-native/sqlite';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { ConstantProvider } from '../../providers/constant/constant';
@@ -26,7 +26,7 @@ export class ProductSubdetailPage {
     userType:any
     constructor(public socialSharing:SocialSharing,
         public storage: Storage,
-        public navCtrl: NavController, public navParams: NavParams, public service:DbserviceProvider, public loadingCtrl:LoadingController, private app:App, public offlineService: OfflineDbProvider, private sqlite: SQLite,public db:MyserviceProvider,public constant:ConstantProvider)
+        public navCtrl: NavController, public navParams: NavParams, public service:DbserviceProvider, public loadingCtrl:LoadingController, private app:App, private sqlite: SQLite,public db:MyserviceProvider,public constant:ConstantProvider)
         {
             storage.get('loginType').then((loginType) => {
                 console.log(loginType);
@@ -70,38 +70,38 @@ export class ProductSubdetailPage {
             
         }
         
-        getProductDetail(id)
-        {
-            this.offlineService.onGetProductDetailHandler(id)
-            .subscribe((productData) =>
-            {
-                console.log(productData);
-                this.loading.dismiss();
-                this.prod_detail = productData;
-                this.prod_image = productData['image'];
+        // getProductDetail(id)
+        // {
+        //     this.offlineService.onGetProductDetailHandler(id)
+        //     .subscribe((productData) =>
+        //     {
+        //         console.log(productData);
+        //         this.loading.dismiss();
+        //         this.prod_detail = productData;
+        //         this.prod_image = productData['image'];
                 
-                for (let index = 0; index < this.prod_image.length; index++) {
+        //         for (let index = 0; index < this.prod_image.length; index++) {
                     
-                    this.offlineService.onReturnImagePathHandler('productImage', this.prod_image[index].image, this.prod_image[index].id).subscribe((imageResultData) => {
+        //             this.offlineService.onReturnImagePathHandler('productImage', this.prod_image[index].image, this.prod_image[index].id).subscribe((imageResultData) => {
                         
-                        console.log(imageResultData);
+        //                 console.log(imageResultData);
                         
-                        const productIndex = this.prod_image.findIndex(row => row.id == imageResultData.recordId);
+        //                 const productIndex = this.prod_image.findIndex(row => row.id == imageResultData.recordId);
                         
-                        console.log(this.prod_image);
-                        console.log('ProductIndex ' + productIndex);
+        //                 console.log(this.prod_image);
+        //                 console.log('ProductIndex ' + productIndex);
                         
-                        this.prod_image[productIndex].imageCompletePath = imageResultData['imagePath'];
+        //                 this.prod_image[productIndex].imageCompletePath = imageResultData['imagePath'];
                         
-                        this.changeImage();
-                    });
-                }
+        //                 this.changeImage();
+        //             });
+        //         }
                 
                 
                 
-                console.log(this.prod_detail.image_profile);
-            });
-        }
+        //         console.log(this.prod_detail.image_profile);
+        //     });
+        // }
         
         
         

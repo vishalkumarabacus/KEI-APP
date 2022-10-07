@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, App, Keyboard } from 'ionic-angular';
 import { ProductSubdetailPage } from '../product-subdetail/product-subdetail';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
-import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
+// import { OfflineDbProvider } from '../../providers/offline-db/offline-db';
 import { SQLite } from '@ionic-native/sqlite';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { AddOrderPage } from '../add-order/add-order';
@@ -58,7 +58,7 @@ export class ProductDetailPage
               public service1: MyserviceProvider,
               public loadingCtrl:LoadingController,
               private app:App,
-              public offlineService: OfflineDbProvider,
+              // public offlineService: OfflineDbProvider,
               private sqlite: SQLite,
               public keyboard : Keyboard,
               public storage: Storage,

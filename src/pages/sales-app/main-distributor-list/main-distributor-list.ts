@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { LeadsDetailPage } from '../../leads-detail/leads-detail';
 import { AddRetailerPage } from '../../add-retailer/add-retailer';
+import { AttendenceserviceProvider } from '../../../providers/attendenceservice/attendenceservice';
 
 
 
@@ -12,9 +13,11 @@ import { AddRetailerPage } from '../../add-retailer/add-retailer';
   templateUrl: 'main-distributor-list.html',
 })
 export class MainDistributorListPage {
+  expenseStatus:any = 'My';
   
   user_right:any=[];
   DrType:any
+  DrName:any
   distributor_list:any = [];
   load_data:any = "0";
   limit=0;
@@ -28,11 +31,18 @@ export class MainDistributorListPage {
               public navCtrl: NavController, 
               public navParams: NavParams, 
               public service: MyserviceProvider, 
+         public attendence_serv: AttendenceserviceProvider,
+
               public loadingCtrl: LoadingController) 
   {
     console.log(this.navParams.get('type'));
     this.DrType = this.navParams.get('type')
+    console.log(this.DrName);
+    
+
+    
     this.get_distributor_list();
+    this.last_attendence()
   }
 
   doRefresh (refresher)
@@ -47,21 +57,31 @@ export class MainDistributorListPage {
           refresher.complete();
       }, 1000);
   }
-  addretailer()
+  addretailer(DrType)
   {
-    this.navCtrl.push(AddRetailerPage,{})
+    console.log(DrType);
+    
+    this.navCtrl.push(AddRetailerPage,{'DrType':DrType})
   }
-  
+  direct_list:any
+  team_list:any
   get_distributor_list()
   {
     console.log(this.DrType);
 
     this.service.show_loading()
-    this.service.addData({'limit':this.limit,'company_name':this.search,type:this.DrType},'Distributor/distributor_lists').then((result)=>{
+    this.service.addData({'limit':this.limit,'company_name':this.search,type:this.DrType,'list_type':this.expenseStatus},'Distributor/distributor_lists').then((result)=>{
       console.log(result);
       this.service.dismiss();
-      this.distributor_list = result;
-      
+      this.distributor_list = result['data'];
+      // if(this.expenseStatus=='My'){
+      this.direct_list = result['count'];
+      this.team_list = result['count2'];
+      // }
+      // if(this.expenseStatus=='Team'){
+      //   this.direct_list = result['count2'];
+      //   this.team_list = result['count'];
+      //   }
       if(this.distributor_list.length == 0)
       {
         this.load_data = "1";
@@ -73,13 +93,34 @@ export class MainDistributorListPage {
       this.service.errToasr()
     });
   }
-  
+  team_count:any
+  last_attendence() {
+    // this.db.show_loading()
+    this.attendence_serv.last_attendence_data().then((result) => {
+        console.log(result);
+        console.log("hiiiiiiiiiiiiiiiiiiii")
+        
+        // this.db.dismiss()
+        this.team_count = result['team_count'];
+       
+        
+    
+        
+      
+        
+    },error=>{
+        console.log("Dashboard error");
+        this.service.dismiss()
+        
+    })
+    
+}
   
   loadData(infiniteScroll)
   {
     console.log('loading');
     
-    this.service.addData({'limit':this.distributor_list.length,type:this.DrType},'Distributor/distributor_lists').then( result=>
+    this.service.addData({'limit':this.distributor_list.length,type:this.DrType,'list_type':this.expenseStatus},'Distributor/distributor_lists').then( result=>
       {
         console.log(result);
         if(result=='')
@@ -89,7 +130,8 @@ export class MainDistributorListPage {
         else
         {
           setTimeout(()=>{
-            this.distributor_list=this.distributor_list.concat(result);
+            this.distributor_list=this.distributor_list.concat(result['data']);
+            console.log(this.distributor_list)
             console.log('Asyn operation has stop')
             infiniteScroll.complete();
           },1000);

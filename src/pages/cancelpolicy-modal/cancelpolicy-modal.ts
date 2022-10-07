@@ -5,7 +5,11 @@ import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 import { TransactionPage } from '../transaction/transaction';
 import { TabsPage } from '../tabs/tabs';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
+import { DashboardPage } from '../dashboard/dashboard';
+import { LoginPage } from '../login/login';
+import { Storage } from '@ionic/storage';
 
+import * as jwt_decode from "jwt-decode";
 
 
 @IonicPage()
@@ -14,15 +18,19 @@ import { MyserviceProvider } from '../../providers/myservice/myservice';
     templateUrl: 'cancelpolicy-modal.html',
 })
 export class CancelpolicyModalPage {
-    net:any='';
+  net:any='';
 
-    constructor(public navCtrl: NavController, public navParams: NavParams,private app:App,public serv: MyserviceProvider,public events: Events) {
+  constructor(public navParams: NavParams, private app: App, public serv: MyserviceProvider, public events: Events,public navCtrl: NavController,public viewCtrl : ViewController,public storage: Storage) {
       events.subscribe('state', (data) => {
+        console.log("Cancel-policy-page");
+        
         console.log(data);
         if(data=='online'){
-          this.reload();
+          // this.reload();
         }
+
       });
+
     }
   
     ionViewDidLoad() {
@@ -32,22 +40,54 @@ export class CancelpolicyModalPage {
      
       
     }
+
+  ionViewWillEnter(){
+
+    console.log("Offline Page");
+    
+    // this.viewCtrl.dismiss()
+
+  }
   
-   
+  
+  getDecodedAccessToken(token: string): any {
+    try {
+      return jwt_decode(token);
+    }
+    catch (Error) {
+      return null;
+    }
+  }
+
+
   
     reload(){
   
-  
       console.log(this.serv.isInternetConnection);
-  
   
       if( this.serv.isInternetConnection==false){
         console.log("internet offlineeeeeeeeeee");
-        
       }
       else{
   
-        this.navCtrl.pop()
+        this.storage.get('token').then((token) => {
+
+        let tokenInfo = this.getDecodedAccessToken(token);
+          console.log(tokenInfo);
+
+          console.log("offline page =>",tokenInfo);
+          
+          if (tokenInfo && tokenInfo.user_type == 'Sales User') {
+
+            console.log("offline page");
+            
+            this.navCtrl.setRoot(DashboardPage);
+
+          }
+          else {
+            this.navCtrl.setRoot(LoginPage, { 'registerType': 'Employee' });
+          }
+        });
       }
     }
   }

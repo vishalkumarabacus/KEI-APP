@@ -18,9 +18,10 @@ export class ExpenseStatusModalPage {
   
   data:any={}
   filter:any={}
+  user:any=[]
 
   from_page :any=''
-  
+  lead_detail:any=[]
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -36,16 +37,65 @@ export class ExpenseStatusModalPage {
         console.log(this.data.type);
         
       }
+      if(this.from_page =='lead')
+      {
+        this.lead_detail=this.navParams.get("lead_detail");
+        this.data.id=this.navParams.get("lead_id");
+
+        console.log(this.data.type);
+        
+      }
+      if(this.from_page =='leadassign')
+      {
+        this.data.id=this.navParams.get("drId");
+        console.log(this.data.id);
+        
+        this.serve.addData(this.data,'Checkin/listing_all_asm').then((result)=>
+        {
+            console.log(result);
+           this.user=result
+           console.log(this.user);
+           
+          },
+          error => {
+            this.serve.presentToast('Something Went wrong!!')
+          });
+      }
+      if(this.from_page =='drassign')
+      {
+        this.data.id=this.navParams.get("drId");
+        console.log(this.data.id);
+        
+        this.serve.addData(this.data,'Checkin/listing_all_asm').then((result)=>
+        {
+            console.log(result);
+           this.user=result
+           console.log(this.user);
+           
+          },
+          error => {
+            this.serve.presentToast('Something Went wrong!!')
+          });
+      }
       if(this.from_page =='travel')
       {
         this.data.id=this.navParams.get("travelId");
+      }
+      if(this.from_page =='leaddetail')
+      {
+        this.data.id=this.navParams.get("lead_id");
+        this.data.status=this.navParams.get("status");
+
       }
       if(this.from_page =='expense')
       {
         this.data.id=this.navParams.get("expenseId");
         this.data.type=this.navParams.get("type");
       }
-     
+      if(this.from_page =='leave')
+    {
+      this.data.id=this.navParams.get("leaveId");
+    }
       if(this.from_page =='travel')
       {
         this.data.id=this.navParams.get("travelId");
@@ -70,9 +120,21 @@ export class ExpenseStatusModalPage {
     {
       this.viewCtrl.dismiss();
     }
+     statusModal1(type) 
+  {
+    console.log(type)
+
+    let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.data.id,'status':this.lead_detail.status,'from':'leaddetail'});
+
+    modal.onDidDismiss(data =>
+    {
+    });
     
+    modal.present();
+  }
     update_status()
     {
+     
       console.log(this.data)
       var func_name 
       if(this.from_page =='expense')
@@ -84,7 +146,14 @@ export class ExpenseStatusModalPage {
       {
         func_name = 'TravelPlan/update_status'
       }
-      
+      if(this.from_page =='leave')
+      {
+        func_name = 'leave/update_status'
+      }
+      if(this.from_page =='leaddetail')
+      {
+        func_name = 'lead/update_lead'
+      }
       this.serve.addData(this.data,func_name).then((result)=>
       {
         console.log(result);
@@ -135,6 +204,46 @@ export class ExpenseStatusModalPage {
           data
         );
       }
+    }
+
+
+    status()
+    {
+      console.log(this.data)
+      var func_name 
+     this.data.dr_id =
+  
+      this.serve.addData(this.data,'Distributor/assign_dr').then((result)=>
+      {
+          console.log(result);
+          if(result)
+          {
+            this.serve.presentToast('User Assigned Successfully!!');
+            this.viewCtrl.dismiss();
+          }
+        },
+        error => {
+          this.serve.presentToast('Something Went wrong!!')
+        });
+    }
+    status1()
+    {
+      console.log(this.data)
+      var func_name 
+     this.data.dr_id =
+  
+      this.serve.addData(this.data,'Distributor/assign_customer').then((result)=>
+      {
+          console.log(result);
+          if(result)
+          {
+            this.serve.presentToast('User Assigned Successfully!!');
+            this.viewCtrl.dismiss();
+          }
+        },
+        error => {
+          this.serve.presentToast('Something Went wrong!!')
+        });
     }
   }
   

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
+import { IonicSelectableModule } from 'ionic-selectable';
 import { CheckinNewPage } from './checkin-new';
 
 @NgModule({
@@ -8,6 +9,7 @@ import { CheckinNewPage } from './checkin-new';
   ],
   imports: [
     IonicPageModule.forChild(CheckinNewPage),
+    IonicSelectableModule
   ],
 })
 export class CheckinNewPageModule {}
