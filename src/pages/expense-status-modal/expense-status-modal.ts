@@ -45,6 +45,14 @@ export class ExpenseStatusModalPage {
         console.log(this.data.type);
         
       }
+      if(this.from_page =='lead_list')
+      {
+
+        // console.log(this.data.type);
+        console.log(this.from_page);
+
+        
+      }
       if(this.from_page =='leadassign')
       {
         this.data.id=this.navParams.get("drId");
@@ -120,6 +128,7 @@ export class ExpenseStatusModalPage {
     {
       this.viewCtrl.dismiss();
     }
+    
      statusModal1(type) 
   {
     console.log(type)

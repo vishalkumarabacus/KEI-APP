@@ -20,6 +20,9 @@ export class ExpensePopoverPage {
   checkInData:any;
   showEditRetailer:boolean=false;
   type:any;
+  date_from:any
+  date_to:any
+  filter:any={}
   
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController) 
   {
@@ -47,6 +50,19 @@ export class ExpensePopoverPage {
     // return type
     this.viewCtrl.dismiss({ 'TabStatus': type});
   }
+
+  ondismiss(){
+        {
+          console.log("hloo");
+          
+          var data=this.filter
+          console.log(data);
+  
+          this.viewCtrl.dismiss(
+            data
+          );
+        }
+      }
   
   goto(type){
     

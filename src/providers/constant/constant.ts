@@ -16,7 +16,7 @@ export class ConstantProvider {
             {
                 this.UserLoggedInData=res
             }
-
+            
             console.log(this.UserLoggedInData);
         })
         storage.get('loggedInUserType')
@@ -45,12 +45,12 @@ export class ConstantProvider {
                 }
             }
             console.log(data);
-
+            
             Object.assign(this.UserLoggedInData, data)
             console.log(this.UserLoggedInData);
         });
     }
-    public connectionChk =''
+    public connectionChk =''  
     public networkType =''
 
     public rootUrl2: string ='https://apps.abacusdesk.com/kei/api/index.php/'
@@ -91,7 +91,7 @@ export class ConstantProvider {
             {
                 this.UserLoggedInData=res
             }
-
+            
             console.log(this.UserLoggedInData);
         })
         this.storage.get('loggedInUserType')
