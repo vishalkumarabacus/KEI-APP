@@ -12,7 +12,7 @@
 </ion-header>
 
 <ion-content>
-    <div class="pb30">
+    <div class="pb10">
         <div class="sticky-main">
             <div class="pd-left-right16 af_bg">
                 <div class="list-box">
@@ -63,7 +63,7 @@
 
                         <div class="wp100 mt16">
                             <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
-                            <button color="theme" (click)="statusModal(lead_detail.id)" ion-button block round>Assign users</button>
+                            <button color="theme" (click)="statusModal(lead_detail.id, lead_detail.state)" ion-button block round>Assign users</button>
                         </div>
                     </div>
                 </div>
@@ -85,50 +85,57 @@
                         <div class="list-box ml10 mr10"*ngIf="lead_detail.type=='9'">
                             <!-- <div class="upper"> -->
                                   <!-- <div class="upper"> -->
-                                    <div class="lower">
-                                        <p>Status</p>
-                                        <p>{{lead_detail.status?lead_detail.status:'N/A'}}</p>
-                                    <!-- </div> -->
-                                </div>
-                                <div class="lower"*ngIf="lead_detail.status=='Lost'||lead_detail.status=='Disqualified'">
-                                    <p>Reason</p>
-                                    <p>{{lead_detail.reason?lead_detail.reason:'N/A'}}</p>
+                                    <div class="contentBox">
+                                        <div class="lower">
+                                                <p>Status</p>
+                                                <p>{{lead_detail.status?lead_detail.status:'N/A'}}</p>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="lower" *ngIf="lead_detail.status=='Lost'||lead_detail.status=='Disqualified'">
+                                            <p>Reason</p>
+                                            <p>{{lead_detail.reason?lead_detail.reason:'N/A'}}</p>
+                                        <!-- </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="contentBox">
+                            <div class="lower">
+                                <p>Alternate Mobile No.</p>
+                                <p>{{lead_detail.whatsapp_no?lead_detail.whatsapp_no:'N/A'}}</p>
+                                <!-- </div> -->
+                            </div>        
+                            <!-- <div class="mid"> -->
+                            <div class="lower">
+                                <p>Source</p>
+                                <p>{{lead_detail.source?lead_detail.source:'N/A'}}</p>
                                 <!-- </div> -->
                             </div>
-                        <div class="lower">
-                            <p>Alternate Mobile No.</p>
-                            <p>{{lead_detail.whatsapp_no?lead_detail.whatsapp_no:'N/A'}}</p>
-                        <!-- </div> -->
-                    </div>
+                        </div>
 
-                    <!-- <div class="mid"> -->
+                        <div class="contentBox">
                         <div class="lower">
-                            <p>Source</p>
-                            <p>{{lead_detail.source?lead_detail.source:'N/A'}}</p>
-                        <!-- </div> -->
+                            <p>Description</p>
+                            <p>{{lead_detail.description?lead_detail.description:'N/A'}}</p>
+                        </div>
+                        <div class="lower">
+                                <p>Product Name</p>
+                                <p>{{lead_detail.product_name?lead_detail.product_name:'N/A'}}</p>
+                            <!-- </div> -->
+                        </div>
                     </div>
-                    <div class="lower">
-                        <p>Description</p>
-                        <p>{{lead_detail.description?lead_detail.description:'N/A'}}</p>
-
-                    </div>
-                                <div class="lower">
-                                    <p>Product Name</p>
-                                    <p>{{lead_detail.product_name?lead_detail.product_name:'N/A'}}</p>
-                                <!-- </div> -->
-                            </div>
 
                             <!-- <div class="mid"> -->
+                                <div class="contentBox">
+                                    <div class="lower">
+                                        <p>Enquiry Id</p>
+                                        <p>{{lead_detail.query_id?lead_detail.query_id:'N/A'}}</p>
+                                    <!-- </div> -->
+                                </div>
                                 <div class="lower">
-                                    <p>Enquiry Id</p>
-                                    <p>{{lead_detail.query_id?lead_detail.query_id:'N/A'}}</p>
-                                <!-- </div> -->
-                            </div>
-                            <div class="lower">
-                                <p>Recieved As</p>
-                                <p>{{lead_detail.q_type?lead_detail.q_type:'N/A'}}</p>
-
-                            </div>
+                                    <p>Recieved As</p>
+                                    <p>{{lead_detail.q_type?lead_detail.q_type:'N/A'}}</p>
+    
+                                </div>
+                                </div>
                             <!-- </div> -->
                             <div class="lower">
                                 <p>Enquiry Description</p>
@@ -142,29 +149,32 @@
                 </div>
                 <div class="list-box ml10 mr10"*ngIf="lead_detail.type!='9'">
                     <!-- <div class="upper"> -->
-                        <div class="lower">
-                            <p>Status</p>
-                            <p>{{lead_detail.status?lead_detail.status:'N/A'}}</p>
-                        <!-- </div> -->
-                    </div>
-                        <div class="lower" *ngIf="lead_detail.whatsapp_no">
-                            <p>Alternate Mobile No.</p>
-                            <p>{{lead_detail.whatsapp_no?lead_detail.whatsapp_no:'N/A'}}</p>
-                        <!-- </div> -->
-                    </div>
+                        <div class="contentBox">
+                            <div class="lower">
+                                    <p>Status</p>
+                                    <p>{{lead_detail.status?lead_detail.status:'N/A'}}</p>
+                                <!-- </div> -->
+                            </div>
+                            <div class="lower" *ngIf="lead_detail.whatsapp_no">
+                                    <p>Alternate Mobile No.</p>
+                                    <p>{{lead_detail.whatsapp_no?lead_detail.whatsapp_no:'N/A'}}</p>
+                                <!-- </div> -->
+                            </div>
+                        </div>
 
 
                     <!-- <div class="mid"> -->
+                    <div class="contentBox">
                         <div class="lower">
                             <p>Source</p>
                             <p>{{lead_detail.source?lead_detail.source:'N/A'}}</p>
                         <!-- </div> -->
                     </div>
-                    <div class="lower">
-                        <p>Description</p>
-                        <p>{{lead_detail.description?lead_detail.description:'N/A'}}</p>
-
+                    <div class="lower" *ngIf="lead_detail.attached_retailer_name">
+                        <p>Attached Retailer Name</p>
+                        <p>{{lead_detail.attached_retailer_name?lead_detail.attached_retailer_name:'N/A'}}</p>
                     </div>
+                </div>
                     <!-- </div> -->
 
 
@@ -173,36 +183,42 @@
 
 
                 <!-- <div class="upper"> -->
-                  <div class="lower" *ngIf="lead_detail.source_mobile">
-                    <p>Source Mobile No.</p>
-                    <p>{{lead_detail.source_mobile?lead_detail.source_mobile:'N/A'}}</p>
-                <!-- </div> -->
-            </div>
-                    <div class="lower" *ngIf="lead_detail.source_type">
-                        <p>Source Type</p>
-                        <p>{{lead_detail.source_type?lead_detail.source_type:'N/A'}}</p>
+                  <div class="contentBox">
+                    <div class="lower" *ngIf="lead_detail.source_mobile">
+                        <p>Source Mobile No.</p>
+                        <p>{{lead_detail.source_mobile?lead_detail.source_mobile:'N/A'}}</p>
                     <!-- </div> -->
                 </div>
-                    <div class="lower"  *ngIf="lead_detail.stage_of_project">
-                        <p>Stage Of Project</p>
-                        <p>{{lead_detail.stage_of_project
-                          ?lead_detail.stage_of_project
-                          :'N/A'}}</p>
-                    <!-- </div> -->
-                </div>
-                <div class="lower" *ngIf="lead_detail.expected_order_month">
-                  <p>Expected Order Month</p>
-                  <p>{{lead_detail.expected_order_month?lead_detail.expected_order_month:'N/A'}}</p>
-              <!-- </div> -->
-          </div>
+                        <div class="lower" *ngIf="lead_detail.source_type">
+                            <p>Source Type</p>
+                            <p>{{lead_detail.source_type?lead_detail.source_type:'N/A'}}</p>
+                        <!-- </div> -->
+                    </div>
+                  </div>
+
+
+                    <div class="contentBox">
+                        <div class="lower"  *ngIf="lead_detail.stage_of_project">
+                            <p>Stage Of Project</p>
+                            <p>{{lead_detail.stage_of_project
+                              ?lead_detail.stage_of_project
+                              :'N/A'}}</p>
+                        <!-- </div> -->
+                    </div>
+                    <div class="lower" *ngIf="lead_detail.expected_order_month">
+                      <p>Expected Order Month</p>
+                      <p>{{lead_detail.expected_order_month?lead_detail.expected_order_month:'N/A'}}</p>
+                  <!-- </div> -->
+              </div>
+                    </div>
 
                 <!-- <div class="mid"> -->
-                    <div class="lower" *ngIf="lead_detail.attached_retailer_name">
-                        <p>Attached Retailer Name</p>
-                        <p>{{lead_detail.attached_retailer_name?lead_detail.attached_retailer_name:'N/A'}}</p>
+                    
                     <!-- </div> -->
-                </div>
-
+                    <div class="lower">
+                        <p>Description</p>
+                        <p>{{lead_detail.description?lead_detail.description:'N/A'}}</p>
+                    </div>
                 <!-- </div> -->
 
 
@@ -275,14 +291,14 @@
                     </li>
                 </ul>
             </div> -->
+            <div class="endcheck inherit p0" *ngIf="lead_detail.status=='qualified'">
+        
+                <div class="wp100 mt16">
+                    <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
+                    <button color="theme" (click)="statusModal1()" ion-button block round>Change Status</button>
+                </div>
+            </div>
         </div>
 
 
     </ion-content>
-    <div class="endcheck inherit p0" *ngIf="lead_detail.status=='qualified'">
-
-        <div class="wp100 mt16">
-            <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
-            <button color="theme" (click)="statusModal1()" ion-button block round>Change Status</button>
-        </div>
-    </div>

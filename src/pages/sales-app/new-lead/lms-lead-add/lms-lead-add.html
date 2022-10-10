@@ -32,7 +32,7 @@
                           <ion-option *ngFor="let row of networkType" value="{{row.type}}"  >{{row.module_name}}</ion-option>
                       </ion-select>
                   </ion-item>
-                  <p  *ngIf="f.submitted && select_type?.invalid" class="error-line">Select Type Is Required</p>
+                  <!-- <p  *ngIf="f.submitted && select_type?.invalid" class="error-line">Select Type Is Required</p> -->
 
                   <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && source?.invalid}"*ngIf="!form.id">
                       <ion-label><span>Source<strong>*</strong></span></ion-label>
@@ -184,9 +184,10 @@
           <ion-label floating><span>Lead Source Contact Name<strong>*</strong></span></ion-label>
           <ion-input type="text" placeholder="Enter Lead Source Contact Name"  name="lead_source_contact" #lead_source_contact="ngModel"  [(ngModel)]="form.source" [ngClass]="{'is-invalid':f.submitted && source?.invalid}" required></ion-input>
       </ion-item>
-      <ion-item >
+      <ion-item [ngClass]="{'cs-error':(f.submitted && ( source_mobile?.invalid ||  form.source_mobile?.length!=10 )) || checkExist==true}">
         <ion-label floating><span>Lead Source Contact No.<strong>*</strong></span></ion-label>
-        <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.source_mobile" minLength="10" maxLength="10"  required></ion-input>
+        <ion-input type="tel"  (keypress)="MobileNumber($event)" name="sourceMobile" placeholder="Enter Mobile" #sourceMobile="ngModel" [(ngModel)]="form.source_mobile" minLength="10" maxLength="10" (ngModelChange)="check_num('source_mobile')" required></ion-input>
+        <!-- <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)="check_num()"  required></ion-input> -->
      </ion-item>
  </ion-list>
     </div>
@@ -228,7 +229,7 @@
             </ion-item>
          <ion-item [ngClass]="{'cs-error':(f.submitted && ( mobile?.invalid ||  form.mobile?.length!=10 )) || checkExist==true}" >
              <ion-label floating><span> Contact Mobile No.<strong>*</strong></span></ion-label>
-             <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)="check_num()"  required></ion-input>
+             <ion-input type="tel"  (keypress)="MobileNumber($event)" name="mobile" placeholder="Enter Mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minLength="10" maxLength="10" (ngModelChange)="check_num('mobile')"  required></ion-input>
          </ion-item>
          <ng-container >
              <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && stage_of_project?.invalid}">

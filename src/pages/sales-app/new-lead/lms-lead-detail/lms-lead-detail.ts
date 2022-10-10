@@ -468,9 +468,9 @@ show_Error(){
     loading.dismiss();
   }
 
-  statusModal(id)
+  statusModal(id, state)
   {
-    this.navCtrl.push(ExpenseStatusModalPage,{'drId':id,'from':'leadassign' });
+    this.navCtrl.push(ExpenseStatusModalPage,{'drId':id,'from':'leadassign', 'state':state});
   }
 
   presentalert(type,id,name) {

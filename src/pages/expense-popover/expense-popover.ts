@@ -45,24 +45,30 @@ export class ExpensePopoverPage {
     console.log('ionViewDidLoad ExpensePopoverPage');
   }
   
-  close(type) 
+  close() 
   {
     // return type
-    this.viewCtrl.dismiss({ 'TabStatus': type});
+    var data = this.filter
+    this.viewCtrl.dismiss(data);
   }
 
-  ondismiss(){
-        {
-          console.log("hloo");
+  // ondismiss(){
+  //       {
+  //         console.log("hloo");
           
-          var data=this.filter
-          console.log(data);
+  //         var data=this.filter
+  //         console.log(data);
   
-          this.viewCtrl.dismiss(
-            data
-          );
-        }
-      }
+  //         this.viewCtrl.dismiss(
+  //           data
+  //         );
+  //       }
+  //     }
+
+  //     dismiss(){
+  //       var data=this.filter
+  //       this.viewCtrl.dismiss(data);
+  //     }
   
   goto(type){
     
