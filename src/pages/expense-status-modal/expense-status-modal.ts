@@ -56,7 +56,9 @@ export class ExpenseStatusModalPage {
       if(this.from_page =='leadassign')
       {
         this.data.id=this.navParams.get("drId");
+        this.data.state=this.navParams.get("state");
         console.log(this.data.id);
+        console.log(this.data);
         
         this.serve.addData(this.data,'Checkin/listing_all_asm').then((result)=>
         {
@@ -121,7 +123,7 @@ export class ExpenseStatusModalPage {
     ionViewDidLoad() 
     {
       console.log('ionViewDidLoad ExpenseStatusModalPage');
-      this.getReportData();
+      // this.getReportData();
     }
     
     dismiss() 

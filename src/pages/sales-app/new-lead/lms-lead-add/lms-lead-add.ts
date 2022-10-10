@@ -157,18 +157,31 @@ console.log(this.form.id);
     }
   }
 
-  check_num()
+  check_num(type)
   {
+    console.log(type)
     this.checkExist=false
-    console.log(this.form.mobile.length);
-
-    if(this.form.mobile && this.form.mobile.length == 10)
+    if(type=='mobile'){
+      console.log(this.form.mobile.length);
+      if(this.form.mobile && this.form.mobile.length == 10)
     {
       console.log(this.form.mobile.length);
 
       console.log(this.form.mobile);
       this.check_mobile_existence(this.form.mobile)
     }
+    }
+    else if(type=='source_mobile'){
+      console.log(this.form.source_mobile.length);
+      if(this.form.source_mobile && this.form.source_mobile.length == 10)
+    {
+      console.log(this.form.source_mobile.length);
+
+      console.log(this.form.source_mobile);
+      this.check_mobile_existence(this.form.source_mobile)
+    }
+    }
+    
   }
   city_list:any=[]
   getCityList()

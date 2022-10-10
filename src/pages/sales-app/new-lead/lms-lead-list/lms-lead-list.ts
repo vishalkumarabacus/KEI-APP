@@ -35,12 +35,16 @@ export class LmsLeadListPage {
 
       popover.present({
         ev: myEvent
-      });
+      }); 
 
       popover.onDidDismiss(data => {
         console.log(data)
-        this.date_from=data.date_from
-        this.date_to=data.date_to
+        if(data != null){
+            this.date_from = data.date_from
+            this.date_to = data.date_to
+        }
+        this.date_from = this.date_from
+        this.date_to=this.date_to
       //   this.date_id=data.team_id
         console.log(this.date_to);
         console.log(this.date_from);
