@@ -84,7 +84,7 @@ console.log(this.form.id);
     //   return
     // }
 
-    // type_id = type_id;
+    this.form.type_id =19;
     this.db.show_loading()
     this.db.addData({"data":this.form,"loginData":this.user_data,'visiting_card_image':this.image_data },"Lead/save_lead")
     .then(resp=>{

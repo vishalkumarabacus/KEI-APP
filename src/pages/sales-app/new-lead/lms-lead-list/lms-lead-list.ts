@@ -14,14 +14,14 @@ import { LmsLeadDetailPage } from '../lms-lead-detail/lms-lead-detail';
 export class LmsLeadListPage {
 
     constructor(public popoverCtrl: PopoverController, public viewCtrl: ViewController, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider,public loadingCtrl: LoadingController) {
-        // this.get_assign_dr(1);
+        // this.get_assign_dr(9);
     }
 
     load_data:any
     start:any=0;
     filter:any={status: 'lead Bank'};
     dr_list:any=[];
-    count:any={};
+    count:any=[];
     allCount:any={}
     drid:any = 9
     date_from:any
@@ -51,43 +51,18 @@ export class LmsLeadListPage {
       })
 
     }
-
-
-
-    statusModal()
-    {
-        console.log('status modal clicked')
-      let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'from':'lead_list'});
-
-      modal.onDidDismiss(data =>
-        {
-            console.log(data)
-          this.date_from=data.date_from
-          this.date_to=data.date_to
-        //   this.date_id=data.team_id
-          console.log(this.date_to);
-          console.log(this.date_from);
-          this.get_assign_dr(9)
-
-
-        //   this.checkin_list(this.date_to,this.date_from)
-        });
-
-        modal.present();
-      }
-
-
-
     getNetworkType(){
         this.db.addData3('', "Dashboard/distributionNetworkModule").then((result => {
           console.log(result);
           this.networkType = result['modules'];
         }))
       }
-    get_assign_dr(type_id:any='')
+    get_assign_dr(type_id)
     {
         console.log(type_id);
         this.drid=type_id;
+        console.log(this.drid);
+
         this.load_data=0;
         this.filter.type_id = type_id;
         this.filter.date_from = this.date_from;
@@ -103,13 +78,16 @@ export class LmsLeadListPage {
 
             this.dr_list = resp['dr_list'];
 
-            this.count = resp['count'][0];
+            this.count = resp['count'];
             console.log(this.count)
             this.allCount = resp['Allcount'];
             for (let index = 0; index < this.count.length; index++) {
                 if(this.count[index].name=='Online'){
                     this.count[index].name='Online';
                 }
+                if(this.count[index].name=='Site Tracker'){
+                  this.count[index].name='Site Tracker';
+              }
                 // if(this.count[index].name=='Dealer'){
                 //     this.count[index].name='Retailer';
                 // }

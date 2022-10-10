@@ -2,13 +2,13 @@
     <ion-navbar>
         <ion-title>Lead Detail</ion-title>
         <ion-buttons end >
-           
+
             <button ion-button icon-only color="light" (click)="goOnTravelAdd()" >
                 <ion-icon name="md-create"></ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
-   
+
 </ion-header>
 
 <ion-content>
@@ -20,18 +20,18 @@
                         <div class="left-date">
                             <div class="date-section">
                                 <p>{{lead_detail.date_created | date:'d MMM y'}}</p>
-                                <p>Date Created</p> 
+                                <p>Date Created</p>
                             </div>
                             <div class="date-section">
                                 <p>{{lead_detail.created_by_name}}</p>
-                                <p>Created by</p> 
+                                <p>Created by</p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mid">
                         <div class="content-info">
-                            <div class="left-info"> 
+                            <div class="left-info">
                                 <div class="circle">{{lead_detail.company_name | slice:0:1}}</div>
                             </div>
                             <div class="right-info">
@@ -44,42 +44,42 @@
                             <a href="tel:{{lead_detail.mobile}}"><i class="material-icons">phone</i></a>
                         </div>
                     </div>
-                    
-                    <div class="three_boxes"> 
-                       
+
+                    <div class="three_boxes">
+
                     </div>
                     <div class="lower">
                         <p>Address</p>
                         <p>{{!lead_detail.state ? 'N/A' : lead_detail.state | titlecase}} {{!lead_detail.district ? '' : ', '+lead_detail.district | titlecase}} {{!lead_detail.city ? '' : ', '+lead_detail.city | titlecase}} {{lead_detail.pincode ? ' - '+lead_detail.pincode : ''}}</p>
                     </div>
                     <div class="endcheck inherit p0" *ngIf="lead_detail.status!='qualified'&& lead_detail.status!='Lost'&& lead_detail.status!='Disqualified'">
-                        
+
                         <div class="wp100 mt16">
                             <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
                             <button color="theme" (click)="statusModal1()" ion-button block round>Change Status</button>
                         </div>
                     </div>
                     <div class="endcheck inherit p0">
-               
+
                         <div class="wp100 mt16">
                             <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
                             <button color="theme" (click)="statusModal(lead_detail.id)" ion-button block round>Assign users</button>
                         </div>
                     </div>
-                </div> 
-               
+                </div>
+
             </div>
-           
+
         </div>
-        
-        
-     
-        
-        
-        
+
+
+
+
+
+
         <div class="pd-left-right16">
             <div class="forword-page flat-item">
-                
+
                 <!-- <div class="list-box ml10 mr10"> -->
                     <!-- <div class="upper"> -->
                         <div class="list-box ml10 mr10"*ngIf="lead_detail.type=='9'">
@@ -100,7 +100,7 @@
                             <p>{{lead_detail.whatsapp_no?lead_detail.whatsapp_no:'N/A'}}</p>
                         <!-- </div> -->
                     </div>
-                    
+
                     <!-- <div class="mid"> -->
                         <div class="lower">
                             <p>Source</p>
@@ -110,14 +110,14 @@
                     <div class="lower">
                         <p>Description</p>
                         <p>{{lead_detail.description?lead_detail.description:'N/A'}}</p>
-                  
+
                     </div>
                                 <div class="lower">
                                     <p>Product Name</p>
                                     <p>{{lead_detail.product_name?lead_detail.product_name:'N/A'}}</p>
                                 <!-- </div> -->
                             </div>
-                            
+
                             <!-- <div class="mid"> -->
                                 <div class="lower">
                                     <p>Enquiry Id</p>
@@ -127,7 +127,7 @@
                             <div class="lower">
                                 <p>Recieved As</p>
                                 <p>{{lead_detail.q_type?lead_detail.q_type:'N/A'}}</p>
-                          
+
                             </div>
                             <!-- </div> -->
                             <div class="lower">
@@ -135,10 +135,10 @@
                                 <p [innerHTML]="lead_detail.enquiry_desc">
                             </p>
                             <!-- </div> -->
-                        </div> 
-                    
+                        </div>
+
                     <!-- <div class="mid"> -->
-                 
+
                 </div>
                 <div class="list-box ml10 mr10"*ngIf="lead_detail.type!='9'">
                     <!-- <div class="upper"> -->
@@ -147,12 +147,13 @@
                             <p>{{lead_detail.status?lead_detail.status:'N/A'}}</p>
                         <!-- </div> -->
                     </div>
-                        <div class="lower">
+                        <div class="lower" *ngIf="lead_detail.whatsapp_no">
                             <p>Alternate Mobile No.</p>
                             <p>{{lead_detail.whatsapp_no?lead_detail.whatsapp_no:'N/A'}}</p>
                         <!-- </div> -->
                     </div>
-                    
+
+
                     <!-- <div class="mid"> -->
                         <div class="lower">
                             <p>Source</p>
@@ -162,43 +163,84 @@
                     <div class="lower">
                         <p>Description</p>
                         <p>{{lead_detail.description?lead_detail.description:'N/A'}}</p>
-                  
+
                     </div>
                     <!-- </div> -->
-                   
-            
+
+
             <!-- <div class="mid"> -->
-         
+
+
+
+                <!-- <div class="upper"> -->
+                  <div class="lower" *ngIf="lead_detail.source_mobile">
+                    <p>Source Mobile No.</p>
+                    <p>{{lead_detail.source_mobile?lead_detail.source_mobile:'N/A'}}</p>
+                <!-- </div> -->
+            </div>
+                    <div class="lower" *ngIf="lead_detail.source_type">
+                        <p>Source Type</p>
+                        <p>{{lead_detail.source_type?lead_detail.source_type:'N/A'}}</p>
+                    <!-- </div> -->
+                </div>
+                    <div class="lower"  *ngIf="lead_detail.stage_of_project">
+                        <p>Stage Of Project</p>
+                        <p>{{lead_detail.stage_of_project
+                          ?lead_detail.stage_of_project
+                          :'N/A'}}</p>
+                    <!-- </div> -->
+                </div>
+                <div class="lower" *ngIf="lead_detail.expected_order_month">
+                  <p>Expected Order Month</p>
+                  <p>{{lead_detail.expected_order_month?lead_detail.expected_order_month:'N/A'}}</p>
+              <!-- </div> -->
+          </div>
+
+                <!-- <div class="mid"> -->
+                    <div class="lower" *ngIf="lead_detail.attached_retailer_name">
+                        <p>Attached Retailer Name</p>
+                        <p>{{lead_detail.attached_retailer_name?lead_detail.attached_retailer_name:'N/A'}}</p>
+                    <!-- </div> -->
+                </div>
+
+                <!-- </div> -->
+
+
+        <!-- <div class="mid"> -->
+
+
+
         </div>
-                
-                 
-       
+
+
+
+
         <a class="no-height"*ngIf=" (last_attendence_data.start_time != '')"   (click)="presentalert(lead_detail.type,lead_detail.id,lead_detail.company_name)">
             <!-- <p><span>{{lead_detail.dr_activity}}</span></p> -->
             <div class="info">
                 Create Checkin
             </div>
-        </a> 
+        </a>
         <a class="no-height" *ngIf=" (last_attendence_data.start_time == '00:00:00'||last_attendence_data.start_time == '')"  (click)="show_Error()">
             <p><span>{{lead_detail.dr_activity}}</span></p>
             <div class="info">
                 Create Checkin
             </div>
-        </a>       
+        </a>
                 <a class="no-height" (click)="lead_activity(lead_detail.type,lead_detail.id,lead_detail.company_name)">
                     <p><span>{{lead_detail.dr_activity}}</span></p>
                     <div class="info">
                         Activity
                     </div>
                 </a>
-                
+
                 <a class="no-height" (click)="lead_followup(lead_detail.type,lead_detail.id,lead_detail.company_name)">
                     <p><span>{{lead_detail.dr_followup}}</span></p>
                     <div class="info">
                         Follow Up
                     </div>
                 </a>
-                
+
                 <!-- <a class="no-height" (click)="goToQuotation(lead_detail.type,lead_detail.id,lead_detail.company_name)">
                     <p><span>{{lead_detail.quotation}}</span></p>
                     <div class="info">
@@ -207,15 +249,15 @@
                 </a> -->
             </div>
         </div>
-        
+
         <div class="upload-doc" >
             <p class="">Upload Image</p>
             <ul class="no-padding">
-      
+
                 <li class="image-upload" *ngFor="let pic of lead_detail.imageList;let i = index;">
                     <img src="{{pic.image}}">
                 </li>
-      
+
                 <li class="add-image" (click)="this.captureMedia()">
                     <i class="material-icons">add</i>
                 </li>
@@ -235,13 +277,12 @@
             </div> -->
         </div>
 
-        
+
     </ion-content>
     <div class="endcheck inherit p0" *ngIf="lead_detail.status=='qualified'">
-               
+
         <div class="wp100 mt16">
             <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
             <button color="theme" (click)="statusModal1()" ion-button block round>Change Status</button>
         </div>
     </div>
-   

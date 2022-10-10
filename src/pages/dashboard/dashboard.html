@@ -6,13 +6,13 @@
 
 
 <ion-content style="background: #f4fbfb;">
-    
-    
+
+
     <div class="dashboard_header">
         <div class="csm_header">
             <div class="logo"><img style="width:100px;height:75px"src="assets/imgs/kei.png" alt=""></div>
             <div class="buttons">
-                
+
                 <div class="notification-btn">
                     <button ion-button  (click)="announcementModal()">
                         <ion-icon ios="ios-notifications" md="md-notifications" class="notification_icon"></ion-icon>
@@ -24,13 +24,13 @@
                 </button>
             </div>
         </div>
-    </div>  
-    
+    </div>
+
     <ion-refresher (ionRefresh)="doRefresh($event)">
         <ion-refresher-content  pullingIcon="arrow-dropdown" pullingText="Pull to refresh"  refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
     </ion-refresher>
-    
+
     <div class="em_info">
         <div class="figure">
             <div class="nnm">
@@ -52,7 +52,7 @@
                      <div class="lb">Start Work Time</div>
                     </div>
                 </button>
-                
+
                 <button ion-button class="stp" *ngIf="(last_attendence_data.stop_time == '0000-00-00 00:00:00') && (last_attendence_data.start_time != '0000-00-00 00:00:00' ) || (last_attendence_data.stop_time == '00:00:00')" (click)="presentAlert('Stop')">
                     <div class="cs-left">
                         <div class="icon"><img src="assets/imgs/wrk_time-end.svg" alt=""></div>
@@ -101,7 +101,7 @@
                 <h4>Leaves</h4>
             </div>
         </div>
-      
+
     </div>
       <div class="target-column">
         <div class="target-column-grid" >
@@ -121,27 +121,27 @@
                     </ion-card-content>
                   </ion-card>
             </div>
-           
-           
+
+
         </div>
     </div>
     <div class="target-column">
         <div class="target-column-grid" >
             <div class="taget-achievement"  (click)="(targetVsAchievement.p_acheivement > 0) && (targetVsAchievement.primary_target > 0) ? viewAchievement('primary'):''"  >
-           
+
             </div>
-           
+
             <div class="taget-achievement" (click)="(targetVsAchievement.secondary_acheivement > 0) && (targetVsAchievement.secondary_target > 0) ?viewAchievement('secondary'): ''">
-                
+
             </div>
-           
+
         </div>
     </div> -->
     <div class="carousel">
                 <ng-container *ngIf="user_data.user_type!='OFFICE'">
-        
+
                  <div class="product-option pt5">
-            
+
                   <div class="main-box" style="width:75px;" *ngFor="let row of networkType" >
                  <div class="product-box">
                     <img src="assets/imgs/icon.png">
@@ -151,7 +151,7 @@
                     <h4>{{row.module_name}}</h4>
                  </div>
                  </div>
-            
+
             <!-- <div class="main-box" (click)="goToMainDistributorListPage(2)">
                 <div class="product-box">
                     <img src="assets/imgs/cs-network/fabricator.svg">
@@ -161,7 +161,7 @@
                     <h4>Dealer</h4>
                 </div>
             </div>
-            
+
             <div class="main-box" (click)="goToMainDistributorListPage(3)">
                 <div class="product-box">
                     <img src="assets/imgs/cs-network/architect.svg">
@@ -171,15 +171,15 @@
                     <h4>Retailer</h4>
                 </div>
             </div>-->
-        </div> 
-        
+        </div>
+
     </ng-container>
     </div>
-  
-    
+
+
     <div padding class="pt10 pb0">
         <ng-container *ngIf="today_checkin.today_checkin > 0">
-            
+
             <div class="go-btn new mb16" (click)="goToCheckin()">
                 <div class="g-left">
                     <p>{{today_checkin.today_checkin}}</p>
@@ -210,7 +210,7 @@
                 </div>
             </div>
         </div> -->
-        
+
         <div class="go-btn new mb16" (click)="goToFollowup()">
             <div class="g-left">
                 <p>{{today_followup.today_followup}}</p>
@@ -257,7 +257,7 @@
             </div>
         </div>
         <ng-container *ngIf="user_data.user_type!='OFFICE'">
-            
+
             <div class="go-btn new mb16" (click)="goToOrders('Primary')">
                 <div class="g-left">
                     <p>{{total_primary_order.total_primary_order}}</p>
@@ -273,7 +273,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </ng-container>
         </div>
     <!-- <div class="target-column">
@@ -292,7 +292,7 @@
                     <span>Primary Target</span>
                  </div>
                  </div>
-           
+
                   <div class="taget-achievement" (click)="(targetVsAchievement.secondary_acheivement > 0) && (targetVsAchievement.secondary_target > 0) ?viewAchievement('secondary'): ''">
                   <div class="taget_vs_achievement">
                     <p class="green-text">&#x20B9; {{targetVsAchievement.secondary_acheivement | number : '1.2-2'}}</p>
@@ -306,15 +306,15 @@
                     <span>Secondary Target</span>
                 </div>
             </div>
-           
+
         </div>
     </div> -->
-     <button *ngIf="this.team_count!=null" ion-button class="cs-btn1" style="background:#2a3b95">Your Team Waiting  For The Approval</button>  
+     <button *ngIf="this.team_count!=null" ion-button class="cs-btn1" style="background:#2a3b95">Your Team Waiting  For The Approval</button>
 
       <div class="product-option pt5"*ngIf="this.team_count!=null">
-            
-    
-        
+
+
+
         <div class="main-box" (click)="goToTeam()">
             <div class="product-box">
                 <img src="assets/imgs/leads.svg">
@@ -342,7 +342,7 @@
                 <h4>Expense</h4>
             </div>
         </div>
-    </div> 
+    </div>
      <!-- <div class="dash-tabs">
         <ul>
             <li (click)="goToTeam()">
@@ -365,6 +365,6 @@
             </li>
         </ul>
     </div> -->
-   
+
     <div class="h50"></div>
 </ion-content>
