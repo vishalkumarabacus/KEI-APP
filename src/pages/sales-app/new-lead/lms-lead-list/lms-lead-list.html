@@ -25,7 +25,7 @@
 
 
 
-        <div class="round-tab mt6">
+        <!-- <div class="round-tab mt6">
             <ul>
                 <li>
                     <a>Online ({{count.count}})</a>
@@ -36,7 +36,7 @@
 
             </ul>
 
-        </div>
+        </div> -->
     </ion-toolbar>
 </ion-header>
 <div class="text-line" *ngIf="filter.date">
@@ -55,13 +55,13 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <!-- <div class="capsule-tabs">
+    <div class="round-tab mt6">
         <ul>
             <li *ngFor="let row of count" [ngClass]="{'active' : row.id==filter.type_id}"  (click)="start=0;drid=row.id; get_assign_dr(row.id)">
-                <p>{{row.name}}<span>{{row.count}}</span></p>
+                <p>{{row.name}}({{row.count}})</p>
             </li>
         </ul>
-    </div> -->
+    </div>
     <div class="capsule-tabs">
         <ul>
           <li [ngClass]="{'active' : filter.status=='lead Bank'}" (click)="filter.date='';start=0;filter.status='lead Bank';get_assign_dr(drid)">
@@ -98,16 +98,16 @@
             </div>
             <div class="mid">
                 <div class="content-info" (click)="lead_detail(data.id)">
-                    <div class="left-info"*ngIf="data.type!=10" >
+                    <div class="left-info"*ngIf="data.type!=19" >
                         <div class="circle" >{{data.company_name.substring(0,1).toUpperCase()}}</div>
                     </div>
-                    <div class="left-info"*ngIf="data.type==10" >
+                    <div class="left-info"*ngIf="data.type==19" >
                         <div class="circle" >{{data.name.substring(0,1).toUpperCase()}}</div>
                     </div>
                     <div class="right-info">
                         <!-- (Verified) -->
                         <!-- *ngIf="data.dealer_verify!=0" -->
-                        <p *ngIf="data.type!=10">{{data.company_name.toUpperCase()}}</p>
+                        <p *ngIf="data.type!=19">{{data.company_name.toUpperCase()}}</p>
                         <!-- <p *ngIf="data.dealer_verify==0"> {{data.company_name.toUpperCase()}}</p> -->
                         <p > {{data.name | titlecase}} ({{data.mobile}})</p>
                     </div>
@@ -133,13 +133,15 @@
         </div>
     </div>
 
-    <div class="h50"></div>
 
-    <ion-fab right bottom>
-        <button ion-fab color="danger" (click)="addLead('add')" ><ion-icon name="add"></ion-icon></button>
+    <ion-fab right bottom  *ngIf="drid ==19">
+      <button  ion-fab color="danger" (click)="addLead('add')" ><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
+
 </ion-content>
+
+
 
 <!--
 
