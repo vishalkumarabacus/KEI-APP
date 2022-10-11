@@ -1,7 +1,8 @@
 
 <ion-header>
     <ion-navbar>
-        <ion-title>Add Follow-Up</ion-title>
+        <ion-title *ngIf="page_from!='add'"><h1> Update Follow Up</h1></ion-title>
+        <ion-title *ngIf="page_from=='add'">Add Follow-Up</ion-title>
     </ion-navbar>
 </ion-header>
 

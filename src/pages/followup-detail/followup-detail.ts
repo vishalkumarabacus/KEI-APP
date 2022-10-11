@@ -159,7 +159,7 @@ update_followup()
     {
       console.log('function called');
 
-      this.navCtrl.push(LmsFollowupAddPage,{'data':this.followup_detail})
+      this.navCtrl.push(FollowupAddPage,{'data':this.followup_detail, 'from':'updateFollowup'})
     }
 
 change_followup_status(){

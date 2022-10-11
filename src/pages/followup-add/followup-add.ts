@@ -21,6 +21,12 @@ export class FollowupAddPage
   drList:any=[];
   followupList:any=[];
   drtype:any;
+  followup_edit:any;
+  form:any;
+  filter:any={};
+  type:any;
+  type_list:any;
+  dr_id:any;
   checkin_id:any=0;
   
   constructor(
@@ -45,6 +51,32 @@ export class FollowupAddPage
     
     ionViewDidLoad() {
       console.log('ionViewDidLoad FollowupAddPage');
+
+      if(this.navParams.get('data')){
+        this.followup_edit=this.navParams.get('data')
+        this.form.followup_date = this.followup_edit.next_follow_date
+        this.form.description = this.followup_edit.description
+        this.form.lead_type = this.followup_edit.type
+        this.form.dr_id={id:this.followup_edit.dr_id,company_name:this.followup_edit.company_name};
+        console.log(this.followup_edit.type)
+        this.get_assign_dr(this.followup_edit.type);
+        this.form.followup_type = this.followup_edit.next_follow_type
+        
+      }
+      else{
+        this.type=this.navParams.get('type');
+      this.form.lead_type = this.type;
+      console.log(this.type);
+  
+      this.form.dr_id={id:this.navParams.get('id'),company_name:this.navParams.get('company_name')};
+      console.log(this.form.dr_id);
+  
+      console.log('ionViewDidLoad LmsFollowupAddPage');
+      this.get_assign_dr(this.type);
+  
+      this.today_date = new Date().toISOString().slice(0,10);
+      console.log(this.today_date);
+      }
     }
     networkType:any=[]
     getNetworkType(){
@@ -68,6 +100,8 @@ export class FollowupAddPage
         this.loading.dismiss()
         
       })
+
+      
       
       if(this.navParams.get('dr_type') && this.navParams.get('dr_name')){
         this.followup_data.dr_type=this.navParams.get('dr_type');
@@ -199,5 +233,39 @@ export class FollowupAddPage
       this.loading.present();
     }
     
+    get_assign_dr(type_id)
+  {
+    this.filter.type_id = type_id;
+    this.type_list = [];
+    console.log(type_id);
+
+    this.service.addData({'dr_id':this.dr_id,"search":this.filter},"Lead/getLeadList")
+    .then(resp=>{
+      console.log(resp);
+      this.type_list = resp['dr_list'];
+      console.log(this.type_list);
+    },
+    err=>
+    {
+    })
+    
+//     if(this.followup_edit.company_name&&this.followup_edit.dr_id)
+//     {
+      
+//       // console.log(this.navParams.get('dr_name'));
+      
+//       console.log(this.followup_edit.dr_id);
+//       console.log(this.followup_edit.company_name);
+
+//       this.form.dr_id= this.type_list.filter(row=>row.id == this.followup_edit.dr_id);
+//       console.log(this.form.dr_id);
+      
+//       this.form.dr_id=this.form.dr_id[0];
+      
+//       // if(this.navParams.get('dr_type') == '3'){
+//       //     // this.get_distributor_list(this.data.type_name)
+//       // }
+//                }
+  }
   }
   

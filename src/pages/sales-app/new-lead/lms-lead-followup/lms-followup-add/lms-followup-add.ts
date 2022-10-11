@@ -20,17 +20,31 @@ export class LmsFollowupAddPage {
   form:any={};
   today_date:any='';
   followup_edit:any={}
-
+  page_from:any;
 
   ionViewWillEnter() {
 
+    if(this.navParams.get('from'))
+      {
+        this.page_from = this.navParams.get('from');
+        console.log(this.page_from);
+      }
+
     if(this.navParams.get('data')){
-      this.followup_edit=this.navParams.get('data')
+      console.log(this.navParams.get('data')[0])
+      this.followup_edit=this.navParams.get('data')[0]
+      this.form.followup_date = this.followup_edit.next_follow_date
+      this.form.description = this.followup_edit.description
+      this.form.lead_type = this.navParams.get('type')
+      this.form.followup_type = this.followup_edit.next_follow_type
+      this.form.dr_id={id:this.followup_edit.dr_id,company_name:this.followup_edit.dr_name};
+      this.get_assign_dr(this.navParams.get('type'));
       console.log(this.followup_edit);
-
-
     }
-    this.type=this.navParams.get('type');
+    
+    else
+    {
+      this.type=this.navParams.get('type');
     this.form.lead_type = this.type;
     console.log(this.type);
 
@@ -42,6 +56,7 @@ export class LmsFollowupAddPage {
 
     this.today_date = new Date().toISOString().slice(0,10);
     console.log(this.today_date);
+    }
   }
 
   filter:any={};

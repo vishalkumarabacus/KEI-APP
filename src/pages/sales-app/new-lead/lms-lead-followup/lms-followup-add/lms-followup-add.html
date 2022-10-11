@@ -1,6 +1,7 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>Add Followup</ion-title>
+        <ion-title *ngIf="page_from!='add'"><h1> Update Follow up</h1></ion-title>
+        <ion-title *ngIf="page_from=='add'">Add Follow-Up</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -37,7 +38,7 @@
                 </ion-item>
                 <p  *ngIf="f.submitted && lead_type?.invalid" class="error-line">Select Type Is Required</p>
 
-                <ion-item class="cs-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && dr_id?.invalid}" *ngIf="form.lead_type == '3' || form.lead_type == '1' || form.lead_type == '5' || form.lead_type == '9'">
+                <ion-item class="cs-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && dr_id?.invalid}">
                    <ion-label *ngIf="form.lead_type == '1'"><span>Select Distributor</span></ion-label>
                    <ion-label *ngIf="form.lead_type == '2'"><span>Select Dealer</span></ion-label>
                     <ion-label *ngIf="form.lead_type == '3'"><span>Select Retailer</span></ion-label>
@@ -65,8 +66,8 @@
                     value="company_name"
                     itemTextField="company_name"
                     [canSearch]="true"
-                    (onChange)="test(form.dr_id)"
-                    #selectComponent>
+                    #selectComponent
+                    (ngModelChange)="get_assign_dr(form.dr_id)">
                 </ionic-selectable>
             </ion-item>
 
@@ -101,7 +102,8 @@
     </div>
 
     <div class="padding16">
-        <button ion-button class="cs-btn">Save</button>
+        <button ion-button class="cs-btn" *ngIf="page_from=='add'">Save</button>
+        <button ion-button class="cs-btn" *ngIf="page_from!='add'">Update</button>
     </div>
 </form>
 </ion-content>

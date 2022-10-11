@@ -9,18 +9,21 @@ import { LmsFollowupAddPage } from '../lms-followup-add/lms-followup-add';
   templateUrl: 'lms-followup-list.html',
 })
 export class LmsFollowupListPage {
+  followup_detail:any = [];
+  today_date = new Date().toISOString().slice(0,10);
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider) {
   }
   
   ionViewWillEnter() {
-    
+    console.log(this.today_date)
     this.type=this.navParams.get('type');
     this.id=this.navParams.get('id');
     this.company_name=this.navParams.get('company_name');
     console.log(this.type);
     console.log(this.id);
     console.log(this.company_name);
+    
     // this.folloupadd();
     console.log('ionViewDidLoad LmsFollowupListPage');
     this.get_Followup_List();
@@ -38,7 +41,11 @@ export class LmsFollowupListPage {
     console.log(this.id);
     this.navCtrl.push(LmsFollowupAddPage,{'type':type,'id':id,'company_name':company_name})
   } 
-  
+  update_followup(type)
+    {
+      console.log('function called');
+      this.navCtrl.push(LmsFollowupAddPage,{'type':type, 'data':this.followup_list, 'from':'updateFollowup'})
+    }
   get_Followup_List()
   {
 
