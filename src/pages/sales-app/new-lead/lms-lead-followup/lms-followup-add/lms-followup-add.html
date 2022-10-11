@@ -8,25 +8,56 @@
     <form name="f" #f="ngForm" (ngSubmit)="f.valid && submit()">
         <div class="edit">
             <ion-list>
-                
+
                 <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && lead_type?.invalid}">
                     <ion-label><span>Lead Type</span></ion-label>
                     <ion-select name="lead_type" #lead_type="ngModel" [(ngModel)]="form.lead_type" (ngModelChange)="get_assign_dr(form.lead_type)">
+                       <ion-option value="1">Distributor</ion-option>
+                       <ion-option value="2">Dealer</ion-option>
                         <ion-option value="3">Retailer</ion-option>
-                        <ion-option value="1">Distributor/Dealer</ion-option>
-                        <ion-option value="5">End User</ion-option>
-                        <ion-option value="9">Project</ion-option>
+                        <ion-option value="4">Project</ion-option>
+                        <!-- <ion-option value="5">End User</ion-option> -->
+                        <ion-option value="5">Architect</ion-option>
+                        <ion-option value="6">Constructor</ion-option>
+                        <ion-option value="7">Contractor</ion-option>
+                        <ion-option value="8">Interior Designer</ion-option>
+                        <ion-option value="9">Online</ion-option>
+                        <ion-option value="10">Electrician</ion-option>
+                        <ion-option value="12">Direct Customer</ion-option>
+                        <ion-option value="13">Builders</ion-option>
+                        <ion-option value="14">Consultant</ion-option>
+                        <ion-option value="15">Govt Department</ion-option>
+                        <ion-option value="16">Industry</ion-option>
+                        <ion-option value="17">Infra</ion-option>
+                        <ion-option value="18">MEPM</ion-option>
+                        <ion-option value="19">Site Tracking</ion-option>
+
+
                     </ion-select>
                 </ion-item>
                 <p  *ngIf="f.submitted && lead_type?.invalid" class="error-line">Select Type Is Required</p>
-                
+
                 <ion-item class="cs-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && dr_id?.invalid}" *ngIf="form.lead_type == '3' || form.lead_type == '1' || form.lead_type == '5' || form.lead_type == '9'">
+                   <ion-label *ngIf="form.lead_type == '1'"><span>Select Distributor</span></ion-label>
+                   <ion-label *ngIf="form.lead_type == '2'"><span>Select Dealer</span></ion-label>
                     <ion-label *ngIf="form.lead_type == '3'"><span>Select Retailer</span></ion-label>
-                    <ion-label *ngIf="form.lead_type == '1'"><span>Select Distributor/Dealer</span></ion-label>
-                    <ion-label *ngIf="form.lead_type == '5'"><span>Select End User</span></ion-label>
-                    <ion-label *ngIf="form.lead_type == '9'"><span>Select Project</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '4'"><span>Select Project</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '5'"><span>Select Architect</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '6'"><span>Select Constructor</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '7'"><span>Select Contractor</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '8'"><span>Select Interior Designer</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '9'"><span>Select Online</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '10'"><span>Select Electrician</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '12'"><span>Select Direct Customer</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '13'"><span>Select Builders</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '14'"><span>Select Consultant</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '15'"><span>Select Govt Department</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '16'"><span>Select Industry</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '17'"><span>Select Infra</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '18'"><span>Select MEPM</span></ion-label>
+                    <ion-label *ngIf="form.lead_type == '19'"><span>Select Site Tracking</span></ion-label>
                     <ionic-selectable
-                    item-content 
+                    item-content
                     [(ngModel)]="form.dr_id"
                     [items]="type_list"
                     itemValueField="id"
@@ -38,9 +69,9 @@
                     #selectComponent>
                 </ionic-selectable>
             </ion-item>
-            
+
             <p  *ngIf="f.submitted && dr_id?.invalid" class="error-line">Select Type Is Required</p>
-            
+
             <ion-item class="cs-normal-select mt16 mb0" [ngClass]="{'cs-error':f.submitted && followup_type?.invalid}">
                 <ion-label><span>Followup Type</span></ion-label>
                 <ion-select name="followup_type"  #followup_type="ngModel" [(ngModel)]="form.followup_type" required>
@@ -51,26 +82,26 @@
                 </ion-select>
             </ion-item>
             <p  *ngIf="f.submitted && followup_type?.invalid" class="error-line">Followup Type Is Required</p>
-            
-            
+
+
             <ion-item [ngClass]="{'cs-error':f.submitted && followup_date?.invalid}" >
                 <ion-label floating><span>Next Followup Date *</span></ion-label>
                 <ion-datetime  placeholder ="Next Followup Date" name="followup_date" min="{{today_date}}" [(ngModel)]="form.followup_date" #followup_date="ngModel" required></ion-datetime>
             </ion-item>
-            
+
             <p *ngIf="f.submitted && followup_date?.invalid"  class="error-line relative">Followup Date is Required!</p>
-            
+
             <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && description?.invalid}">
                 <ion-label floating><span>Description </span></ion-label>
                 <ion-textarea  placeholder="Enter Description"  type="text" name="description" #description="ngModel" [(ngModel)]="form.description" required></ion-textarea>
             </ion-item>
             <p  *ngIf="f.submitted && description?.invalid" class="error-line">Description Is Invalid</p>
-            
+
         </ion-list>
     </div>
-    
+
     <div class="padding16">
         <button ion-button class="cs-btn">Save</button>
-    </div>		  
+    </div>
 </form>
 </ion-content>

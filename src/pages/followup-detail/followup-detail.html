@@ -1,4 +1,4 @@
-<!-- 
+<!--
 <ion-header>
   <ion-navbar>
     <ion-title>Followup Detail</ion-title>
@@ -13,7 +13,7 @@
           <div class="left-info" >
             <div class="circle">A</div>
           </div>
-          
+
           <div class="right-info">
             <p>Abacusdes</p>
             <p >Channel Partner</p>
@@ -28,17 +28,17 @@
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt repellendus id, eaque enim voluptate ab
         </p>
-        
+
       </div>
-    </div>  
+    </div>
   </div>
-  
+
   <div class="pl16 pr16">
     <div class="list-box mb0">
       <div class="three_boxes">
         <div class="lower">
           <p>Followup Date</p>
-          <p>26 May 2020</p>   
+          <p>26 May 2020</p>
         </div>
         <div class="lower">
           <p>Date Created</p>
@@ -55,24 +55,24 @@
           <p class="pending-clr">Pending</p>
         </div>
       </div>
-      
+
       <div class="lower" >
         <p>Description</p>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos natus ab placeat</p>
       </div>
     </div>
   </div>
-  
-  
-  
+
+
+
   <div class="edit" >
     <ion-list>
       <ion-item class="mb10" >
         <ion-label floating><span>Next Follow Up Date *</span></ion-label>
         <ion-datetime display-format="MMM DD, YYYY" placeholder ="Select Date" ></ion-datetime>
       </ion-item>
-      
-      
+
+
       <ion-item class="cs-normal-select mb0">
         <ion-label><span>Satus</span></ion-label>
         <ion-select name="discount_type" >
@@ -86,11 +86,16 @@
     </div>
     <button ion-button block class="h40 green-color mt15" style="letter-spacing: 1px;">Update</button>
   </div>
-  
+
 </ion-content> -->
 <ion-header>
   <ion-navbar>
     <ion-title>Followup Detail</ion-title>
+    <ion-buttons end >
+      <button ion-button icon-only color="light" (click)="update_followup()">
+          <ion-icon name="md-create"></ion-icon>
+      </button>
+  </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -102,7 +107,7 @@
           <div class="left-info" >
             <div class="circle">{{followup_detail.company_name?followup_detail.company_name.substring(0,1).toUpperCase():''}}</div>
           </div>
-          
+
           <div class="right-info">
             <p > {{followup_detail.company_name}}</p>
             <p *ngIf="followup_detail.type=='1'">Distributor</p>
@@ -123,12 +128,12 @@
       <div class="lower">
         <p>Address</p>
         <p>{{followup_detail.address && followup_detail.address!=''?(followup_detail.address | titlecase) +', ' :''}} {{followup_detail.district && followup_detail.district!=''?(followup_detail.district | titlecase) +', ':''}} {{followup_detail.state && followup_detail.state!=''?(followup_detail.state | titlecase) +', ':''}} {{followup_detail.pincode && followup_detail.pincode!=''?followup_detail.pincode:''}}</p>
-        
-        
+
+
       </div>
-    </div>  
+    </div>
   </div>
-  
+
   <div class="pl16 pr16">
     <div class="list-box mb0">
       <div class="three_boxes">
@@ -151,30 +156,30 @@
            <p *ngIf="followup_detail.status=='pending'" class="yellow-clr">{{followup_detail.status | titlecase }}</p>
         </div>
       </div>
-      
+
       <div class="lower" >
         <p>Description</p>
         <p>{{followup_detail.description}}</p>
       </div>
     </div>
   </div>
-  
-  
-  
+
+
+
   <div class="edit" *ngIf="status == 'pending' && current_followup_date <= today_date">
     <ion-list>
       <ion-item class="mb10" *ngIf="followup_detail.status == 'In Progress'">
         <ion-label floating><span>Next Follow Up Date *</span></ion-label>
         <ion-datetime display-format="MMM DD, YYYY" placeholder ="Select Date" min={{today_date}} max={{max_date}} name="followup_date" #followup_date="ngModel" [(ngModel)]="followup_detail.follow_up_date" (ngModelChange)="disable_update = false"></ion-datetime>
-     
+
       </ion-item>
 
       <ion-item class="mb10 cs-textarea1" *ngIf="followup_detail.status == 'In Progress'" >
         <ion-label floating><span>Follow Up Remark</span></ion-label>
         <ion-textarea name="followup_remark" #followup_remark="ngModel" [(ngModel)]="followup_detail.followup_remark"  placeholder="Enter Remark" ></ion-textarea>
       </ion-item>
-      
-      
+
+
       <ion-item class="cs-normal-select mb0">
         <ion-label><span>Satus</span></ion-label>
         <ion-select name="discount_type" [(ngModel)]="followup_detail.status">
@@ -189,6 +194,6 @@
     <button ion-button block class="h40 green-color mt15" style="letter-spacing: 1px;" [disabled]="followup_detail.status == 'pending' || (followup_detail.status == 'In Progress' &&  disable_update)  " (click)="followup_detail.status == 'complete' || followup_detail.status == 'In Progress'? change_followup_status():''">Update</button>
 
   </div>
-  
+
 </ion-content>
 
