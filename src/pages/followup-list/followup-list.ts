@@ -72,7 +72,7 @@ export class FollowupListPage
     }
     
     goOnAddFollowup(){
-      this.navCtrl.push(FollowupAddPage,{})
+      this.navCtrl.push(FollowupAddPage,{'from':'add'})
     }
 
     // goOnDetail(){

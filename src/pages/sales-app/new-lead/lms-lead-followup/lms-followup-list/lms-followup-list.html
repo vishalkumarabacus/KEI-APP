@@ -38,6 +38,10 @@
                     <div class="right-info">
                         <p>{{row.dr_name ? row.dr_name : 'N/A'}}</p>
                         <!-- <p>{{row.dr_id | titlecase}}</p> -->
+                        
+                    </div>
+                    <div class="right-info" style="margin-left: auto;">
+                        <ion-icon name="create" class="cs-action" *ngIf="row.next_follow_date==today_date && row.status =='Pending'" (click)="update_followup(type)"></ion-icon>
                     </div>
                 </div>
             </div>
@@ -48,7 +52,7 @@
                     <p>{{row.next_follow_date}}</p>
                 </div>
                 <div class="lower">
-                    <p>Followup Type</p> 
+                    <p>Followup Type</p>
                     <p>{{row.next_follow_type}}</p>
                 </div>
             </div>
