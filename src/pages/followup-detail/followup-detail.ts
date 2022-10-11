@@ -17,18 +17,18 @@
 //   followup_id: any;
 //   followup_detail: any={};
 //   loader: boolean = false;
-  
-//   constructor() { 
-    
-    
- 
-    
+
+//   constructor() {
+
+
+
+
 //   }
-  
+
 //   ngOnInit() {
 //   }
-  
-  
+
+
 //   get_followup_detail() {
 //     this.loader = true;
 //     this.serve.fetchData({'followup_id':this.followup_id}, "Distributors/followup_detail").subscribe((result) => {
@@ -39,8 +39,8 @@
 //       }, 700);
 //     })
 //   }
-  
-  
+
+
 //   edit_followup_modal() {
 //     const dialogRef = this.dialog.open(FollowupEditComponent, {
 //       width: '750px',
@@ -53,9 +53,9 @@
 //       this.get_followup_detail()
 //     });
 //   }
-  
-  
-  
+
+
+
 // }
 import { Component } from '@angular/core';
 import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
@@ -63,6 +63,7 @@ import moment from 'moment';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { FollowupAddPage } from '../followup-add/followup-add';
+import { LmsFollowupAddPage } from '../sales-app/new-lead/lms-lead-followup/lms-followup-add/lms-followup-add';
 
 /**
 * Generated class for the FollowupDetailPage page.
@@ -77,7 +78,7 @@ import { FollowupAddPage } from '../followup-add/followup-add';
   templateUrl: 'followup-detail.html',
 })
 export class FollowupDetailPage {
-  
+
   loading:Loading;
   followup_id:any = '0';
   followup_detail:any = [];
@@ -86,27 +87,27 @@ export class FollowupDetailPage {
   max_date = new Date().getFullYear() + 1;
   disable_update : boolean = true;
   current_followup_date:any=''
-  
-  
+
+
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,public service:MyserviceProvider,public loadingCtrl:LoadingController,public dbService:DbserviceProvider, public navParams: NavParams) {
   }
-  
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad FollowupDetailPage');
   }
-  
+
   ionViewWillEnter(){
-    
+
     console.log(this.navParams.get('from'));
     console.log(this.navParams.get('follow_up_id'));
-    
+
     if(this.navParams.get('from') == 'follow_up_list_page' && this.navParams.get('follow_up_id')){
       this.followup_id = this.navParams.get('follow_up_id')
       this.get_followup_detail();
     }
-    
+
   }
-  
+
   get_followup_detail(){
     console.log("get_followup_detail method call");
     this.show_loading()
@@ -116,10 +117,10 @@ export class FollowupDetailPage {
       this.status = this.followup_detail.status;
       this.current_followup_date = this.followup_detail.next_follow_date;
       console.log(this.current_followup_date);
-      
-      
+
+
       this.loading.dismiss();
-      
+
     },err=>
     {
       this.loading.dismiss();
@@ -128,12 +129,12 @@ export class FollowupDetailPage {
         title:'Error !',
         subTitle: 'Somethong Went Wrong Please Try Again',
         cssClass:'action-close',
-        
+
         buttons: [{
           text: 'Okay',
           role: 'Okay',
           handler: () => {
-            
+
           }
         },
       ]
@@ -141,7 +142,7 @@ export class FollowupDetailPage {
     alert.present();
     this.navCtrl.pop();
   });
-  
+
 }
 
 
@@ -154,27 +155,33 @@ show_loading()
   });
   this.loading.present();
 }
+update_followup()
+    {
+      console.log('function called');
+
+      this.navCtrl.push(LmsFollowupAddPage,{'data':this.followup_detail})
+    }
 
 change_followup_status(){
-  
-  console.log("change_followup_status method call"); 
+
+  console.log("change_followup_status method call");
   console.log(this.followup_detail.status);
   console.log(this.followup_detail.id);
   console.log(this.followup_detail);
-  
+
   this.show_loading();
-  
+
   this.service.addData(this.followup_detail.status == 'complete' ? {'id':this.followup_detail.id,'status':this.followup_detail.status} : {'id':this.followup_detail.id,'status':this.followup_detail.status,'followup_date':this.followup_detail.follow_up_date,'followup_remark':this.followup_detail.followup_remark},'Followup/update_followup').then((result)=>{
     console.log(result);
     if(result['msg'] == 'Updated Successfully'){
       this.loading.dismiss();
-      
+
       if(this.followup_detail.status == 'complete'){
         let alert = this.alertCtrl.create({
           title: 'Add Follow Up?',
           subTitle: 'Do You Want To Create Other Follow Up',
           cssClass: 'action-close',
-          
+
           buttons: [{
             text: 'NO',
             role: 'cancel',
@@ -193,12 +200,12 @@ change_followup_status(){
         alert.present();
       }
       else{
-        
+
         let alert = this.alertCtrl.create({
           title: 'Success?',
           subTitle: 'Follow Up Update Successfully',
           cssClass: 'action-close',
-          
+
           buttons: [{
             text: 'Ok',
             role: 'cancel',
@@ -210,8 +217,8 @@ change_followup_status(){
         alert.present();
       }
     }
-    
-    
+
+
   },err=>
   {
     this.loading.dismiss();
@@ -220,12 +227,12 @@ change_followup_status(){
       title:'Error !',
       subTitle: 'Somethong Went Wrong Please Try Again',
       cssClass:'action-close',
-      
+
       buttons: [{
         text: 'Okay',
         role: 'Okay',
         handler: () => {
-          
+
         }
       },
     ]
@@ -235,6 +242,8 @@ change_followup_status(){
 });
 
 }
+
+
 
 
 }
