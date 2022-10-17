@@ -181,7 +181,7 @@ console.log(this.form.id);
       this.check_mobile_existence(this.form.source_mobile)
     }
     }
-    
+
   }
   city_list:any=[]
   getCityList()
@@ -194,6 +194,7 @@ console.log(this.form.id);
       // this.loading.dismiss()
       console.log(result);
       this.city_list=result['city'];
+
 
       // if(this.navParams.get('from') == 'travel detail page' && this.navParams.get('travel_id') && this.travel_data.travel_type == 'Area Visit'){
       //   for(let tmp_index = 0 ;tmp_index<this.travel_plan_detail_for_update.selected_data.length ; tmp_index++){
@@ -319,7 +320,7 @@ console.log(this.form.id);
           this.get_district()
           this.form.district = result['district_name']
           this.getCityList()
-          this.form.city = result['city']
+          this.form.city1 = result['city']
           // this.selectarea()
           // this.form.area = result['area']
           console.log(this.form);

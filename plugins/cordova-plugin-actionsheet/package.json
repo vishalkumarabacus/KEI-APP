@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-actionsheet@2.3.3",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "cordova-plugin-actionsheet@2.3.3",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-actionsheet/-/cordova-plugin-actionsheet-2.3.3.tgz",
   "_spec": "2.3.3",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Eddy Verbruggen - @EddyVerbruggen"
   },

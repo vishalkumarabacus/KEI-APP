@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-file-transfer@1.7.1",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "cordova-plugin-file-transfer@1.7.1",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.1.tgz",
   "_spec": "1.7.1",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Apache Software Foundation"
   },

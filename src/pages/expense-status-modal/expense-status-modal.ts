@@ -15,7 +15,7 @@ import { MyserviceProvider } from '../../providers/myservice/myservice';
   templateUrl: 'expense-status-modal.html',
 })
 export class ExpenseStatusModalPage {
-  
+
   data:any={}
   filter:any={}
   user:any=[]
@@ -23,11 +23,11 @@ export class ExpenseStatusModalPage {
   from_page :any=''
   lead_detail:any=[]
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
+    public navCtrl: NavController,
+    public navParams: NavParams,
     public viewCtrl: ViewController,
     public serve: MyserviceProvider,
-    public modalCtrl: ModalController) 
+    )
     {
       this.from_page =this.navParams.get("from");
       console.log(this.from_page)
@@ -35,7 +35,7 @@ export class ExpenseStatusModalPage {
       {
         this.data.type=this.navParams.get("type");
         console.log(this.data.type);
-        
+
       }
       if(this.from_page =='lead')
       {
@@ -43,7 +43,7 @@ export class ExpenseStatusModalPage {
         this.data.id=this.navParams.get("lead_id");
 
         console.log(this.data.type);
-        
+
       }
       if(this.from_page =='lead_list')
       {
@@ -51,7 +51,7 @@ export class ExpenseStatusModalPage {
         // console.log(this.data.type);
         console.log(this.from_page);
 
-        
+
       }
       if(this.from_page =='leadassign')
       {
@@ -59,13 +59,13 @@ export class ExpenseStatusModalPage {
         this.data.state=this.navParams.get("state");
         console.log(this.data.id);
         console.log(this.data);
-        
+
         this.serve.addData(this.data,'Checkin/listing_all_asm').then((result)=>
         {
             console.log(result);
            this.user=result
            console.log(this.user);
-           
+
           },
           error => {
             this.serve.presentToast('Something Went wrong!!')
@@ -75,13 +75,13 @@ export class ExpenseStatusModalPage {
       {
         this.data.id=this.navParams.get("drId");
         console.log(this.data.id);
-        
+
         this.serve.addData(this.data,'Checkin/listing_all_asm').then((result)=>
         {
             console.log(result);
            this.user=result
            console.log(this.user);
-           
+
           },
           error => {
             this.serve.presentToast('Something Went wrong!!')
@@ -114,45 +114,45 @@ export class ExpenseStatusModalPage {
       {
         this.data.type=this.navParams.get("type");
         console.log(this.data.type);
-        
+
       }
       console.log(this.data);
-      
+
     }
-    
-    ionViewDidLoad() 
+
+    ionViewDidLoad()
     {
       console.log('ionViewDidLoad ExpenseStatusModalPage');
       // this.getReportData();
     }
-    
-    dismiss() 
+
+    dismiss()
     {
       this.viewCtrl.dismiss();
     }
-    
-     statusModal1(type) 
-  {
-    console.log(type)
 
-    let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.data.id,'status':this.lead_detail.status,'from':'leaddetail'});
+  //    statusModal1(type)
+  // {
+  //   console.log(type)
 
-    modal.onDidDismiss(data =>
-    {
-    });
-    
-    modal.present();
-  }
+  //   let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.data.id,'status':this.lead_detail.status,'from':'leaddetail'});
+
+  //   modal.onDidDismiss(data =>
+  //   {
+  //   });
+
+  //   modal.present();
+  // }
     update_status()
     {
-     
+
       console.log(this.data)
-      var func_name 
+      var func_name
       if(this.from_page =='expense')
       {
         func_name = 'Expense/update_status'
       }
-      
+
       if(this.from_page =='travel')
       {
         func_name = 'TravelPlan/update_status'
@@ -191,11 +191,11 @@ export class ExpenseStatusModalPage {
 
 
 
-       
 
 
 
-       
+
+
 
       },err=>
       {
@@ -207,7 +207,7 @@ export class ExpenseStatusModalPage {
     ondismiss(){
       {
         console.log("hloo");
-        
+
         var data=this.filter
         console.log(data);
 
@@ -221,9 +221,9 @@ export class ExpenseStatusModalPage {
     status()
     {
       console.log(this.data)
-      var func_name 
+      var func_name
      this.data.dr_id =
-  
+
       this.serve.addData(this.data,'Distributor/assign_dr').then((result)=>
       {
           console.log(result);
@@ -240,9 +240,9 @@ export class ExpenseStatusModalPage {
     status1()
     {
       console.log(this.data)
-      var func_name 
+      var func_name
      this.data.dr_id =
-  
+
       this.serve.addData(this.data,'Distributor/assign_customer').then((result)=>
       {
           console.log(result);
@@ -257,4 +257,3 @@ export class ExpenseStatusModalPage {
         });
     }
   }
-  

@@ -65,13 +65,16 @@
     <div class="capsule-tabs">
         <ul>
           <li [ngClass]="{'active' : filter.status=='lead Bank'}" (click)="filter.date='';start=0;filter.status='lead Bank';get_assign_dr(drid)">
-            <p>Lead Bank<span>{{allCount.leadbank||'0'}}</span></p>
+            <p>Lead Bank<span>{{allCount.leadbank?allCount.leadbank:'0'}}</span></p>
           </li>
           <!-- <li [ngClass]="{'active' : filter.status=='Qualified'}" (click)="filter.date='';start=0;filter.status='Qualified';get_assign_dr(drid)">
             <p>Qualified<span>{{upcoming_count}}</span></p>
           </li> -->
           <li [ngClass]="{'active' : filter.status=='Qualified'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr(drid)">
             <p>Running<span>{{allCount.qualified?allCount.qualified:'0'}}</span></p>
+          </li>
+          <li [ngClass]="{'active' : filter.status=='Partially win'}"(click)="filter.date='';start=0;filter.status='Partially win';get_assign_dr(drid)" *ngIf="drid ==19">
+            <p> Partially won<span>{{allCount.win?allCount.win:'0'}}</span></p>
           </li>
           <li [ngClass]="{'active' : filter.status=='win'}"(click)="filter.date='';start=0;filter.status='win';get_assign_dr(drid)">
               <p>Win<span>{{allCount.win?allCount.win:'0'}}</span></p>
@@ -116,7 +119,11 @@
                     <a href="tel:{{data.mobile}}"><i class="material-icons">phone</i></a>
                 </div>
             </div>
-            <div class="lower"  *ngIf="data.state  || data.district  || data.city  || data.area" (click)="lead_detail(data.id)">
+            <div class="lower"  *ngIf="data.executive_name" (click)="lead_detail(data.id)">
+              <p>SO Name</p>
+              <p>{{data.executive_name}}</p>
+          </div>
+            <div class="lower" *ngIf="data.state  || data.district  || data.city  || data.area" (click)="lead_detail(data.id)">
                 <p>Address</p>
                 <p>{{data.address}} {{!data.area ? 'N/A' : data.area | titlecase}} {{!data.district ? '' : ', '+data.district | titlecase}} {{!data.state ? 'N/A' : data.state | titlecase}} </p>
             </div>

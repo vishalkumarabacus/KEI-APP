@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-androidx-build@1.0.4",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_development": true,
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-androidx-build/-/cordova-androidx-build-1.0.4.tgz",
   "_spec": "1.0.4",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Masashi Katsumata"
   },

@@ -32,11 +32,11 @@ this.GET_BEAT_CODE_LIST()
 if(this.navParams.get('DrType')){
   this.DrType=this.navParams.get('DrType')
   console.log(this.DrType);
-  
+
 }
 else{
   console.log('nhi mila');
-  
+
 }
 
     if(this.navParams.get('data'))
@@ -54,7 +54,7 @@ console.log(this.form.doa);
     //  console.log(this.lead_data);
 
     }
-    
+
   }
 form:any={};
 state_list:any=[];
@@ -83,10 +83,10 @@ get_distributor()
     this.db.addData({'type':1,'from':'order'},'DealerData/get_type_list').then((result)=>{
         console.log(result);
         this.distributor_list = result;
-        
+
         // this.service1.dismiss();
-      
-        
+
+
     });
 }
 city_list:any[]
@@ -97,27 +97,27 @@ getCityList()
   this.form.city1 = [];
   console.log(this.form);
   // this.show_loading()
-  
+
   this.db.addData({'district_name':this.form.district,'state_name':this.form.state},'dealerData/getCity').then((result)=>{
     // this.loading.dismiss()
     console.log(result);
     this.city_list=result['city'];
-    
-    
-    
+
+
+
   });
 }
 form1:any={};
 
 selectarea(){
   console.log(this.form);
-  
+
   this.form1.state=this.form.state;
   this.form1.district=this.form.district;
   this.form1.city=this.form.city1;
 
   console.log(this.form1);
-  
+
 
   // this.db.addData3(this.form1,"User/city_user_list")
   this.db.addData(this.form1,"dealerData/getArea")
@@ -147,12 +147,12 @@ update()
   this.db.show_loading()
   console.log(this.form.district);
   // Distributor/save_lead
-  // 
+  //
   this.db.addData({"id":this.form.id,"data":this.form},"Lead/update_lead")
   .then(resp=>{
     console.log(resp);
     this.db.dismiss()
-    
+
     if(resp['msg'] == 'success')
     {
       this.db.presentToast("Success!");
@@ -193,14 +193,14 @@ this.form.mobile=''
           }
         ]
       })
-  
+
       alert.present();
-  } 
+  }
   // if()
 }
 save_retailer()
 {
- 
+
   if(!this.form.assign_dr_id && this.DrType==3)
   {
       let toast = this.toastCtrl.create({
@@ -238,7 +238,7 @@ GET_BEAT_CODE_LIST() {
     this.beatCodeList = result['data'];
     for(let i = 0 ;i<this.beatCodeList.length;i++){
         this.beatCodeList[i].beat_code1=this.beatCodeList[i].beat_code+' '+'( '+this.beatCodeList[i].area+')'
-     
+
     }
   }, err => {
     // this.serve.dismiss()
@@ -252,52 +252,52 @@ get_district()
     console.log(resp);
     this.district_list = resp['district_list'];
     console.log( this.district_list);
-    
+
   },
   err=>{
     this.db.errToasr()
   })
 }
 checkExist=false
-MobileNumber(event: any) 
+MobileNumber(event: any)
   {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
-    if (event.keyCode != 8 && !pattern.test(inputChar)) 
+    if (event.keyCode != 8 && !pattern.test(inputChar))
     {event.preventDefault(); }
   }
   check_num()
   {
     this.checkExist=false
     console.log(this.form.mobile.length);
-    
+
     if(this.form.mobile && this.form.mobile.length == 10)
     {
       console.log(this.form.mobile.length);
-      
+
       console.log(this.form.mobile);
       this.check_mobile_existence(this.form.mobile)
     }
   }
 error:any={}
   check_mobile_existence(mobile)
-  {   
+  {
     // this.form={}
     this.form.mobile=mobile
-    
+
    this.db.show_loading()
     this.db.addData({'mobile':mobile},'Enquiry/check_mobile_existenceLead').then((result)=>{
       this.error=result['data']
-      
+
       this.db.dismiss()
-      
+
       if(result['executive']!=0)
       {
         let alert=this.alertCtrl.create({
           title:'Exists !!',
           subTitle: 'Mobile No Is Already Registered With An Executive !!',
           cssClass:'action-close',
-          
+
           buttons: [
             {
               text:'Okay',
@@ -314,25 +314,25 @@ error:any={}
         if(result['check_mobile']==1)
         {
           this.checkExist=true
-          
+
           // this.db.presentToast('Dealer With Same Mobile No. Already Exists')
-          
+
         }
         else
         {
           this.form.DealerExist=false;
-          
+
           this.checkExist=false
         }
-        
+
       },err=>
       {
         this.db.dismiss()
-        
+
       })
-      
-      
-      
+
+
+
     }
 
     selectAddressOnBehalfOfPincode()
@@ -342,19 +342,19 @@ error:any={}
         // this.db.show_loading()
         this.db.addData({'pincode':this.form.pincode},'Enquiry/selectAddressOnBehalfOfPincode').then((result)=>{
           this.db.dismiss()
-          
+
           console.log(result);
           this.form.state = result['state_name']
           this.get_district()
-          this.getCityList()
           this.form.district = result['district_name']
-          this.form.city = result['city']
+          this.getCityList()
+          this.form.city1 = result['city']
           this.form.area = result['area']
-          
+
         },err=>
         {
           // this.db.dismiss()
-          
+
           // this.db.presentToast('Failed To Get ')
         })
       }

@@ -21,9 +21,12 @@ package cordova.plugins;
 /*
  * Imports
  */
+import static android.content.Context.BATTERY_SERVICE;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,11 +43,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.util.Log;
 
@@ -54,7 +61,7 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 
 
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 
 /**
  * Diagnostic plugin implementation for Android
@@ -79,32 +86,59 @@ public class Diagnostic extends CordovaPlugin{
     protected static final Map<String, String> permissionsMap;
     static {
         Map<String, String> _permissionsMap = new HashMap <String, String>();
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_CALENDAR", Manifest.permission.READ_CALENDAR);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_CALENDAR", Manifest.permission.WRITE_CALENDAR);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "CAMERA", Manifest.permission.CAMERA);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_CONTACTS", Manifest.permission.READ_CONTACTS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_CONTACTS", Manifest.permission.WRITE_CONTACTS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "GET_ACCOUNTS", Manifest.permission.GET_ACCOUNTS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_FINE_LOCATION", Manifest.permission.ACCESS_FINE_LOCATION);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_COARSE_LOCATION", Manifest.permission.ACCESS_COARSE_LOCATION);
-        // Add as string as Manifest.permission.ACCESS_BACKGROUND_LOCATION not defined in < API 29:
+
+        // API 1-22+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_COARSE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_FINE_LOCATION", "android.permission.ACCESS_FINE_LOCATION");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ADD_VOICEMAIL", "android.permission.ADD_VOICEMAIL");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "BODY_SENSORS", "android.permission.BODY_SENSORS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "CALL_PHONE", "android.permission.CALL_PHONE");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "CAMERA", "android.permission.CAMERA");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "GET_ACCOUNTS", "android.permission.GET_ACCOUNTS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "PROCESS_OUTGOING_CALLS", "android.permission.PROCESS_OUTGOING_CALLS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_CALENDAR", "android.permission.READ_CALENDAR");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_CALL_LOG", "android.permission.READ_CALL_LOG");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_CONTACTS", "android.permission.READ_CONTACTS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_PHONE_STATE", "android.permission.READ_PHONE_STATE");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_SMS", "android.permission.READ_SMS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECEIVE_MMS", "android.permission.RECEIVE_MMS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECEIVE_SMS", "android.permission.RECEIVE_SMS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECEIVE_WAP_PUSH", "android.permission.RECEIVE_WAP_PUSH");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECORD_AUDIO", "android.permission.RECORD_AUDIO");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "SEND_SMS", "android.permission.SEND_SMS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "USE_SIP", "android.permission.USE_SIP");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_CALENDAR", "android.permission.WRITE_CALENDAR");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_CALL_LOG", "android.permission.WRITE_CALL_LOG");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_CONTACTS", "android.permission.WRITE_CONTACTS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE");
+
+        // API 26+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ANSWER_PHONE_CALLS", "android.permission.ANSWER_PHONE_CALLS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_PHONE_NUMBERS", "android.permission.READ_PHONE_NUMBERS");
+
+        // API 28+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCEPT_HANDOVER", "android.permission.ACCEPT_HANDOVER");
+
+        // API 29+
         Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_BACKGROUND_LOCATION");
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECORD_AUDIO", Manifest.permission.RECORD_AUDIO);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_PHONE_STATE", Manifest.permission.READ_PHONE_STATE);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "CALL_PHONE", Manifest.permission.CALL_PHONE);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "ADD_VOICEMAIL", Manifest.permission.ADD_VOICEMAIL);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "USE_SIP", Manifest.permission.USE_SIP);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "PROCESS_OUTGOING_CALLS", Manifest.permission.PROCESS_OUTGOING_CALLS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "SEND_SMS", Manifest.permission.SEND_SMS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECEIVE_SMS", Manifest.permission.RECEIVE_SMS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_SMS", Manifest.permission.READ_SMS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECEIVE_WAP_PUSH", Manifest.permission.RECEIVE_WAP_PUSH);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "RECEIVE_MMS", Manifest.permission.RECEIVE_MMS);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_EXTERNAL_STORAGE", Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_CALL_LOG", Manifest.permission.READ_CALL_LOG);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "WRITE_CALL_LOG", Manifest.permission.WRITE_CALL_LOG);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_EXTERNAL_STORAGE", Manifest.permission.READ_EXTERNAL_STORAGE);
-        Diagnostic.addBiDirMapEntry(_permissionsMap, "BODY_SENSORS", Manifest.permission.BODY_SENSORS);
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_MEDIA_LOCATION", "android.permission.ACCESS_MEDIA_LOCATION");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACTIVITY_RECOGNITION", "android.permission.ACTIVITY_RECOGNITION");
+
+        // API 31+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_ADVERTISE");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "BLUETOOTH_CONNECT", "android.permission.BLUETOOTH_CONNECT");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "BLUETOOTH_SCAN", "android.permission.BLUETOOTH_SCAN");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "UWB_RANGING", "android.permission.UWB_RANGING");
+
+        // API 33+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "BODY_SENSORS_BACKGROUND", "android.permission.BODY_SENSORS_BACKGROUND");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "NEARBY_WIFI_DEVICES", "android.permission.NEARBY_WIFI_DEVICES");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "POST_NOTIFICATIONS", "android.permission.POST_NOTIFICATIONS");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_MEDIA_AUDIO", "android.permission.READ_MEDIA_AUDIO");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_MEDIA_IMAGES", "android.permission.READ_MEDIA_IMAGES");
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_MEDIA_VIDEO", "android.permission.READ_MEDIA_VIDEO");
+
         permissionsMap = Collections.unmodifiableMap(_permissionsMap);
     }
 
@@ -248,6 +282,14 @@ public class Diagnostic extends CordovaPlugin{
                 this.restart(args);
             } else if(action.equals("getArchitecture")) {
                 callbackContext.success(getCPUArchitecture());
+            } else if(action.equals("getCurrentBatteryLevel")) {
+                callbackContext.success(getCurrentBatteryLevel());
+            } else if(action.equals("isAirplaneModeEnabled")) {
+                callbackContext.success(isAirplaneModeEnabled() ? 1 : 0);
+            } else if(action.equals("getDeviceOSVersion")) {
+                callbackContext.success(getDeviceOSVersion());
+            } else if(action.equals("getBuildOSVersion")) {
+                callbackContext.success(getBuildOSVersion());
             } else {
                 handleError("Invalid action");
                 return false;
@@ -316,7 +358,7 @@ public class Diagnostic extends CordovaPlugin{
 
     public void requestRuntimePermissions(JSONArray args) throws Exception{
         JSONArray permissions = args.getJSONArray(0);
-        int requestId = storeContextByRequestId();
+        int requestId = storeCurrentContextByRequestId();
         _requestRuntimePermissions(permissions, requestId);
     }
 
@@ -325,7 +367,7 @@ public class Diagnostic extends CordovaPlugin{
     }
 
     public void requestRuntimePermission(String permission) throws Exception{
-        requestRuntimePermission(permission, storeContextByRequestId());
+        requestRuntimePermission(permission, storeCurrentContextByRequestId());
     }
 
     public void requestRuntimePermission(String permission, int requestId) throws Exception{
@@ -491,9 +533,17 @@ public class Diagnostic extends CordovaPlugin{
             if(!permissionsMap.containsKey(permission)){
                 throw new Exception("Permission name '"+permission+"' is not a valid permission");
             }
+            if(Build.VERSION.SDK_INT < 29 && permission.equals("ACCESS_BACKGROUND_LOCATION")){
+                // This version of Android doesn't support background location permission so check for standard coarse location permission
+                permission = "ACCESS_COARSE_LOCATION";
+            }
+            if(Build.VERSION.SDK_INT < 29 && permission.equals("ACTIVITY_RECOGNITION")){
+                // This version of Android doesn't support activity recognition permission so check for body sensors permission
+                permission = "BODY_SENSORS";
+            }
             String androidPermission = permissionsMap.get(permission);
             Log.v(TAG, "Get authorisation status for "+androidPermission);
-            boolean granted = hasPermission(androidPermission);
+            boolean granted = hasRuntimePermission(androidPermission);
             if(granted){
                 statuses.put(permission, Diagnostic.STATUS_GRANTED);
             }else{
@@ -501,9 +551,6 @@ public class Diagnostic extends CordovaPlugin{
                 if(!showRationale){
                     if(isPermissionRequested(permission)){
                         statuses.put(permission, Diagnostic.STATUS_DENIED_ALWAYS);
-                    }else if(Build.VERSION.SDK_INT < 29 && permission.equals("ACCESS_BACKGROUND_LOCATION")){
-                        // This version of Android doesn't support background location permission so assume it's implicitly granted
-                        statuses.put(permission, Diagnostic.STATUS_GRANTED);
                     }else{
                         statuses.put(permission, Diagnostic.STATUS_NOT_REQUESTED);
                     }
@@ -550,7 +597,7 @@ public class Diagnostic extends CordovaPlugin{
         context.success(statuses);
     }
 
-    protected int storeContextByRequestId(){
+    protected int storeCurrentContextByRequestId(){
         return storeContextByRequestId(currentContext);
     }
 
@@ -617,17 +664,17 @@ public class Diagnostic extends CordovaPlugin{
         map.put(value, key);
     }
 
-    protected boolean hasPermission(String permission) throws Exception{
-        boolean hasPermission = true;
+    protected boolean hasRuntimePermission(String permission) throws Exception{
+        boolean hasRuntimePermission = true;
         Method method = null;
         try {
             method = cordova.getClass().getMethod("hasPermission", permission.getClass());
             Boolean bool = (Boolean) method.invoke(cordova, permission);
-            hasPermission = bool.booleanValue();
+            hasRuntimePermission = bool.booleanValue();
         } catch (NoSuchMethodException e) {
             logWarning("Cordova v" + CordovaWebView.CORDOVA_VERSION + " does not support runtime permissions so defaulting to GRANTED for " + permission);
         }
-        return hasPermission;
+        return hasRuntimePermission;
     }
 
     protected void requestPermissions(CordovaPlugin plugin, int requestCode, String [] permissions) throws Exception{
@@ -649,7 +696,7 @@ public class Diagnostic extends CordovaPlugin{
             Boolean bool = (Boolean) method.invoke(null, activity, permission);
             shouldShow = bool.booleanValue();
         } catch (NoSuchMethodException e) {
-            throw new Exception("shouldShowRequestPermissionRationale() method not found in ActivityCompat class. Check you have Android Support Library v23+ installed");
+            throw new Exception("shouldShowRequestPermissionRationale() method not found in ActivityCompat class.");
         }
         return shouldShow;
     }
@@ -686,45 +733,25 @@ public class Diagnostic extends CordovaPlugin{
 
     /**
      * Performs a full cold app restart - restarts application
-     * https://stackoverflow.com/a/22345538/777265
+     * https://stackoverflow.com/a/58530756/777265
      */
     protected void doColdRestart() {
         String baseError = "Unable to cold restart application: ";
         try {
             logInfo("Cold restarting application");
-            Context c = applicationContext;
-            //check if the context is given
-            if (c != null) {
-                //fetch the packagemanager so we can get the default launch activity
-                // (you can replace this intent with any other activity if you want
-                PackageManager pm = c.getPackageManager();
-                //check if we got the PackageManager
-                if (pm != null) {
-                    //create the intent with the default start activity for your application
-                    Intent mStartActivity = pm.getLaunchIntentForPackage(
-                            c.getPackageName()
-                    );
-                    if (mStartActivity != null) {
-                        //mStartActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        //create a pending intent so the application is restarted after System.exit(0) was called.
-                        // We use an AlarmManager to call this intent in 100ms
-                        int mPendingIntentId = 223344;
-                        PendingIntent mPendingIntent = PendingIntent
-                                .getActivity(c, mPendingIntentId, mStartActivity,
-                                        PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager mgr = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                        Log.i(TAG,"Killing application for cold restart");
-                        //kill the application
-                        System.exit(0);
-                    } else {
-                        handleError(baseError+"StartActivity is null");
-                    }
-                } else {
-                    handleError(baseError+"PackageManager is null");
-                }
+            Activity activity = instance.cordova.getActivity();
+            if (activity != null) {
+                // Systems at 29/Q and later don't allow relaunch, but System.exit(0) on
+                // all supported systems will relaunch ... but by killing the process, then
+                // restarting the process with the back stack intact. We must make sure that
+                // the launch activity is the only thing in the back stack before exiting.
+                final PackageManager pm = activity.getPackageManager();
+                final Intent intent = pm.getLaunchIntentForPackage(activity.getPackageName());
+                activity.finishAffinity(); // Finishes all activities.
+                activity.startActivity(intent);    // Start the launch activity
+                System.exit(0);    // System finishes and automatically relaunches us.
             } else {
-                handleError(baseError+"Context is null");
+                handleError(baseError+"Activity is null");
             }
         } catch (Exception ex) {
             handleError(baseError+ ex.getMessage());
@@ -774,6 +801,74 @@ public class Diagnostic extends CordovaPlugin{
         return sharedPref.getBoolean(permission, false);
     }
 
+    protected int getCurrentBatteryLevel(){
+        BatteryManager bm = (BatteryManager) cordova.getContext().getApplicationContext().getSystemService(BATTERY_SERVICE);
+        return bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+    }
+
+    // https://stackoverflow.com/a/18237962/777265
+    protected boolean hasBuildPermission(String permission)
+    {
+        try {
+            PackageInfo info = this.cordova.getActivity().getPackageManager().getPackageInfo(this.cordova.getContext().getPackageName(), PackageManager.GET_PERMISSIONS);
+            if (info.requestedPermissions != null) {
+                for (String p : info.requestedPermissions) {
+                    if (p.equals("android.permission."+permission)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isAirplaneModeEnabled() {
+        return Settings.Global.getInt(this.cordova.getActivity().getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+    }
+
+    public JSONObject getDeviceOSVersion() throws Exception{
+        JSONObject details = new JSONObject();
+        details.put("version", Build.VERSION.RELEASE);
+        details.put("apiLevel", Build.VERSION.SDK_INT);
+        details.put("apiName", getNameForApiLevel(Build.VERSION.SDK_INT));
+        return details;
+    }
+
+    public JSONObject getBuildOSVersion() throws Exception{
+        JSONObject details = new JSONObject();
+        int targetVersion = 0;
+        int minVersion = 0;
+        Activity activity = instance.cordova.getActivity();
+        ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), 0);
+        if (applicationInfo != null) {
+            targetVersion = applicationInfo.targetSdkVersion;
+            if(Build.VERSION.SDK_INT >= 24){
+                minVersion = applicationInfo.minSdkVersion;
+            }
+        }
+
+        details.put("targetApiLevel", targetVersion);
+        details.put("targetApiName", getNameForApiLevel(targetVersion));
+        details.put("minApiLevel", minVersion);
+        details.put("minApiName", getNameForApiLevel(minVersion));
+        return details;
+    }
+
+    // https://stackoverflow.com/a/55946200/777265
+    protected String getNameForApiLevel(int apiLevel) throws Exception{
+        Field[] fields = Build.VERSION_CODES.class.getFields();
+        String codeName = "UNKNOWN";
+        for (Field field : fields) {
+            if (field.getInt(Build.VERSION_CODES.class) == apiLevel) {
+                codeName = field.getName();
+            }
+        }
+        return codeName;
+    }
+
     /************
      * Overrides
      ***********/
@@ -798,6 +893,14 @@ public class Diagnostic extends CordovaPlugin{
             for (int i = 0, len = permissions.length; i < len; i++) {
                 String androidPermission = permissions[i];
                 String permission = permissionsMap.get(androidPermission);
+                if(Build.VERSION.SDK_INT < 29 && permission.equals("ACCESS_BACKGROUND_LOCATION")){
+                    // This version of Android doesn't support background location permission so use standard coarse location permission
+                    permission = "ACCESS_COARSE_LOCATION";
+                }
+                if(Build.VERSION.SDK_INT < 29 && permission.equals("ACTIVITY_RECOGNITION")){
+                    // This version of Android doesn't support activity recognition permission so check for body sensors permission
+                    permission = "BODY_SENSORS";
+                }
                 String status;
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                     boolean showRationale = shouldShowRequestPermissionRationale(this.cordova.getActivity(), androidPermission);
@@ -805,9 +908,6 @@ public class Diagnostic extends CordovaPlugin{
                         if(isPermissionRequested(permission)){
                             // user denied WITH "never ask again"
                             status = Diagnostic.STATUS_DENIED_ALWAYS;
-                        }else if(Build.VERSION.SDK_INT < 29 && permission.equals("ACCESS_BACKGROUND_LOCATION")){
-                            // This version of Android doesn't support background location permission so assume it's implicitly granted
-                            status = Diagnostic.STATUS_GRANTED;
                         }else{
                             // The app doesn't have permission and the user has not been asked for the permission before
                             status = Diagnostic.STATUS_NOT_REQUESTED;

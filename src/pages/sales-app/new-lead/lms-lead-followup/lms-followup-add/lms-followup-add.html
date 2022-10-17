@@ -12,7 +12,7 @@
 
                 <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && lead_type?.invalid}">
                     <ion-label><span>Lead Type</span></ion-label>
-                    <ion-select name="lead_type" #lead_type="ngModel" [(ngModel)]="form.lead_type" (ngModelChange)="get_assign_dr(form.lead_type)">
+                    <ion-select name="lead_type" #lead_type="ngModel" [(ngModel)]="form.lead_type" (ngModelChange)="get_assign_dr(form.lead_type)" [disabled]="(disableSelect == true)">
                        <ion-option value="1">Distributor</ion-option>
                        <ion-option value="2">Dealer</ion-option>
                         <ion-option value="3">Retailer</ion-option>
@@ -66,8 +66,9 @@
                     value="company_name"
                     itemTextField="company_name"
                     [canSearch]="true"
+                    (onChange)="test(form.dr_id)"
                     #selectComponent
-                    (ngModelChange)="get_assign_dr(form.dr_id)">
+                     [disabled]="(disableSelect == true)">
                 </ionic-selectable>
             </ion-item>
 

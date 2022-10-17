@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-android-permissions@1.1.3",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "cordova-plugin-android-permissions@1.1.3",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-android-permissions/-/cordova-plugin-android-permissions-1.1.3.tgz",
   "_spec": "1.1.3",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Jason Yang"
   },

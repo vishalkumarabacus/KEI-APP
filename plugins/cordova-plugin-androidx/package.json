@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-androidx@3.0.0",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_development": true,
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-androidx/-/cordova-plugin-androidx-3.0.0.tgz",
   "_spec": "3.0.0",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Dave Alden"
   },

@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-nativegeocoder@2.0.5",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "cordova-plugin-nativegeocoder@2.0.5",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-nativegeocoder/-/cordova-plugin-nativegeocoder-2.0.5.tgz",
   "_spec": "2.0.5",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Sebastian Baar"
   },

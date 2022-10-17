@@ -3,9 +3,12 @@
         <ion-title>Lead Detail</ion-title>
         <ion-buttons end >
 
-            <button ion-button icon-only color="light" (click)="goOnTravelAdd()" >
+            <button ion-button icon-only color="light"  *ngIf="(lead_detail.status=='Lost'||lead_detail.status=='Disqualified'||lead_detail.status=='Win') && lead_detail.date_updated == today_date" (click)="goOnTravelAdd()" >
                 <ion-icon name="md-create"></ion-icon>
             </button>
+            <button ion-button icon-only color="light"  *ngIf="lead_detail.status=='qualified' || lead_detail.status=='Lead Bank' " (click)="goOnTravelAdd()" >
+              <ion-icon name="md-create"></ion-icon>
+          </button>
         </ion-buttons>
     </ion-navbar>
 
@@ -211,6 +214,22 @@
                   <!-- </div> -->
               </div>
                     </div>
+                    <div class="contentBox">
+                      <div class="lower"  *ngIf="lead_detail.ninety_coil_requirment">
+                          <p>Expected 90m Coil Requirment</p>
+                          <p>{{lead_detail.ninety_coil_requirment
+                            ?lead_detail.ninety_coil_requirment
+                            :'N/A'}}</p>
+                      <!-- </div> -->
+                  </div>
+                  <div class="lower" *ngIf="lead_detail.one_eighty_coil_requirment">
+                    <p>Expected 180m Coil Requirment</p>
+                    <p>{{lead_detail.one_eighty_coil_requirment
+                      ?lead_detail.one_eighty_coil_requirment
+                      :'N/A'}}</p>
+                <!-- </div> -->
+            </div>
+                  </div>
 
                 <!-- <div class="mid"> -->
 
@@ -232,13 +251,13 @@
 
 
         <a class="no-height"*ngIf=" (last_attendence_data.start_time != '')"   (click)="presentalert(lead_detail.type,lead_detail.id,lead_detail.company_name)">
-            <!-- <p><span>{{lead_detail.dr_activity}}</span></p> -->
+            <p><span>{{lead_detail.dr_checkin}}</span></p>
             <div class="info">
                 Create Checkin
             </div>
         </a>
         <a class="no-height" *ngIf=" (last_attendence_data.start_time == '00:00:00'||last_attendence_data.start_time == '')"  (click)="show_Error()">
-            <p><span>{{lead_detail.dr_activity}}</span></p>
+            <p><span>{{lead_detail.dr_checkin}}</span></p>
             <div class="info">
                 Create Checkin
             </div>

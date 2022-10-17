@@ -1,33 +1,33 @@
 {
   "_args": [
     [
-      "cordova-plugin-splashscreen@6.0.1",
-      "D:\\KEI\\KEI APP"
+      "cordova-plugin-splashscreen@6.0.2",
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_development": true,
-  "_from": "cordova-plugin-splashscreen@6.0.1",
-  "_id": "cordova-plugin-splashscreen@6.0.1",
+  "_from": "cordova-plugin-splashscreen@6.0.2",
+  "_id": "cordova-plugin-splashscreen@6.0.2",
   "_inBundle": false,
-  "_integrity": "sha512-olJPBFRUuzunzeuB76TOBoq3yYlnhpWDk/S7ErR6MdqPz1KuK36omB9u4o//SdgfBbxHz+SsUtyvst68NrU3pA==",
+  "_integrity": "sha512-7JiUfnInir+SCOEgTJ+5/cHF3UFl69jp6cAQfHtJaaQt9Pli8D8yTJjU0HGlJCvryvsVs4Xlc7/sEJM7vLJgvg==",
   "_location": "/cordova-plugin-splashscreen",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "cordova-plugin-splashscreen@6.0.1",
+    "raw": "cordova-plugin-splashscreen@6.0.2",
     "name": "cordova-plugin-splashscreen",
     "escapedName": "cordova-plugin-splashscreen",
-    "rawSpec": "6.0.1",
+    "rawSpec": "6.0.2",
     "saveSpec": null,
-    "fetchSpec": "6.0.1"
+    "fetchSpec": "6.0.2"
   },
   "_requiredBy": [
     "#DEV:/"
   ],
-  "_resolved": "https://registry.npmmirror.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-6.0.1.tgz",
-  "_spec": "6.0.1",
-  "_where": "D:\\KEI\\KEI APP",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-6.0.2.tgz",
+  "_spec": "6.0.2",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Apache Software Foundation"
   },
@@ -50,6 +50,10 @@
     "cordovaDependencies": {
       "2.0.0": {
         "cordova-android": ">=3.6.0"
+      },
+      "6.0.2": {
+        "cordova-android": ">=3.6.0 <11.0.0",
+        "cordova-windows": ">=4.4.0"
       },
       "7.0.0": {
         "cordova": ">100"
@@ -80,5 +84,5 @@
     "test": "npm run lint"
   },
   "types": "./types/index.d.ts",
-  "version": "6.0.1"
+  "version": "6.0.2"
 }

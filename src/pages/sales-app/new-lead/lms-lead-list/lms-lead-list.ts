@@ -25,34 +25,28 @@ export class LmsLeadListPage {
     allCount:any={}
     drid:any = 9
     date_from:any
-  date_to:any
-  date_id:any
+    date_to:any
+    date_id:any
     networkType:any=[]
 
     presentPopover(myEvent)
     {
-      let popover = this.popoverCtrl.create(ExpensePopoverPage,{'from':'lead_list'});
-
-      popover.present({
-        ev: myEvent
-      }); 
+      let popover = this.popoverCtrl.create(ExpensePopoverPage,{'from':'lead_list', 'status':this.filter.status,'Tab':this.filter.type_id});
 
       popover.onDidDismiss(data => {
         console.log(data)
-        if(data != null){
-            this.date_from = data.date_from
-            this.date_to = data.date_to
+        if(data){
+          this.date_from = data.date_from
+          this.date_to = data.date_to
+          console.log(this.date_to);
+          console.log(this.date_from);
+          this.get_assign_dr(data.Tab)
         }
-        this.date_from = this.date_from
-        this.date_to=this.date_to
-      //   this.date_id=data.team_id
-        console.log(this.date_to);
-        console.log(this.date_from);
-        this.get_assign_dr(9)
-
-
 
       })
+      popover.present({
+        ev: myEvent
+      });
 
     }
     getNetworkType(){
@@ -71,17 +65,13 @@ export class LmsLeadListPage {
         this.filter.type_id = type_id;
         this.filter.date_from = this.date_from;
         this.filter.date_to = this.date_to;
-
-        // this.db.show_loading();
-
+          this.db.show_loading();
         this.db.addData({"search":this.filter},"Lead/getLeadList")
         .then(resp=>{
 
             console.log(resp);
-        // this.db.dismiss();
-
+           this.db.dismiss();
             this.dr_list = resp['dr_list'];
-
             this.count = resp['count'];
             console.log(this.count)
             this.allCount = resp['Allcount'];

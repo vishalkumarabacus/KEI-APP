@@ -1,42 +1,40 @@
 {
-  "_args": [
-    [
-      "cordova-plugin-gpsmockchecker@1.0.5",
-      "D:\\KEI\\KEI APP"
-    ]
-  ],
-  "_from": "cordova-plugin-gpsmockchecker@1.0.5",
+  "_from": "cordova-plugin-gpsmockchecker",
   "_id": "cordova-plugin-gpsmockchecker@1.0.5",
   "_inBundle": false,
   "_integrity": "sha512-d9GdMsras6kfUpgmEspL0/zcdEW7W9rXHG0wFfrui7FEyLwt9ha7KTINoQr63DV1I1Kr+cOUHTWjLivTupKu/A==",
   "_location": "/cordova-plugin-gpsmockchecker",
   "_phantomChildren": {},
   "_requested": {
-    "type": "version",
+    "type": "tag",
     "registry": true,
-    "raw": "cordova-plugin-gpsmockchecker@1.0.5",
+    "raw": "cordova-plugin-gpsmockchecker",
     "name": "cordova-plugin-gpsmockchecker",
     "escapedName": "cordova-plugin-gpsmockchecker",
-    "rawSpec": "1.0.5",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "1.0.5"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
-    "/"
+    "#DEV:/",
+    "#USER"
   ],
-  "_resolved": "https://registry.npmmirror.com/cordova-plugin-gpsmockchecker/-/cordova-plugin-gpsmockchecker-1.0.5.tgz",
-  "_spec": "1.0.5",
-  "_where": "D:\\KEI\\KEI APP",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-gpsmockchecker/-/cordova-plugin-gpsmockchecker-1.0.5.tgz",
+  "_shasum": "9fa4a8e39a5745741edc427b68fed8da63c1a72f",
+  "_spec": "cordova-plugin-gpsmockchecker",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Sunflower Energias SL"
   },
   "bugs": {
     "url": "https://github.com/sunflowerenergias/cordova-plugin-gpsmockchecker/issues"
   },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova-plugin-gpsmockchecker",
     "platforms": []
   },
+  "deprecated": false,
   "description": "This is a cordova plugin to avoid mock locations.",
   "homepage": "https://github.com/sunflowerenergias/cordova-plugin-gpsmockchecker#readme",
   "keywords": [

@@ -2,7 +2,7 @@
   "_args": [
     [
       "uk.co.workingedge.phonegap.plugin.launchnavigator@5.0.6",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "uk.co.workingedge.phonegap.plugin.launchnavigator@5.0.6",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/uk.co.workingedge.phonegap.plugin.launchnavigator/-/uk.co.workingedge.phonegap.plugin.launchnavigator-5.0.6.tgz",
   "_spec": "5.0.6",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Dave Alden"
   },

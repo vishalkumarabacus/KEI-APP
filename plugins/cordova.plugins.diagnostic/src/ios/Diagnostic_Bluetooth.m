@@ -100,6 +100,17 @@ static NSString*const LOG_TAG = @"Diagnostic_Bluetooth[native]";
 
 }
 
+- (void) getAuthorizationStatus: (CDVInvokedUrlCommand*)command {
+    [self.commandDelegate runInBackground:^{
+        @try {
+            NSString* authState = [self getAuthorizationStatus];
+            [diagnostic sendPluginResultString:authState :command];
+        }@catch (NSException *exception) {
+            [diagnostic handlePluginException:exception :command];
+        }
+    }];
+}
+
 /********************************/
 #pragma mark - Internals
 /********************************/
@@ -112,47 +123,27 @@ static NSString*const LOG_TAG = @"Diagnostic_Bluetooth[native]";
     switch(self.bluetoothManager.state)
     {
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
         case CBManagerStateResetting:
-#else
-        case CBCentralManagerStateResetting:
-#endif
             state = @"resetting";
             description =@"The connection with the system service was momentarily lost, update imminent.";
             break;
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
         case CBManagerStateUnsupported:
-#else
-        case CBCentralManagerStateUnsupported:
-#endif
             state = @"unsupported";
             description = @"The platform doesn't support Bluetooth Low Energy.";
             break;
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
         case CBManagerStateUnauthorized:
-#else
-        case CBCentralManagerStateUnauthorized:
-#endif
             state = @"unauthorized";
             description = @"The app is not authorized to use Bluetooth Low Energy.";
             break;
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
         case CBManagerStatePoweredOff:
-#else
-        case CBCentralManagerStatePoweredOff:
-#endif
             state = @"powered_off";
             description = @"Bluetooth is currently powered off.";
             break;
 
-#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
         case CBManagerStatePoweredOn:
-#else
-        case CBCentralManagerStatePoweredOn:
-#endif
             state = @"powered_on";
             description = @"Bluetooth is currently powered on and available to use.";
             break;
@@ -175,6 +166,40 @@ static NSString*const LOG_TAG = @"Diagnostic_Bluetooth[native]";
                                  options:@{CBCentralManagerOptionShowPowerAlertKey: @(NO)}];
         [self centralManagerDidUpdateState:self.bluetoothManager]; // Send initial state
     }
+}
+
+// https://stackoverflow.com/q/57238647/777265
+- (NSString*) getAuthorizationStatus {
+    NSString* authState;
+    if (@available(iOS 13.0, *)){
+        CBManagerAuthorization authorization;
+        if(@available(iOS 13.1, *)){
+            authorization = CBCentralManager.authorization;
+        }else{
+            // iOS 13.0 requires BT manager to be initialized in order to check authorization which results in BT permissions dialog if not already authorized
+            [self ensureBluetoothManager];
+            authorization = [self.bluetoothManager authorization];
+        }
+        
+        switch(authorization){
+            case CBManagerAuthorizationAllowedAlways:
+                authState = AUTHORIZATION_GRANTED;
+                break;
+            case CBManagerAuthorizationDenied:
+                authState = AUTHORIZATION_DENIED;
+                break;
+            case CBManagerAuthorizationRestricted:
+                authState = AUTHORIZATION_DENIED;
+                break;
+            case CBManagerAuthorizationNotDetermined:
+                authState = AUTHORIZATION_NOT_DETERMINED;
+                break;
+        }
+    }else{
+        // Device is running iOS <13.0 so doesn't require Bluetooth permission at run-time
+        authState = AUTHORIZATION_GRANTED;
+    }
+    return authState;
 }
 
 /********************************/

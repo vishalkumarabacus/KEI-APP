@@ -24,13 +24,13 @@ import { Diagnostic } from '@ionic-native/diagnostic';
   templateUrl: 'add-checkin.html',
 })
 export class AddCheckinPage {
-  
+
   @ViewChild('selectComponent') selectComponent: IonicSelectableComponent;
-  
+
   @ViewChild(Navbar) navBar: Navbar;
-  
+
   userPincode:any
-  userPincodeCheck = true ; 
+  userPincodeCheck = true ;
   add_exist:any=false
   data:any = {};
   distribution_data:any=[];
@@ -44,74 +44,74 @@ export class AddCheckinPage {
   load_data:any = "0";
   limit=0;
   flag:any='';
-  
+
   isCheckinEnabled:boolean = false;
   customer_type:any = {};
   request:any
-  constructor(public navCtrl: NavController, 
+  constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public loadingCtrl: LoadingController, 
+    public loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
     public service: MyserviceProvider,
-    public toastCtrl: ToastController, 
+    public toastCtrl: ToastController,
     public formBuilder: FormBuilder,
     public diagnostic : Diagnostic,
     // public map : Map,
-    
-    public platform: Platform, 
+
+    public platform: Platform,
     public locationAccuracy: LocationAccuracy,
-    
+
     // private  checkinListPage:CheckinListPage,
     public geolocation: Geolocation,public storage:Storage,
     // public cache : CacheService
     ) {
-      
-      
+
+
       // var cache = new Cache;
-      
+
       // cache.delete()
       // this.cache.clearAll();
       // this.cache.enableCache(false)
-      
+
       this.getFilterData()
       // this.checkUserLocation()
       this.data = {};
-      
+
       if(this.navParams.get('data'))
       {
         this.distribution_data = this.navParams.get('data');
         console.log(this.distribution_data);
-        
+
         this.data.network = this.distribution_data.type;
         console.log(this.data.network);
-        
+
         this.data.dr_id = this.distribution_data.id;
         console.log(this.data.dr_id);
-        
+
         this.data.type_name = {'company_name':this.distribution_data.company_name};
         console.log(this.data.type_name);
-        
+
         this.type_name.company_name = this.distribution_data.company_name;
         this.type_name.name = this.distribution_data.name;
         this.type_name.mobile = this.distribution_data.mobile;
       }
-      
+
       this.AddCheckinForm = this.formBuilder.group({
         name: ['', Validators.compose([Validators.required, Validators.minLength(3)])],
         mobile: ['',Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])]
       })
-      
+
     }
     userType:any;
     ionViewDidLoad() {
       this.getNetworkType()
       console.log('ionViewDidLoad AddCheckinPage');
-      
+
       // this.navBar.backButtonClick = (e:UIEvent)=>{
       //   // todo something
       //   this.navCtrl.push(CheckinListPage);
       // }
-      
+
       this.storage.get('user_type').then((userType) => {
         console.log(userType);
         if(userType=='OFFICE')
@@ -120,22 +120,22 @@ export class AddCheckinPage {
           this.get_network_list(this.data.network,'')
           this.userType  = userType
         }
-        
+
       });
-      
-      
+
+
     }
     ionViewDidLeave(){
-      
+
       console.log("destroyed attendence component")
-      
+
       this.request.unsubscribe(); // To cancel the get request.
     }
-    
+
     loading:any;
     networkType:any=[]
     otherType:any=[]
-    
+
     // othertype=[{module_name:'Other',type:'11'}]
     getNetworkType(){
       this.request=  this.service.addData3({'type':'checkin'}, "Dashboard/allNetworkModule").then((result => {
@@ -144,9 +144,9 @@ export class AddCheckinPage {
         // this.networkType.push(this.othertype[0])
         console.log(this.networkType);
         // console.log(this.othertype);
-        
-        
-        
+
+
+
       }))
     }
     getotherType(data){
@@ -156,20 +156,20 @@ export class AddCheckinPage {
         // this.networkType.push(this.othertype[0])
         console.log(this.networkType);
         this.open();
-        
+
         // console.log(this.othertype);
-        
-        
-        
+
+
+
       }))
     }
     category_list:any=[]
     getFilterData()
     {
-      
-      
+
+
       this.category_list = [{name:'Scheduled'},{name:'Unscheduled'}];
-      
+
       this.category_list.map((x:any)=>{
         x.checked = false;
       });
@@ -177,72 +177,72 @@ export class AddCheckinPage {
     typeboolean:any
     test(data){
       console.log(data)
-      
+
       if(data!='3'&&data!='11'){
         this.string=undefined
         this.get_network_list(data,'')
-        
+
         this.typeboolean =false
-        
+
       }
       if(data!='3'&&data=='11'){
         this.string=undefined
         this.getotherType(data)
-        
+
         this.typeboolean =false
-        
+
       }
       console.log(this.typeboolean)
-      
+
       if(data=='3' &&data!='11'){
-        
-        
+
+
         console.log(this.typeboolean)
-        
+
         this.typeboolean =true
         // this.get_network_list(data)
-        
+
         console.log(data)
         console.log(this.typeboolean)
-        
+
       }
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     presentToast() {
       let toast = this.toastCtrl.create({
         message: 'Visit Started Successfully',
         duration: 3000,
         position: 'bottom'
       });
-      
-      
-      
+
+
+
       toast.present();
     }
-    
-    
+
+
     distributor_network_list:any = [];
     string:any={}
     search:any={}
-    
+
     test66(event,network){
       console.log(event.text);
       this.search=event.text
       console.log(this.search);
       this.get_network_list(network,this.search)
-      
+
     }
     get_network_list(network_type,search)
     {
-      
-      
+
+
       this.data.type_name = {};
       // this.load = "0";
-      
+
       console.log(network_type);
       if(network_type != 'Other')
       {
@@ -251,6 +251,15 @@ export class AddCheckinPage {
           console.log(result);
           this.distributor_network_list = result;
           for(let i = 0 ;i<this.distributor_network_list.length;i++){
+            if(this.distributor_network_list[i].company_name==null){
+              this.distributor_network_list[i].company_name=''
+          }
+          if(this.distributor_network_list[i].name==null){
+              this.distributor_network_list[i].name=''
+          }
+          if(this.distributor_network_list[i].mobile==null){
+              this.distributor_network_list[i].mobile=''
+          }
             if(this.distributor_network_list[i].name!=""||this.distributor_network_list[i].mobile!=""){
               this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name+' '+'('+this.distributor_network_list[i].name+'  '+this.distributor_network_list[i].mobile+')'
             }
@@ -260,19 +269,19 @@ export class AddCheckinPage {
           }
           this.filter=[]
           // this.load = "1";
-          
+
           // this.service.dismiss();
           this.open();
         });
       }
-      
-      
-      
+
+
+
     }
     loadData(infiniteScroll,network_type)
     {
       console.log('loading');
-      
+
       this.request= this.service.addData({'limit':this.distributor_network_list.length,'filter':this.string, 'type':network_type},'Distributor/get_type_list').then( result=>
         {
           console.log(result);
@@ -294,23 +303,23 @@ export class AddCheckinPage {
       {
         this.selectComponent.open();
       }
-      
-      
-      
-      
-      
-      MobileNumber(event: any) 
+
+
+
+
+
+      MobileNumber(event: any)
       {
         const pattern = /[0-9\+\-\ ]/;
         let inputChar = String.fromCharCode(event.charCode);
-        if (event.keyCode != 8 && !pattern.test(inputChar)) 
+        if (event.keyCode != 8 && !pattern.test(inputChar))
         {event.preventDefault(); }
       }
-      
-      
+
+
       load:any = "0";
       type_name:any={};
-      
+
       other_name:any = '';
       dr_name:any
       other(name,network,type_name)
@@ -319,8 +328,8 @@ export class AddCheckinPage {
         console.log(type_name);
         console.log(name);
         console.log(network);
-        
-        
+
+
         this.type_name = type_name;
         this.load = "1";
         this.dr_name=name
@@ -330,12 +339,12 @@ export class AddCheckinPage {
         {
           this.navCtrl.push(AddDealerPage,{'type': network});
         }
-        
+
         if(name == 'Add New Direct Dealer')
         {
           this.navCtrl.push(AddDealerPage,{'type': network});
         }
-        
+
         if(name == 'Prospective Retailer')
         {
           this.addNewDealer = true;
@@ -401,16 +410,16 @@ export class AddCheckinPage {
           this.addNewDealer = true;
         }
       }
-      
+
       check_num(mobile)
       {
         this.checkExist=false
         console.log(mobile);
-        
+
         if(mobile && mobile.length == 10)
         {
           console.log(mobile.length);
-          
+
           console.log(mobile);
           this.check_mobile_existence(mobile)
         }
@@ -418,23 +427,23 @@ export class AddCheckinPage {
       checkExist=false
       error:any
       check_mobile_existence(mobile)
-      {   
+      {
         // this.data.mobile=mobile
-        
+
         this.service.show_loading()
         this.request= this.service.addData({'mobile':mobile},'Enquiry/check_mobile_existenceLead').then((result)=>{
           this.error=result['data']
           console.log(this.error);
-          
+
           this.service.dismiss()
-          
+
           if(result['executive']!=0)
           {
             let alert=this.alertCtrl.create({
               title:'Exists !!',
               subTitle: 'Mobile No Is Already Registered With An Executive !!',
               cssClass:'action-close',
-              
+
               buttons: [
                 {
                   text:'Okay',
@@ -451,25 +460,25 @@ export class AddCheckinPage {
             if(result['check_mobile']==1)
             {
               this.checkExist=true
-              
+
               // this.service.presentToast('Dealer With Same Mobile No. Already Exists')
-              
+
             }
             else
             {
               this.data.DealerExist=false;
-              
+
               this.checkExist=false
             }
-            
+
           },err=>
           {
             this.service.dismiss()
-            
+
           })
-          
-          
-          
+
+
+
         }
         check_mobile(type){
           if(this.checkExist==true &&(this.data.network==this.error.type))
@@ -489,7 +498,7 @@ export class AddCheckinPage {
                     this.add_exist=true
                     console.log('Cancel clicked');
                     this.presentalert(type)
-                    
+
                   }
                 },
                 {
@@ -500,26 +509,26 @@ export class AddCheckinPage {
                 }
               ]
             })
-            
+
             alert.present();
-          }  
+          }
         }
-        
-        
-        
+
+
+
         userCurrentLocation:any
         // checkUserLocation()
         // {
         //   this.platform.ready().then(() => {
-        
+
         //     var whiteList = ['com.package.example','com.package.example2'];
-        
+
         //     (<any>window).gpsmockchecker.check(whiteList, (result) => {
-        
+
         //       console.log(result);
-        
+
         //       if(result.isMock){
-        
+
         //         console.log("DANGER!! Mock is in use");
         //         console.log("Apps that use gps mock: ");
         //         let alert = this.alertCtrl.create({
@@ -528,9 +537,9 @@ export class AddCheckinPage {
         //           buttons: [
         //             {
         //               text: 'Ok',
-        //               handler: () => 
+        //               handler: () =>
         //               {
-        
+
         //               }
         //             }
         //           ]
@@ -544,83 +553,83 @@ export class AddCheckinPage {
         //           () => {
         //             let options = {maximumAge: 10000, timeout: 15000, enableHighAccuracy: true};
         //             this.geolocation.getCurrentPosition(options).then((resp) => {
-        
+
         //               this.data.lat = resp.coords.latitude
         //               this.data.lng = resp.coords.longitude
-        
+
         //               console.log(this.data);
-        
+
         //               this.service.addData({'data':this.data},'Checkin/checkPincode').then((result)=>{
         //                 console.log(result);
         //                 this.userPincode = result[0]
         //                 this.userCurrentLocation = result[1]
         //                 console.log('check console here');
-        
+
         //                 console.log(this.userPincode);
         //                 console.log(this.userCurrentLocation);
-        
+
         //               },err=>
         //               {
         //                 this.service.dismiss();
         //               });
-        
+
         //             }).catch((error) => {
         //               console.log('Error getting location', error);
         //               console.log('Error requesting location permissions', error);
-        //               this.service.dismiss();          
+        //               this.service.dismiss();
         //               let toast = this.toastCtrl.create({
         //                 message: 'Allow Location Permissions',
         //                 duration: 3000,
         //                 position: 'bottom'
         //               });
-        
-        
-        
+
+
+
         //               toast.present();
         //             });
         //           },
         //           error => {
         //             console.log('Error requesting location permissions', error);
-        //             this.service.dismiss();          
+        //             this.service.dismiss();
         //             let toast = this.toastCtrl.create({
         //               message: 'Allow Location Permissions',
         //               duration: 3000,
         //               position: 'bottom'
         //             });
-        
-        
-        
+
+
+
         //             toast.present();
         //           });
         //         }
-        
-        
-        
+
+
+
         //       }, (error) => console.log(error));
-        
+
         //     });
-        
+
         //   }
-        
+
         pending_checkin()
         {
           this.service.pending_data().then((result)=>{
             console.log(result);
             this.checkin_data = result['checkin_data'];
-            console.log(this.checkin_data); 
-            // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});      
+            console.log(this.checkin_data);
+            // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
           })
         }
         presentalert(type) {
-          
+
           this.platform.ready().then(() => {
-            
+
             var whiteList = ['com.package.example','com.package.example2'];
-            
+
             (<any>window).gpsmockchecker.check(whiteList, (result) => {
-              
+
               console.log(result);
-              
+
               if(result.isMock){
                 console.log("DANGER!! Mock is in use");
                 console.log("Apps that use gps mock: ");
@@ -630,21 +639,21 @@ export class AddCheckinPage {
                   buttons: [
                     {
                       text: 'Ok',
-                      handler: () => 
+                      handler: () =>
                       {
-                        
+
                       }
                     }
                   ]
                 });
-                
+
                 alert.present();
                 console.log(result.mocks);
               }
               else
               {
                 this.checkLocationActive(type);
-                
+
                 // let alert = this.alertCtrl.create({
                 //   title: 'Start Visit',
                 //   message: 'Do you want to start visit?',
@@ -654,11 +663,11 @@ export class AddCheckinPage {
                 //       text: 'Yes',
                 //       handler: () => {
                 //         console.log('Yes clicked');
-                
-                
-                
-                
-                
+
+
+
+
+
                 //       }
                 //     },
                 //     {
@@ -668,74 +677,74 @@ export class AddCheckinPage {
                 //         console.log('Cancel clicked');
                 //       }
                 //     }
-                
+
                 //   ]
                 // });
                 // alert.present();
               }
-              
-              
+
+
             }, (error) => console.log(error));
-            
+
           });
-          
-          
+
+
         }
         checkin(type)
         {
-          
+
           console.log(type);
-          
+
           this.service.show_loading()
           this.isCheckinEnabled = true;
-          
+
           var options = {
             maximumAge:0,
             enableHighAccuracy: true,
             timeout:10000
           };
-          
+
           // this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-          
+
           //   if (canRequest) {
-          
+
           //     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then((resp)=>{
           //       console.log("Request Successful");
-          
+
           //       this.geolocation.getCurrentPosition(options).then((resp) => {
           //         console.log(resp);
-          
+
           //       })
-          
+
           //     },error=>{
           //          console.log('Error requesting location permissions', error)
           //     })
           //   }
-          
+
           // });
 
           if(this.isCheckinEnabled==true){
             console.log("in Function");
-            
+
             this.geolocation.getCurrentPosition(options).then((resp) => {
               this.data.lat = resp.coords.latitude
               this.data.lng = resp.coords.longitude
-              
+
               if(type=='other'){
-                
+
                 this.service.addData({'data':this.data},'Checkin/start_other_visit').then((result)=>{
                   console.log(result);
                   this.isCheckinEnabled = false;
 
                   if(result == 'success')
                   {
-                    
+
                     this.navCtrl.remove(2,1,{animate:false});
                     this.navCtrl.pop({animate:false});
                     this.service.dismiss();
                     this.pending_checkin();
                     if(this.checkin_data != null){
-                      this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});  
+                      this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
                       // this.navCtrl.pop();
                     }
                     this.presentToast();
@@ -752,7 +761,7 @@ export class AddCheckinPage {
                   console.log(this.data);
                   this.data.dr_id = this.data.type_name.id;
                   this.data.dr_name = this.data.type_name.name;
-                  
+
                   this.service.addData({'data':this.data},'Checkin/start_visit_new').then((result)=>{
                     console.log(result);
                     console.warn("static result console");
@@ -764,64 +773,64 @@ export class AddCheckinPage {
                       this.navCtrl.pop({animate:false});
                       this.pending_checkin();
                       if(this.checkin_data != null){
-                        this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});  
+                        this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
                       }
                       this.service.dismiss();
                       this.presentToast();
-                      
-                      
-                      
-                      
+
+
+
+
                     }
                     else
                     {
                       this.service.dismiss();
                     }
-                    
-                    
+
+
                   });
                 }
-                
+
                 if(this.distribution_data != '')
                 {
-                  
+
                   this.service.addData({'data':this.data},'Checkin/start_visit_new').then((result)=>{
                     console.log(result);
                     if(result == 'success')
                     {
-                      
+
                       this.navCtrl.pop({animate:false});
                       this.service.dismiss();
                       this.presentToast();
                       this.navCtrl.push(CheckinListPage);
-                      
+
                     }
                     else
                     {
                       this.service.dismiss();
                     }
                   });
-                  
+
                 }
-                
-                
+
+
               }
               else if(type=='new'){
-                
+
                 this.data.type = 'Retailer';
-                
+
                 this.service.addData({'data':this.data,'add_exist':this.add_exist},'Checkin/start_dealer_visit').then((result)=>{
                   console.log(result);
                   this.isCheckinEnabled = false;
 
                   if(result == 'success')
                   {
-                    
+
                     this.navCtrl.remove(2,1,{animate:false});
                     this.navCtrl.pop({animate:false});
                     this.pending_checkin();
                     if(this.checkin_data != null){
-                      this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});  
+                      this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
                       // this.navCtrl.pop();
                     }
                     this.service.dismiss();
@@ -832,18 +841,18 @@ export class AddCheckinPage {
                   this.service.dismiss();
                 });
               }
-              
+
             }).catch((error) => {
-              
+
               console.log(error);
               this.service.dismiss();
 
-              
+
               let alert = this.alertCtrl.create({
                 title: '',
                 message: 'Could not get Location !!',
                 buttons: [
-                  
+
                   {
                     text: 'OK',
                     handler: () => {
@@ -852,23 +861,23 @@ export class AddCheckinPage {
                 ]
               })
               alert.present();
-              
+
             });
 
           }
         }
-        
+
         checkLocationActive(targetAction){
-          
+
           console.log("Check location");
-          
-          
+
+
           this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
             () => {
-              
+
               this.diagnostic.requestLocationAuthorization().then((status)=>{
                 console.log(status);
-                
+
                 switch (status) {
                   case this.diagnostic.permissionStatus.NOT_REQUESTED:
                   console.log("Permission not requested");
@@ -889,7 +898,7 @@ export class AddCheckinPage {
                   console.log("Permission granted only when in use");
                   this.checkin(targetAction);
                   break;
-                  
+
                   default:
                   console.log("DEFAULT CASE");
                   console.log(status);
@@ -897,20 +906,20 @@ export class AddCheckinPage {
                 }
               },error=>{
                 console.log("authorision Error");
-                
+
                 this.diagnostic.locationAuthorizationMode.ALWAYS
-              }) 
-              
+              })
+
             },
             error => {
               console.log("Accuracy Error");
-              
+
               this.service.dismiss();
               let alert = this.alertCtrl.create({
                 title: '',
                 message: 'Please Allow Location !!',
                 buttons: [
-                  
+
                   {
                     text: 'OK',
                     handler: () => {
@@ -921,17 +930,17 @@ export class AddCheckinPage {
               alert.present();
               this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY
             });
-            
+
           }
-          
+
           throwLocationError() {
-            
+
             console.log("location error");
-            
+
             let alert=this.alertCtrl.create({
               title:'To access this app please allow location permission from KEI App',
               cssClass:'action-close',
-              
+
               buttons: [{
                 text: 'Cancel',
                 role: 'cancel',
@@ -948,9 +957,8 @@ export class AddCheckinPage {
               }]
             });
             alert.present();
-            
+
           }
-          
-          
+
+
         }
-        

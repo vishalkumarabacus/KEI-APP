@@ -2,7 +2,7 @@
   "_args": [
     [
       "es6-promise-plugin@4.2.2",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "es6-promise-plugin@4.2.2",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/es6-promise-plugin/-/es6-promise-plugin-4.2.2.tgz",
   "_spec": "4.2.2",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": "",
   "bugs": {
     "url": "https://github.com/vstirbu/PromisesPlugin/issues"
