@@ -2,7 +2,7 @@
   "_args": [
     [
       "phonegap-plugin-push@2.3.0",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_development": true,
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/phonegap-plugin-push/-/phonegap-plugin-push-2.3.0.tgz",
   "_spec": "2.3.0",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Adobe PhoneGap Team"
   },

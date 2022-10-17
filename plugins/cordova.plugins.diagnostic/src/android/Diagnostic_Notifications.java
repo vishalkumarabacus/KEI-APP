@@ -22,7 +22,12 @@ package cordova.plugins;
  * Imports
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
@@ -32,7 +37,7 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 /**
  * Diagnostic plugin implementation for Android
@@ -102,11 +107,14 @@ public class Diagnostic_Notifications extends CordovaPlugin{
      * @return                  True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        currentContext = callbackContext;
+        Diagnostic.instance.currentContext = currentContext = callbackContext;
 
         try {
             if(action.equals("isRemoteNotificationsEnabled")) {
                 callbackContext.success(isRemoteNotificationsEnabled() ? 1 : 0);
+            } else if(action.equals("switchToNotificationSettings")) {
+                switchToNotificationSettings();
+                callbackContext.success();
             } else {
                 diagnostic.handleError("Invalid action");
                 return false;
@@ -125,6 +133,21 @@ public class Diagnostic_Notifications extends CordovaPlugin{
         return result;
     }
 
+    public void switchToNotificationSettings() {
+        Context context = this.cordova.getActivity().getApplicationContext();
+        Intent settingsIntent = new Intent();
+        String packageName = context.getPackageName();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            diagnostic.logDebug("Switch to notification Settings");
+            settingsIntent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            settingsIntent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName);
+        } else {
+            settingsIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            settingsIntent.setData(Uri.parse("package:" + packageName));
+            diagnostic.logDebug("Switch to notification Settings: Only possible on android O or above. Falling back to application details");
+        }
+        cordova.getActivity().startActivity(settingsIntent);
+    }
 
     /************
      * Internals

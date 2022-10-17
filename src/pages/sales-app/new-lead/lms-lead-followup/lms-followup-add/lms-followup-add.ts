@@ -14,6 +14,7 @@ export class LmsFollowupAddPage {
 
   @ViewChild(Navbar) navBar: Navbar;
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider) {
   }
 
@@ -21,6 +22,8 @@ export class LmsFollowupAddPage {
   today_date:any='';
   followup_edit:any={}
   page_from:any;
+  disableSelect:boolean = false;
+
 
   ionViewWillEnter() {
 
@@ -31,17 +34,22 @@ export class LmsFollowupAddPage {
       }
 
     if(this.navParams.get('data')){
-      console.log(this.navParams.get('data')[0])
-      this.followup_edit=this.navParams.get('data')[0]
+      console.log(this.navParams.get('data'))
+      this.followup_edit=this.navParams.get('data')
+      this.form.followup_type = this.followup_edit.next_follow_type
       this.form.followup_date = this.followup_edit.next_follow_date
       this.form.description = this.followup_edit.description
-      this.form.lead_type = this.navParams.get('type')
-      this.form.followup_type = this.followup_edit.next_follow_type
+      this.form.lead_type = this.navParams.get('update_type')
       this.form.dr_id={id:this.followup_edit.dr_id,company_name:this.followup_edit.dr_name};
-      this.get_assign_dr(this.navParams.get('type'));
+       if(this.followup_edit.dr_id && this.followup_edit.dr_name){
+        this.disableSelect=true;
+      }
+      this.get_assign_dr(this.navParams.get('update_type'));
       console.log(this.followup_edit);
+      this.today_date = new Date().toISOString().slice(0,10);
+      console.log(this.today_date);
     }
-    
+
     else
     {
       this.type=this.navParams.get('type');
@@ -96,6 +104,7 @@ export class LmsFollowupAddPage {
 
     this.form.drid = this.form.dr_id.id;
     this.form.companyname = this.form.dr_id.company_name;
+    this.form.followup_id=this.navParams.get('update_id')
 
     this.db.show_loading()
     this.db.addData({"data":this.form,},"Lead/addFollowup")
@@ -104,9 +113,14 @@ export class LmsFollowupAddPage {
       console.log(resp);
       this.db.dismiss()
 
-      if(resp['status'] == 'Success')
+      if(resp['status'] == 'Success' && !this.form.followup_id)
       {
         this.db.presentToast("Successfully Added");
+        this.navCtrl.pop();
+      }
+      if(resp['status'] == 'Success' && this.form.followup_id)
+      {
+        this.db.presentToast(" Update Successfully");
         this.navCtrl.pop();
       }
     },

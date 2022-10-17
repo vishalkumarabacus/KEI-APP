@@ -25,7 +25,7 @@ package cordova.plugins;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
-import android.support.v4.os.EnvironmentCompat;
+import androidx.core.os.EnvironmentCompat;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
@@ -111,7 +111,7 @@ public class Diagnostic_External_Storage extends CordovaPlugin{
      * @return                  True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        currentContext = callbackContext;
+        Diagnostic.instance.currentContext = currentContext = callbackContext;
 
         try {
             if(action.equals("getExternalSdCardDetails")) {
@@ -137,7 +137,7 @@ public class Diagnostic_External_Storage extends CordovaPlugin{
 
     protected void getExternalSdCardDetails() throws Exception{
         String permission = diagnostic.permissionsMap.get(externalStoragePermission);
-        if (diagnostic.hasPermission(permission)) {
+        if (diagnostic.hasRuntimePermission(permission)) {
             _getExternalSdCardDetails();
         } else {
             diagnostic.requestRuntimePermission(permission, Diagnostic.GET_EXTERNAL_SD_CARD_DETAILS_PERMISSION_REQUEST);

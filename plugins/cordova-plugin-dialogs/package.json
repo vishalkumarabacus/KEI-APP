@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-dialogs@2.0.2",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "cordova-plugin-dialogs@2.0.2",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-dialogs/-/cordova-plugin-dialogs-2.0.2.tgz",
   "_spec": "2.0.2",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Apache Software Foundation"
   },

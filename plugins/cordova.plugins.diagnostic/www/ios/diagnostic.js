@@ -25,7 +25,10 @@ var Diagnostic = (function(){
         "DENIED_ALWAYS": "denied_always", // User denied access to this permission
         "RESTRICTED": "restricted", // Permission is unavailable and user cannot enable it.  For example, when parental controls are in effect for the current user.
         "GRANTED": "authorized", //  User granted access to this permission
-        "GRANTED_WHEN_IN_USE": "authorized_when_in_use" //  User granted access use location permission only when app is in use
+        "GRANTED_WHEN_IN_USE": "authorized_when_in_use", //  User granted access use location permission only when app is in use
+        "EPHEMERAL": "ephemeral", // The app is authorized to schedule or receive notifications for a limited amount of time.
+        "PROVISIONAL": "provisional", // The application is provisionally authorized to post non-interruptive user notifications.
+        "LIMITED": "limited" // The app has limited access to the Photo Library
     };
 
     Diagnostic.cpuArchitecture = {
@@ -79,7 +82,6 @@ var Diagnostic = (function(){
      * @param {Function} successCallback - The callback which will be called when switch to settings is successful.
      * @param {Function} errorCallback - The callback which will be called when switch to settings encounters an error.
      * This callback function is passed a single string parameter containing the error message.
-     * This works only on iOS 8+. iOS 7 and below will invoke the errorCallback.
      */
     Diagnostic.switchToSettings = function(successCallback, errorCallback) {
         return cordova.exec(successCallback,
@@ -133,6 +135,61 @@ var Diagnostic = (function(){
         Diagnostic.getBackgroundRefreshStatus(function(status){
             successCallback(status === Diagnostic.permissionStatus.GRANTED);
         }, errorCallback);
+    };
+
+    /**
+     * Returns the current battery level of the device as a percentage.
+     *
+     * @param {Function} successCallback -  The callback which will be called when the operation is successful.
+     * This callback function is passed a single integer parameter which the current battery level percentage.
+     * @param {Function} errorCallback -  The callback which will be called when the operation encounters an error.
+     *  This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.getCurrentBatteryLevel = function(successCallback, errorCallback){
+        return cordova.exec(successCallback,
+            errorCallback,
+            'Diagnostic',
+            'getCurrentBatteryLevel',
+            []);
+    };
+
+    /**
+     * Returns details of the OS of the device on which the app is currently running
+     *
+     * @param {Function} successCallback -  The callback which will be called when the operation is successful.
+     * This callback function is passed a single object parameter with the following fields:
+     * - {string} version - version string of the OS e.g. "11.0"
+     * - {integer} apiLevel - API level of the OS e.g. 30
+     * - {string} apiName - code name for API level e.g. "FROYO"
+     * @param {Function} errorCallback -  The callback which will be called when the operation encounters an error.
+     *  This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.getDeviceOSVersion = function(successCallback, errorCallback) {
+        return cordova.exec(successCallback,
+            errorCallback,
+            'Diagnostic',
+            'getDeviceOSVersion',
+            []);
+    };
+
+    /**
+     * Returns details of the SDK levels used to build the app.
+     *
+     * @param {Function} successCallback -  The callback which will be called when the operation is successful.
+     * This callback function is passed a single object parameter with the following fields:
+     * - {integer} targetApiLevel - API level of the target SDK (used to build the app)
+     * - {string} targetApiName - code name for API level of the target SDK e.g. "FROYO"
+     * - {integer} minApiLevel - API level of the minimum SDK (lowest on which the app can be installed)
+     * - {string} minApiName - code name for API level of the minimum SDK e.g. "FROYO"
+     * @param {Function} errorCallback -  The callback which will be called when the operation encounters an error.
+     *  This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.getBuildOSVersion = function(successCallback, errorCallback) {
+        return cordova.exec(successCallback,
+            errorCallback,
+            'Diagnostic',
+            'getBuildOSVersion',
+            []);
     };
 
     /************
@@ -214,6 +271,25 @@ var Diagnostic = (function(){
     };
 
     /**
+     * Returns the location accuracy authorization for the application.
+     *
+     * @param {Function} successCallback - The callback which will be called when operation is successful.
+     * This callback function is passed a single string parameter which indicates the location accuracy authorization as a constant in `cordova.plugins.diagnostic.locationAccuracyAuthorization`.
+     * Possible values are:
+     * `cordova.plugins.diagnostic.locationAccuracyAuthorization.FULL`
+     * `cordova.plugins.diagnostic.locationAccuracyAuthorization.REDUCED`
+     * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
+     * This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.getLocationAccuracyAuthorization = function(successCallback, errorCallback) {
+        if(cordova.plugins.diagnostic.location){
+            cordova.plugins.diagnostic.location.getLocationAccuracyAuthorization.apply(this, arguments);
+        }else{
+            throw "Diagnostic Location module is not installed";
+        }
+    };
+
+    /**
      * Requests location authorization for the application.
      * Authorization can be requested to use location either "when in use" (only in foreground) or "always" (foreground and background).
      * Should only be called if authorization status is NOT_REQUESTED. Calling it when in any other state will have no effect.
@@ -238,6 +314,31 @@ var Diagnostic = (function(){
     };
 
     /**
+     * Requests temporary access to full location accuracy for the application.
+     * By default on iOS 14+, when a user grants location permission, the app can only receive reduced accuracy locations.
+     * If your app requires full (high-accuracy GPS) locations (e.g. a SatNav app), you need to call this method.
+     * Should only be called if location authorization has been granted.
+     *
+     * @param {String} purpose - (required) corresponds to a key in the NSLocationTemporaryUsageDescriptionDictionary entry in your app's `*-Info.plist`
+     * which contains a message explaining the user why your app needs their exact location.
+     * This will be presented to the user via permission dialog in which they can either accept or reject the request.
+     * @param {Function} successCallback - (optional) Invoked in response to the user's choice in the permission dialog.
+     * It is passed a single string parameter which defines the resulting accuracy authorization as a constant in `cordova.plugins.diagnostic.locationAccuracyAuthorization`.
+     * Possible values are:
+     * `cordova.plugins.diagnostic.locationAccuracyAuthorization.FULL`
+     * `cordova.plugins.diagnostic.locationAccuracyAuthorization.REDUCED`
+     * @param {Function} errorCallback -  (optional) The callback which will be called when operation encounters an error.
+     * This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.requestTemporaryFullAccuracyAuthorization = function(purpose, successCallback, errorCallback) {
+        if(cordova.plugins.diagnostic.location){
+            cordova.plugins.diagnostic.location.requestTemporaryFullAccuracyAuthorization.apply(this, arguments);
+        }else{
+            throw "Diagnostic Location module is not installed";
+        }
+    };
+
+    /**
      * Registers a function to be called when a change in Location state occurs.
      * On iOS, this occurs when location authorization status is changed.
      * This can be triggered either by the user's response to a location permission authorization dialog,
@@ -251,6 +352,24 @@ var Diagnostic = (function(){
     Diagnostic.registerLocationStateChangeHandler = function(successCallback) {
         if(cordova.plugins.diagnostic.location){
             cordova.plugins.diagnostic.location.registerLocationStateChangeHandler.apply(this, arguments);
+        }else{
+            throw "Diagnostic Location module is not installed";
+        }
+    };
+
+    /**
+     * Registers a function to be called when a change in location accuracy authorization occurs.
+     * This occurs when location accuracy authorization is changed.
+     * This can be triggered either by the user's response to a location accuracy authorization dialog,
+     * or by the user changing the location accuracy authorization specifically for your app in Settings.
+     * Pass in a falsey value to de-register the currently registered function.
+     *
+     * @param {Function} successCallback -  The callback which will be called when the location accuracy authorization changes.
+     * This callback function is passed a single string parameter indicating the new location accuracy authorization as a constant in `cordova.plugins.diagnostic.locationAccuracyAuthorization`.
+     */
+    Diagnostic.registerLocationAccuracyAuthorizationChangeHandler = function(successCallback) {
+        if(cordova.plugins.diagnostic.location){
+            cordova.plugins.diagnostic.location.registerLocationAccuracyAuthorizationChangeHandler.apply(this, arguments);
         }else{
             throw "Diagnostic Location module is not installed";
         }
@@ -355,8 +474,14 @@ var Diagnostic = (function(){
      * This callback function is passed a single boolean parameter which is TRUE if access to Camera Roll is authorized.
      * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
+     * @param {Function} accessLevel - (optional) On iOS 14+, specifies the level of access to the photo library to query as a constant in cordova.plugins.diagnostic.photoLibraryAccessLevel`
+     * - Possible values are:
+     *      - ADD_ONLY - can add to but not read from Photo Library
+     *      - READ_WRITE - can both add to and read from Photo Library
+     * - Defaults to ADD_ONLY if not specified
+     * - Has no effect on iOS 13 or below
      */
-    Diagnostic.isCameraRollAuthorized = function(successCallback, errorCallback) {
+    Diagnostic.isCameraRollAuthorized = function(successCallback, errorCallback, accessLevel) {
         if(cordova.plugins.diagnostic.camera){
             cordova.plugins.diagnostic.camera.isCameraRollAuthorized.apply(this, arguments);
         }else{
@@ -371,8 +496,14 @@ var Diagnostic = (function(){
      * This callback function is passed a single string parameter which indicates the authorization status as a constant in `cordova.plugins.diagnostic.permissionStatus`.
      * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
+     * @param {Function} accessLevel - (optional) On iOS 14+, specifies the level of access to the photo library to query as a constant in cordova.plugins.diagnostic.photoLibraryAccessLevel`
+     * - Possible values are:
+     *      - ADD_ONLY - can add to but not read from Photo Library
+     *      - READ_WRITE - can both add to and read from Photo Library
+     * - Defaults to ADD_ONLY if not specified
+     * - Has no effect on iOS 13 or below
      */
-    Diagnostic.getCameraRollAuthorizationStatus = function(successCallback, errorCallback) {
+    Diagnostic.getCameraRollAuthorizationStatus = function(successCallback, errorCallback, accessLevel) {
         if(cordova.plugins.diagnostic.camera){
             cordova.plugins.diagnostic.camera.getCameraRollAuthorizationStatus.apply(this, arguments);
         }else{
@@ -389,10 +520,24 @@ var Diagnostic = (function(){
      * `cordova.plugins.diagnostic.permissionStatus.GRANTED` or `cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS`
      * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
+     * @param {Function} accessLevel - On iOS 14+, specifies the level of access to the photo library as a constant in cordova.plugins.diagnostic.photoLibraryAccessLevel`
+     * - Possible values are:
+     *      - ADD_ONLY - can add to but not read from Photo Library
+     *      - READ_WRITE - can both add to and read from Photo Library
+     * - Defaults to ADD_ONLY if not specified
+     * - Has no effect on iOS 13 or below
      */
-    Diagnostic.requestCameraRollAuthorization = function(successCallback, errorCallback) {
+    Diagnostic.requestCameraRollAuthorization = function(successCallback, errorCallback, accessLevel) {
         if(cordova.plugins.diagnostic.camera){
             cordova.plugins.diagnostic.camera.requestCameraRollAuthorization.apply(this, arguments);
+        }else{
+            throw "Diagnostic Camera module is not installed";
+        }
+    };
+
+    Diagnostic.presentLimitedLibraryPicker = function(successCallback, errorCallback) {
+        if(cordova.plugins.diagnostic.camera){
+            cordova.plugins.diagnostic.camera.presentLimitedLibraryPicker.apply(this, arguments);
         }else{
             throw "Diagnostic Camera module is not installed";
         }
@@ -505,14 +650,21 @@ var Diagnostic = (function(){
         }
     };
 
+    Diagnostic.getBluetoothAuthorizationStatus = function(successCallback, errorCallback) {
+        if(cordova.plugins.diagnostic.bluetooth){
+            cordova.plugins.diagnostic.bluetooth.getAuthorizationStatus.apply(this, arguments);
+        }else{
+            throw "Diagnostic Bluetooth module is not installed";
+        }
+    };
+
     /***********************
      * Remote Notifications
      ***********************/
 
     /**
      * Checks if remote (push) notifications are enabled.
-     * On iOS 8+, returns true if app is registered for remote notifications AND "Allow Notifications" switch is ON AND alert style is not set to "None" (i.e. "Banners" or "Alerts").
-     * On iOS <=7, returns true if app is registered for remote notifications AND alert style is not set to "None" (i.e. "Banners" or "Alerts") - same as isRegisteredForRemoteNotifications().
+     * Returns true if app is registered for remote notifications AND "Allow Notifications" switch is ON AND alert style is not set to "None" (i.e. "Banners" or "Alerts").
      *
      * @param {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single boolean parameter which is TRUE if remote (push) notifications are enabled.
@@ -529,7 +681,7 @@ var Diagnostic = (function(){
 
     /**
      * Indicates the current setting of notification types for the app in the Settings app.
-     * Note: on iOS 8+, if "Allow Notifications" switch is OFF, all types will be returned as disabled.
+     * Note: if "Allow Notifications" switch is OFF, all types will be returned as disabled.
      *
      * @param {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single object parameter where the key is the notification type as a constant in `cordova.plugins.diagnostic.remoteNotificationType` and the value is a boolean indicating whether it's enabled:
@@ -549,10 +701,9 @@ var Diagnostic = (function(){
 
     /**
      * Indicates if the app is registered for remote notifications on the device.
-     * On iOS 8+, returns true if the app is registered for remote notifications and received its device token,
+     * Returns true if the app is registered for remote notifications and received its device token,
      * or false if registration has not occurred, has failed, or has been denied by the user.
      * Note that user preferences for notifications in the Settings app will not affect this.
-     * On iOS <=7, returns true if app is registered for remote notifications AND alert style is not set to "None" (i.e. "Banners" or "Alerts") - same as isRemoteNotificationsEnabled().
      *
      * @param {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single boolean parameter which is TRUE if the device is registered for remote (push) notifications.
@@ -569,7 +720,6 @@ var Diagnostic = (function(){
 
     /**
      * Returns the remote notifications authorization status for the application.
-     * Works on iOS 10+ (iOS 9 and below will invoke the error callback).
      *
      * @param {Object} params - (optional) parameters:
      *  - {Function} successCallback - The callback which will be called when operation is successful.
@@ -591,7 +741,6 @@ var Diagnostic = (function(){
 
     /**
      * Requests remote notifications authorization for the application.
-     * Works on iOS 8+ (iOS 8 and below will invoke the error callback).
      *
      * @param {Object} params - (optional) parameters:
      *  - {Function} successCallback - The callback which will be called when operation is successful.
@@ -601,7 +750,6 @@ var Diagnostic = (function(){
      * If not specified, defaults to all notification types.
      * @param {Boolean} omitRegistration - If true, registration for remote notifications will not be carried out once remote notifications authorization is granted.
      * Defaults to false (registration will automatically take place once authorization is granted).
-     * iOS 10+ only: on iOS 8 & 9 authorization and registration are implicitly inseparable so both will be carried out.
      */
     Diagnostic.requestRemoteNotificationsAuthorization = function() {
         if(cordova.plugins.diagnostic.notifications){
@@ -655,7 +803,6 @@ var Diagnostic = (function(){
      * `cordova.plugins.diagnostic.permissionStatus.GRANTED` or `cordova.plugins.diagnostic.permissionStatus.DENIED_ALWAYS`
      * @param {Function} errorCallback - The callback which will be called when an error occurs.
      * This callback function is passed a single string parameter containing the error message.
-     * This works only on iOS 7+.
      */
     Diagnostic.requestMicrophoneAuthorization = function(successCallback, errorCallback) {
         if(cordova.plugins.diagnostic.microphone){

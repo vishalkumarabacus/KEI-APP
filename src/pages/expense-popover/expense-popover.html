@@ -8,36 +8,32 @@
   <div class="work-modal">
     <div class="work-modal-bg">
       <div>
-        
+
         <div class="head">
           <span>Search</span>
-          <a class="close" (click)="close()"><i class="material-icons">close</i></a>
+          <a class="close" (click)="close1()"><i class="material-icons">close</i></a>
         </div>
         <div class="edit mt10 ml0 mr0">
-          <ion-list>            
+          <ion-list>
                 <h1 style="font-size: 12px;">Date From :</h1>
                 <ion-item class="cs-normal-select mt16">
                 <ion-input class="calander" type="date" [max]="date" name="date_from" #date_from="ngModel" [(ngModel)]="filter.date_from">  <i class="material-icons">date_range</i> </ion-input>
-               
+
             </ion-item>
             <h1 style="font-size: 12px;">Date To :</h1>
             <ion-item class="cs-normal-select mt16">
               <ion-input class="calander"  type="date"  [max]="date"  name="date_to" #date_to="ngModel" [(ngModel)]="filter.date_to">  <i class="material-icons">date_range</i> </ion-input>
-            
 
-             
           </ion-item>
-                 
+
           </ion-list>
-    
-      </div>
-        
+          </div>
         <div style="padding: 0px 8px 8px 8px;">
           <button style="width: 100% !important;" ion-button color="secondary" (click)="ondismiss()">SEARCH</button>
         </div>
       </div>
     </div>
-    
+
   </div>
 </ion-list>
 
@@ -49,5 +45,5 @@
   <!-- <button ion-item (click)="goto('Pop & Gifts')"><img src="assets/imgs/product-1.svg"> Pop & Gifts</button> -->
   <button *ngIf="!showEditRetailer && type == 'newRetailer' " ion-item (click)="goto('Show')"><img src="assets/imgs/cs-network/architect.svg"> Edit Info</button>
   <button *ngIf="showEditRetailer && type == 'newRetailer'" ion-item (click)="goto('Hide')"><img src="assets/imgs/cs-network/architect.svg"> Edit Info</button>
-  
+
 </ion-list>

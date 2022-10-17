@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-android-support-gradle-release@3.0.1",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_from": "cordova-android-support-gradle-release@3.0.1",
@@ -26,7 +26,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-android-support-gradle-release/-/cordova-android-support-gradle-release-3.0.1.tgz",
   "_spec": "3.0.1",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Dave Alden"
   },

@@ -12,7 +12,7 @@
 		</button>
 		</ion-buttons> -->
 	</ion-navbar>
-	
+
 </ion-header>
 
 
@@ -42,11 +42,11 @@
 						</ion-item>
 						</div>
 				</ion-content>
-				
+
 			</ng-container> -->
-		
-		
-		
+
+
+
 		<!-- <ion-item>
 			<ion-label>Contractor</ion-label>
 			<ion-radio value="10" ></ion-radio>
@@ -79,23 +79,23 @@
 			<ion-list>
 				<ion-item class="cs-select">
 					<ion-label >Select Type</ion-label>
-				
-					
+
+
 					<ion-select  placeholder="Select Type" name="user"  [(ngModel)]="string"(ngModelChange)="get_network_list(3)" >
 						<ion-option  value="Unscheduled" >Unscheduled</ion-option>
 						<ion-option  value="Scheduled" >Scheduled</ion-option>
-			
+
 					</ion-select>
-			</ion-item>			
+			</ion-item>
 		</ion-list>
 	</div>
-	
-	
+
+
 	</ng-container>
 
 
   </ion-list>
-	<div *ngIf="(data.network == '1' || data.network == '2' || data.network == '3' || data.network == '4' || data.network == '5' || data.network == '6' || data.network == '7'|| data.network == '8'|| data.network == '9'|| data.network == '10' || data.network == '14'|| data.network == '13'|| data.network == '15' || data.network == '16'|| data.network == '17' || data.network == '18'|| data.network == '12')&&data.network != '11'"class="edit m0 mt16">
+	<div *ngIf="(data.network == '1' || data.network == '2' || data.network == '3' || data.network == '4' || data.network == '5' || data.network == '6' || data.network == '7'|| data.network == '8'|| data.network == '9'|| data.network == '10' || data.network == '14'|| data.network == '13'|| data.network == '15' || data.network == '16'|| data.network == '17' || data.network == '18'|| data.network == '12'|| data.network == '19')&&data.network != '11'"class="edit m0 mt16">
 		<ion-list>
 			<ion-item class="cs-select" >
 				<ion-label *ngIf="data.network == '1'">Distributor</ion-label>
@@ -106,6 +106,8 @@
 				<ion-label *ngIf="data.network == '7'">Contractor</ion-label>
 				<ion-label *ngIf="data.network == '5'">Architect</ion-label>
 				<ion-label *ngIf="data.network == '9'">Online</ion-label>
+				<ion-label *ngIf="data.network == '19'">Site Tracking</ion-label>
+
 
 				<ion-label *ngIf="data.network == '6'">Constructor</ion-label>
 				<ion-label *ngIf="data.network == '4'">Project</ion-label>
@@ -118,9 +120,9 @@
 
 
 
-				
+
 				<ionic-selectable
-				item-content 
+				item-content
 				[(ngModel)]="data.type_name"
 				[items]="distributor_network_list"
 				itemValueField="id"
@@ -132,17 +134,17 @@
 				[canSearch]="true"
 				#selectComponent>
 			</ionic-selectable>
-		</ion-item>			
+		</ion-item>
 	</ion-list>
 </div>
 <div *ngIf="data.network == '11'"class="edit m0 mt16">
 	<ion-list>
 		<ion-item class="cs-select">
 			<ion-label *ngIf="data.network == '11'">Others</ion-label>
-			
-			
+
+
 			<ionic-selectable
-			item-content 
+			item-content
 			[(ngModel)]="data.type_name"
 			[items]="otherType"
 			itemValueField="id"
@@ -153,7 +155,7 @@
 			[canSearch]="true"
 			#selectComponent>
 		</ionic-selectable>
-	</ion-item>			
+	</ion-item>
 </ion-list>
 </div>
 
@@ -170,7 +172,7 @@
 
 
 <form name="f" #f="ngForm" >
-	<div class="edit m0" *ngIf="addNewDealer==true" > 
+	<div class="edit m0" *ngIf="addNewDealer==true" >
 		<ion-list>
 			<ion-item [ngClass]="{'cs-error': ((f.submitted &&  mobile?.invalid) || checkExist==true)}">
 				<ion-label floating><span>Mobile <strong>*</strong></span></ion-label>
@@ -198,7 +200,7 @@
 			<p  *ngIf="checkExist==true &&(error.type=='16'&&error.lead_type=='Lead'&&error.checkin_active=='0'&&data.mobile!='')" class="error-line">Same Mobile No. Already Exists with  Industry</p>
 			<p  *ngIf="checkExist==true &&(error.type=='17'&&error.lead_type=='Lead'&&error.checkin_active=='0'&&data.mobile!='')" class="error-line">Same Mobile No. Already Exists with Infra</p>
 			<p  *ngIf="checkExist==true &&(error.type=='18'&&error.lead_type=='Lead'&&error.checkin_active=='0'&&data.mobile!='')" class="error-line">Same Mobile No. Already Exists with MEPM</p>
-			
+
 			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='1')" class="error-line">This Account is Disabled in Distributor ,Kindly Contact with HO</p>
 			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='2')" class="error-line">This Account is Disabled in Dealer ,Kindly Contact with HO</p>
 			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='3')" class="error-line">This Account is Disabled in Retailer ,Kindly Contact with HO</p>
@@ -216,10 +218,12 @@
 			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='17')" class="error-line">This Account is Disabled in Infra ,Kindly Contact with HO</p>
 			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='18')" class="error-line">This Account is Disabled in MEPM ,Kindly Contact with HO</p>
 			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='9' && lead_type=='Lead')" class="error-line">This Account is Disabled in online lead ,Kindly Contact with HO</p>
+			<p  *ngIf="checkExist==true &&(error.checkin_active=='1'&&error.type=='19' && lead_type=='Lead')" class="error-line">This Account is Disabled in Site Tracking lead ,Kindly Contact with HO</p>
 
-       
 
-			
+
+
+
 			<p *ngIf="f.submitted && mobile?.invalid && data.mobile"  class="error-line">Mobile Is Invalid</p>
 			<ng-container *ngIf="data.mobile && data.mobile.length==10 "  >
 				<ion-item [ngClass]="{'cs-error': (f.submitted &&  company_name?.invalid )}"*ngIf="dr_name!='Prospective Electrician'">
@@ -228,14 +232,14 @@
 				</ion-item>
 				<p *ngIf="f.submitted && company_name?.invalid && !data.name"  class="error-line">Company Name is required!</p>
 				<p *ngIf="f.submitted && company_name?.invalid && data.name"  class="error-line">Company Name Is Invalid</p>
-				
+
 				<ion-item [ngClass]="{'cs-error': (f.submitted &&  name?.invalid )}">
 					<ion-label floating><span>Name <strong>*</strong></span></ion-label>
 					<ion-input type="text" [(ngModel)]="data.name" name="name"  #name="ngModel" minlength="3" required></ion-input>
 				</ion-item>
 				<p *ngIf="f.submitted && name?.invalid && !data.name"  class="error-line">Name is required!</p>
 				<p *ngIf="f.submitted && name?.invalid && data.name"  class="error-line">Name Is Invalid</p>
-				
+
 			</ng-container>
 		</ion-list>
 	</div>

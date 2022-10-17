@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-file-opener2@3.0.5",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
   "_development": true,
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmmirror.com/cordova-plugin-file-opener2/-/cordova-plugin-file-opener2-3.0.5.tgz",
   "_spec": "3.0.5",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "pwlin05@gmail.com"
   },

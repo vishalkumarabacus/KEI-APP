@@ -1,62 +1,50 @@
 {
-  "_args": [
-    [
-      "cordova.plugins.diagnostic@5.0.2",
-      "D:\\KEI\\KEI APP"
-    ]
-  ],
-  "_from": "cordova.plugins.diagnostic@5.0.2",
-  "_id": "cordova.plugins.diagnostic@5.0.2",
+  "_from": "cordova.plugins.diagnostic",
+  "_id": "cordova.plugins.diagnostic@7.1.0",
   "_inBundle": false,
-  "_integrity": "sha512-H59o7YxJ2/COzvg+jyTpUqX8QoDcvti9dluJ9a+pHumE8lf3meWemwCl0QFa9GH+xgVd6X1Ikj/6P3+DKWd9eg==",
+  "_integrity": "sha512-X9NHRkmnoON5vJPCwR7lYXu61nsHUvhgcHsK8bIJiyMV67ziZDsoxQ8BSlmtfLJ3QSRWxHgzJDm0pqlN+grOfw==",
   "_location": "/cordova.plugins.diagnostic",
   "_phantomChildren": {},
   "_requested": {
-    "type": "version",
+    "type": "tag",
     "registry": true,
-    "raw": "cordova.plugins.diagnostic@5.0.2",
+    "raw": "cordova.plugins.diagnostic",
     "name": "cordova.plugins.diagnostic",
     "escapedName": "cordova.plugins.diagnostic",
-    "rawSpec": "5.0.2",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "5.0.2"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
-    "/"
+    "#DEV:/",
+    "#USER"
   ],
-  "_resolved": "https://registry.npmmirror.com/cordova.plugins.diagnostic/-/cordova.plugins.diagnostic-5.0.2.tgz",
-  "_spec": "5.0.2",
-  "_where": "D:\\KEI\\KEI APP",
+  "_resolved": "https://registry.npmjs.org/cordova.plugins.diagnostic/-/cordova.plugins.diagnostic-7.1.0.tgz",
+  "_shasum": "88b08a7d024bd4f2e00194cf9dad184a0fb04bc4",
+  "_spec": "cordova.plugins.diagnostic",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Dave Alden"
   },
   "bugs": {
     "url": "https://github.com/dpa99c/cordova-diagnostic-plugin/issues"
   },
+  "bundleDependencies": false,
   "cordova": {
     "id": "cordova.plugins.diagnostic",
     "platforms": [
       "android",
-      "ios",
-      "windows"
+      "ios"
     ]
   },
   "cordova_name": "Diagnostic",
   "dependencies": {
-    "colors": "^1.1.2",
+    "colors": "1.4.0",
     "elementtree": "^0.1.6",
-    "minimist": "1.2.0"
+    "minimist": "1.2.6"
   },
+  "deprecated": false,
   "description": "Cordova/Phonegap plugin to check the state of Location/WiFi/Camera/Bluetooth device settings.",
-  "engines": {
-    "cordovaDependencies": {
-      "4.0.0": {
-        "cordova": ">=7.1.0",
-        "cordova-android": ">=6.3.0",
-        "cordova-ios": ">=4.3.0"
-      }
-    }
-  },
   "homepage": "https://github.com/dpa99c/cordova-diagnostic-plugin#readme",
   "issue": "https://github.com/dpa99c/cordova-diagnostic-plugin/issues",
   "keywords": [
@@ -64,7 +52,6 @@
     "cordova",
     "android",
     "ios",
-    "windows",
     "phonegap",
     "diagnostic",
     "wifi",
@@ -84,5 +71,5 @@
     "postinstall": "node ./scripts/apply-modules.js"
   },
   "types": "./cordova.plugins.diagnostic.d.ts",
-  "version": "5.0.2"
+  "version": "7.1.0"
 }

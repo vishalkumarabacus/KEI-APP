@@ -14,7 +14,7 @@ export class LmsFollowupListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider) {
   }
-  
+
   ionViewWillEnter() {
     console.log(this.today_date)
     this.type=this.navParams.get('type');
@@ -23,28 +23,31 @@ export class LmsFollowupListPage {
     console.log(this.type);
     console.log(this.id);
     console.log(this.company_name);
-    
+
     // this.folloupadd();
     console.log('ionViewDidLoad LmsFollowupListPage');
     this.get_Followup_List();
   }
-  
-  
+
+
   followup_list:any[];
   type:any;
   id:any;
   company_name:any;
-  
-  lead_followup_add(type,id,company_name)
+
+  lead_followup_add(type,id,company_name,add)
   {
     console.log(this.type);
     console.log(this.id);
-    this.navCtrl.push(LmsFollowupAddPage,{'type':type,'id':id,'company_name':company_name})
-  } 
-  update_followup(type)
+    this.navCtrl.push(LmsFollowupAddPage,{'type':type,'id':id,'company_name':company_name ,'from':add})
+  }
+  update_followup(row,type,id)
     {
       console.log('function called');
-      this.navCtrl.push(LmsFollowupAddPage,{'type':type, 'data':this.followup_list, 'from':'updateFollowup'})
+      console.log(row);
+      console.log(type);
+      console.log(id);
+      this.navCtrl.push(LmsFollowupAddPage,{'data':row,'update_type':type,'update_id':id,'from':'updateFollowup'})
     }
   get_Followup_List()
   {
@@ -61,10 +64,10 @@ export class LmsFollowupListPage {
     {
     })
   }
-  
+
   doRefresh (refresher)
-  {   
-    this.get_Followup_List() 
+  {
+    this.get_Followup_List()
     setTimeout(() => {
       refresher.complete();
     }, 1000);

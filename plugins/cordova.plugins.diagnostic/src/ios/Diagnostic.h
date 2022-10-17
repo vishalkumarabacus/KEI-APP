@@ -20,6 +20,9 @@ extern NSString*const UNKNOWN;
 extern NSString*const AUTHORIZATION_NOT_DETERMINED;
 extern NSString*const AUTHORIZATION_DENIED;
 extern NSString*const AUTHORIZATION_GRANTED;
+extern NSString*const AUTHORIZATION_PROVISIONAL;
+extern NSString*const AUTHORIZATION_EPHEMERAL;
+extern NSString*const AUTHORIZATION_LIMITED;
 
 @interface Diagnostic : CDVPlugin
 
@@ -31,10 +34,15 @@ extern NSString*const AUTHORIZATION_GRANTED;
 - (void) switchToSettings: (CDVInvokedUrlCommand*)command;
 - (void) getBackgroundRefreshStatus: (CDVInvokedUrlCommand*)command;
 - (void) getArchitecture: (CDVInvokedUrlCommand*)command;
+- (void) getCurrentBatteryLevel: (CDVInvokedUrlCommand*)command;
+- (void) getDeviceOSVersion: (CDVInvokedUrlCommand*)command;
+- (void) getBuildOSVersion: (CDVInvokedUrlCommand*)command;
 
 // Utilities
 + (id) getInstance;
 - (void) sendPluginResult: (CDVPluginResult*)result :(CDVInvokedUrlCommand*)command;
+- (void) sendPluginResultSuccess:(CDVInvokedUrlCommand*)command;
+- (void) sendPluginNoResultAndKeepCallback:(CDVInvokedUrlCommand*)command;
 - (void) sendPluginResultBool: (BOOL)result :(CDVInvokedUrlCommand*)command;
 - (void) sendPluginResultString: (NSString*)result :(CDVInvokedUrlCommand*)command;
 - (void) sendPluginError: (NSString*) errorMessage :(CDVInvokedUrlCommand*)command;

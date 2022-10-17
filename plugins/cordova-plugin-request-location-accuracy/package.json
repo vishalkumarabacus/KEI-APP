@@ -2,9 +2,10 @@
   "_args": [
     [
       "cordova-plugin-request-location-accuracy@2.3.0",
-      "D:\\KEI\\KEI APP"
+      "D:\\abacusdesk\\KEI-APP-main"
     ]
   ],
+  "_development": true,
   "_from": "cordova-plugin-request-location-accuracy@2.3.0",
   "_id": "cordova-plugin-request-location-accuracy@2.3.0",
   "_inBundle": false,
@@ -22,11 +23,11 @@
     "fetchSpec": "2.3.0"
   },
   "_requiredBy": [
-    "/"
+    "#DEV:/"
   ],
-  "_resolved": "https://registry.npmmirror.com/cordova-plugin-request-location-accuracy/-/cordova-plugin-request-location-accuracy-2.3.0.tgz",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-request-location-accuracy/-/cordova-plugin-request-location-accuracy-2.3.0.tgz",
   "_spec": "2.3.0",
-  "_where": "D:\\KEI\\KEI APP",
+  "_where": "D:\\abacusdesk\\KEI-APP-main",
   "author": {
     "name": "Dave Alden"
   },

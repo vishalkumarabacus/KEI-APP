@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, NavController, NavParams,ToastController,ActionSheetController, ModalController, AlertController, Platform } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController, NavParams,ToastController,ActionSheetController, ModalController, AlertController, Platform, PopoverController } from 'ionic-angular';
 import { MyserviceProvider } from '../../../../providers/myservice/myservice';
 import { LmsActivityListPage } from '../lms-lead-activity/lms-activity-list/lms-activity-list';
 import { LmsFollowupListPage } from '../lms-lead-followup/lms-followup-list/lms-followup-list';
@@ -15,6 +15,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AttendenceserviceProvider } from '../../../../providers/attendenceservice/attendenceservice';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import moment from 'moment';
 
 
 
@@ -25,7 +26,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 })
 export class LmsLeadDetailPage {
 
-  constructor(public navCtrl: NavController,public toastCtrl: ToastController,
+  constructor(public navCtrl: NavController,public toastCtrl: ToastController,public popoverCtrl: PopoverController, public modal: ModalController,
     public modalCtrl: ModalController,public actionSheetController: ActionSheetController,
      public alertCtrl: AlertController,private camera: Camera ,public navParams: NavParams,
     public diagnostic : Diagnostic,
@@ -39,7 +40,9 @@ export class LmsLeadDetailPage {
      public loadingCtrl: LoadingController,public service:MyserviceProvider) {
       this.last_attendence()
       this.dr_detail()
-  }
+
+
+    }
 
   ionViewWillEnter() {
     this.last_attendence()
@@ -48,6 +51,8 @@ export class LmsLeadDetailPage {
     console.log(this.dr_id);
     this.dr_detail();
     console.log('ionViewDidLoad LmsLeadDetailPage');
+    this.today_date = new Date().toISOString().slice(0,10);
+    console.log(this.today_date);
   }
 
   search:any={}
@@ -56,6 +61,8 @@ export class LmsLeadDetailPage {
   contactPerson:any={};
   visiting_image:any=[];
   image: any = '';
+  today_date:any='';
+
 
 
   dr_detail()
@@ -71,12 +78,17 @@ export class LmsLeadDetailPage {
       console.log(result);
       this.lead_detail = result['data'];
       console.log(this.lead_detail);
+      console.log(this.lead_detail.date_updated);
+      if (this.lead_detail.date_updated) {
+        this.lead_detail.date_updated = moment(this.lead_detail.date_updated).format('YYYY-MM-DD');
+        console.log(this.lead_detail.date_updated);
+        console.log(this.today_date);
+      }
       this.visiting_image.push(this.lead_detail.visiting_card_image)
       console.log(this.visiting_image);
       this.contactPerson=result['data']['contactPerson'];
       console.log(this.contactPerson);
-    this.service.dismiss()
-
+      this.service.dismiss()
     });
   }
 
@@ -417,23 +429,23 @@ show_Error(){
 
 
   }
-  statusModal1(type)
-  {
-    this.navCtrl.push(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail' });
-  }
   // statusModal1(type)
   // {
-  //   console.log(type)
-
-  //   let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail'});
-
-  //   modal.onDidDismiss(data =>
-  //   {
-  //     this.dr_detail()
-  //   });
-
-  //   modal.present();
+  //   this.navCtrl.push(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail' });
   // }
+
+  statusModal1(type)
+  {
+    console.log(type)
+    let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail'});
+
+    modal.onDidDismiss(data =>
+    {
+      console.log(data);
+      this.dr_detail()
+    });
+    modal.present();
+  }
 
   update_visiting_card(){
     var loading = this.loadingCtrl.create({
@@ -564,6 +576,15 @@ checkin(type,id,name)
 
       this.service.addData({'data':this.data1},'Checkin/start_visit_new').then((result)=>{
         console.log(result);
+        if(result == 'Please Check Out First'){
+          let toast = this.toastCtrl.create({
+            message:'Please Check Out First',
+            duration: 3000,
+            position: 'bottom'
+          });
+          toast.present();
+
+        }
         console.warn("static result console");
 
         if(result == 'success')
