@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, ModalController, NavController, NavParams, ViewController, PopoverController } from 'ionic-angular';
+import { ConstantProvider } from '../../../../providers/constant/constant';
 import { MyserviceProvider } from '../../../../providers/myservice/myservice';
 import { ExpensePopoverPage } from '../../../expense-popover/expense-popover';
 import { ExpenseStatusModalPage } from '../../../expense-status-modal/expense-status-modal';
@@ -13,8 +14,9 @@ import { LmsLeadDetailPage } from '../lms-lead-detail/lms-lead-detail';
 })
 export class LmsLeadListPage {
 
-    constructor(public popoverCtrl: PopoverController, public viewCtrl: ViewController, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider,public loadingCtrl: LoadingController) {
+    constructor(public popoverCtrl: PopoverController, public viewCtrl: ViewController, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams,public db:MyserviceProvider,public loadingCtrl: LoadingController, public constant:ConstantProvider,) {
         // this.get_assign_dr(9);
+
     }
 
     load_data:any
@@ -28,6 +30,24 @@ export class LmsLeadListPage {
     date_to:any
     date_id:any
     networkType:any=[]
+
+
+    ionViewWillEnter() {
+      console.log('ionViewDidLoad LmsLeadListPage');
+      console.log(this.constant.tabSelectedOrder);
+      if(this.constant.tabSelectedOrder && this.constant.tabSelectedOrder!='')
+      {
+          this.filter.type_id = this.constant.tabSelectedOrder
+          console.log( this.filter.type_id);
+           this.get_assign_dr(this.filter.type_id);
+      }
+      else{
+        this.get_assign_dr(9);
+
+      }
+      // this.doRefresh(Refresher);
+
+  }
 
     presentPopover(myEvent)
     {
@@ -128,7 +148,7 @@ export class LmsLeadListPage {
     lead_detail(id)
     {
         console.log(id);
-        this.navCtrl.push(LmsLeadDetailPage,{'id':id,'type':'Lead'})
+        this.navCtrl.push(LmsLeadDetailPage,{'id':id,'type':'Lead','tab_id':this.drid})
     }
 
     addLead(add)
@@ -138,12 +158,7 @@ export class LmsLeadListPage {
         this.navCtrl.push(LmsLeadAddPage,{'from':add})
      }
 
-    ionViewWillEnter() {
-        console.log('ionViewDidLoad LmsLeadListPage');
-        this.get_assign_dr(9);
-        // this.doRefresh(Refresher);
 
-    }
 
     doRefresh(refresher)
     {

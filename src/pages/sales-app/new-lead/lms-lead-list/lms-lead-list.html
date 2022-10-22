@@ -57,7 +57,7 @@
 
     <div class="round-tab mt6">
         <ul>
-            <li *ngFor="let row of count" [ngClass]="{'active' : row.id==filter.type_id}"  (click)="start=0;drid=row.id; get_assign_dr(row.id)">
+            <li *ngFor="let row of count" [ngClass]="{'active' : row.id==filter.type_id}"  (click)="start=0;drid=row.id;constant.tabSelectedOrder=drid;get_assign_dr(row.id)">
                 <p>{{row.name}}({{row.count}})</p>
             </li>
         </ul>
@@ -70,7 +70,7 @@
           <!-- <li [ngClass]="{'active' : filter.status=='Qualified'}" (click)="filter.date='';start=0;filter.status='Qualified';get_assign_dr(drid)">
             <p>Qualified<span>{{upcoming_count}}</span></p>
           </li> -->
-          <li [ngClass]="{'active' : filter.status=='Qualified'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr(drid)">
+          <li [ngClass]="{'active' : filter.status=='Qualified'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr(drid)" *ngIf="drid !=19">
             <p>Running<span>{{allCount.qualified?allCount.qualified:'0'}}</span></p>
           </li>
           <li [ngClass]="{'active' : filter.status=='Partially win'}"(click)="filter.date='';start=0;filter.status='Partially win';get_assign_dr(drid)" *ngIf="drid ==19">
@@ -82,7 +82,7 @@
             <li [ngClass]="{'active' : filter.status=='lost'}" (click)="filter.date='';start=0;filter.status='lost';get_assign_dr(drid)">
                 <p>Lost<span>{{allCount.lost?allCount.lost:'0'}}</span></p>
             </li>
-            <li [ngClass]="{'active' : filter.status=='Disqualified'}"(click)="filter.date='';start=0;filter.status='Disqualified' ;get_assign_dr(drid)">
+            <li [ngClass]="{'active' : filter.status=='Disqualified'}"(click)="filter.date='';start=0;filter.status='Disqualified' ;get_assign_dr(drid)" *ngIf="drid !=19">
               <p>Disqualified<span>{{allCount.disqualified?allCount.disqualified:'0'}}</span></p>
             </li>
         </ul>

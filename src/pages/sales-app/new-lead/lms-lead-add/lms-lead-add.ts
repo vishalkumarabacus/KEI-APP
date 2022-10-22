@@ -28,8 +28,8 @@ this.source()
   area_list:any=[];
   image: any = '';
   image_data: any = [];
-search:any
-
+   search:any
+   tab_id:any
   checkExist=false
   user_data:any={};
   ionViewDidLoad() {
@@ -56,6 +56,11 @@ console.log(this.form.id);
     {
       this.page_from = this.navParams.get('from');
       console.log(this.page_from);
+    }
+    if(this.navParams.get('tab_id'))
+    {
+      this.tab_id = this.navParams.get('tab_id');
+      console.log(this.tab_id);
     }
   }
 

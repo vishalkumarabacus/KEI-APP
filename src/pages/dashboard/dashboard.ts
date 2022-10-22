@@ -74,10 +74,10 @@ export class DashboardPage {
     targetVsAchievement: any = {};
     today_followup: any = [];
     isCheckinEnabled : boolean = false;
-    
+
     constructor(private network: Network,
         public db:MyserviceProvider,
-        
+
         public navCtrl: NavController
         , public loadingCtrl: LoadingController
         , public service: CatalougeProvider
@@ -96,47 +96,47 @@ export class DashboardPage {
         , public constant: ConstantProvider
         , public modal: ModalController
         , public diagnostic : Diagnostic
-        
+
         , public modalCtrl: ModalController) {
-            
-            
+
+
         }
-        
+
         // ngOnInit() {
         //     this.timer = setInterval(() => {
         //       this.time = new Date();
         //     }, 1000);
         //   }
-        
+
         //   ngOnDestroy(){
         //     clearInterval(this.timer);
         //   }
-        
+
         ionViewWillEnter() {
             this.getNetworkType()
             this.pending_checkin();
-            
+
             this.timer = setInterval(() => {
                 this.time = new Date();
             }, 1000);
-            
+
             //   this.timer = setInterval(() => {
             //    console.log("every time");
             //   }, 1000);
-            
+
             this.last_attendence();
             var time = new Date();
-            
+
             this.currentTime = moment().format("HH:mm:ss");
-            
+
             this.storage.get('token').then((token) => {
                 if (typeof (token) !== 'undefined' && token) {
                     this.user_logged_in = true;
                     console.log(this.user_logged_in);
                 }
             });
-            
-            
+
+
             this.storage.get('userId').then((id) => {
                 console.log(id);
                 if (typeof (id) !== 'undefined' && id) {
@@ -144,60 +144,60 @@ export class DashboardPage {
                     console.log(this.user_id);
                 }
             });
-            
+
             console.log(this.storage);
-            
-            
+
+
             this.platform.ready().then(() => {
-                
-                
+
+
                 this.network.onConnect().subscribe(() => {
                     this.constant.connectionChk = 'online;'
                 });
                 this.network.onDisconnect().subscribe(() => {
                     this.constant.connectionChk = 'offline';
                 });
-                
+
             })
-            
+
             if(this.constant.deviceId!='')
-            
+
             setTimeout(()=>
             {
                 console.warn('--------------------------------------');
                 console.log(this.constant);
                 console.log(this.constant.deviceId);
                 console.log(this.user_id);
-                console.warn('--------------------------------------');            
-                
+                console.warn('--------------------------------------');
+
                 {
                     console.log('device id found ' + this.constant.UserLoggedInData.id);
-                    let data = 
+                    let data =
                     //  this.serve.addData({'registration_id':this.constant.deviceId ,'user_id':this.user_id },'Attendence/update_notification_token').then((r)=>
                     this.serve.addData({'data':this.constant.deviceId},'Attendence/update_notification_token').then((r)=>
-                    
+
                     {
                     });
                 }
             },2000);
-            
+
             console.log(this.user_id);
         }
-        
-        
+
+
         leave:any=[]
         ionViewDidEnter() {
-            
-            // do not remove this code its urgent 
-            
+
+            // do not remove this code its urgent
+
             // this.subscription = this.platform.backButton.subscribe(()=>{
             //     console.log("in exit function");
-            
+
             //     let alert=this.alertCtrl.create({
             //         title:'Exit Application?',
             //         subTitle: 'Are you sure want to exit the App?',
             //         cssClass:'action-close',
-            
+
             //         buttons: [{
             //             text: 'Cancel',
             //             role: 'cancel',
@@ -215,41 +215,41 @@ export class DashboardPage {
             //     });
             //     alert.present();
             // });
-            
-            
+
+
             this.events.publish('current_page', 'Dashboard');
         }
-        
+
         //     ionViewWillLeave(){
         //         console.log("in exit function 2");
         //         this.subscription.unsubscribe();
         //   }
-        
+
         ionViewDidLeave() {
             this.events.publish('current_page', '');
         }
-        
-        
+
+
         pending_checkin()
         {
             this.serve.pending_data().then((result)=>{
                 console.log(result);
                 this.checkin_data = result['checkin_data'];
-                console.log(this.checkin_data); 
-                // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});      
+                console.log(this.checkin_data);
+                // this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
             })
         }
-        // stop_attend() 
+        // stop_attend()
         // {
         //     log("hiiii")
         //     this.platform.ready().then(() => {
-        
+
         //         var whiteList = ['com.package.example','com.package.example2'];
-        
+
         //         (<any>window).gpsmockchecker.check(whiteList, (result) => {
-        
+
         //           console.log(result,'test');
-        
+
         //           if(result.isMock){
         //               console.log("DANGER!! Mock is in use");
         //               console.log("Apps that use gps mock: ");
@@ -259,9 +259,9 @@ export class DashboardPage {
         //                 buttons: [
         //                     {
         //                         text: 'Ok',
-        //                         handler: () => 
+        //                         handler: () =>
         //                         {
-        
+
         //                         }
         //                     }
         //                 ]
@@ -272,16 +272,16 @@ export class DashboardPage {
         //           else
         //           {
         //               console.log("hloo work out of territory")
-        //             this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => 
+        //             this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() =>
         //             {
         //                 let options = {maximumAge: 10000, timeout: 15000, enableHighAccuracy: true};
-        //                 this.geolocation.getCurrentPosition(options).then((resp) => 
+        //                 this.geolocation.getCurrentPosition(options).then((resp) =>
         //                 {
         //                     var lat = resp.coords.latitude
         //                     var lng = resp.coords.longitude
         //                     this.serve.show_loading()
-        
-        //                     this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) => 
+
+        //                     this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) =>
         //                     {
         //                         if(result =='success')
         //                         {
@@ -294,43 +294,43 @@ export class DashboardPage {
         //                         this.serve.dismiss()
         //                         this.serve.errToasr()
         //                     })
-        
-        //                 }).catch((error) => 
+
+        //                 }).catch((error) =>
         //                 {
         //                     this.serve.presentToast('Could Not Get Location !!')
         //                 });
         //             },
-        //             error => 
+        //             error =>
         //             {
         //                 this.serve.presentToast('Please Allow Location !!')
         //             });
         //           }
-        
-        
-        
+
+
+
         //         }, (error) => console.log(error));
-        
+
         //       });
-        
+
         // }
-        
+
         start_attend() {
             // console.log(this.data);
 
 
             this.serve.show_loading();
-            
+
             this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
                 () => {
-                    
+
                     let options = { maximumAge:0, timeout: 15000, enableHighAccuracy: true };
                     this.geolocation.getCurrentPosition(options).then((resp) => {
-                        
+
                         var lat = resp.coords.latitude
                         var lng = resp.coords.longitude
-                        
+
                         // this.serve.show_loading()
-                        
+
                         this.attendence_serv.start_attend({ 'lat': lat, 'lng': lng, 'id': this.user_id,  }).then((result) => {
                             if (result['msg'] == 'success') {
                                 this.events.publish('user:login');
@@ -339,13 +339,13 @@ export class DashboardPage {
                                 this.last_attendence()
                             }
                         })
-                        
+
                     }).catch((error) => {
                         let alert = this.alertCtrl.create({
                             title: '',
                             message: 'Please Allow Location||',
                             buttons: [
-                                
+
                                 {
                                     text: 'OK',
                                     handler: () => {
@@ -354,31 +354,31 @@ export class DashboardPage {
                             ]
                         })
                         alert.present();
-                        
+
                         this.serve.dismiss();
-                        
+
                     });
                 },
                 error => {
                     this.serve.dismiss();
                     this.serve.presentToast('Please Allow Location!!')
                 });
-                
+
             }
-            
+
             stop_attend() {
                 console.log("hlooo stop");
-                
+
                 // this.serve.show_loading();
                 console.log("hlooo stop");
-                
-                
+
+
                 this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(() => {
                     let options = { maximumAge: 0, timeout: 15000, enableHighAccuracy: true };
                     this.geolocation.getCurrentPosition(options).then((resp) => {
                         var lat = resp.coords.latitude
                         var lng = resp.coords.longitude
-                        
+
                         this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) => {
                             if (result == 'success') {
                                 // this.serve.dismiss();
@@ -389,13 +389,13 @@ export class DashboardPage {
                             this.serve.dismiss()
                             this.serve.errToasr()
                         })
-                        
+
                     }).catch((error) => {
                         let alert = this.alertCtrl.create({
                             title: '',
                             message: 'Please Allow Location||',
                             buttons: [
-                                
+
                                 {
                                     text: 'OK',
                                     handler: () => {
@@ -409,49 +409,51 @@ export class DashboardPage {
                 error => {
                     this.serve.presentToast('Please Allow Location !!')
                 });
-                
+
             }
-            
-            
-            
-            
-            
+
+
+
+
+
             Approval_array:any
             expense:any
             leaveany:any
-            
+
             team_count:any
+            Today_announcementCount:any
             last_attendence() {
                 // this.db.show_loading()
                 this.attendence_serv.last_attendence_data().then((result) => {
                     console.log(result);
                     console.log("hiiiiiiiiiiiiiiiiiiii")
-                    
+
                     // this.db.dismiss()
                     this.last_attendence_data = result['attendence_data'];
                     this.team_count = result['team_count'];
                     this.storage.set('team_count', this.team_count);
                     console.log(this.team_count)
                     this.vehicle = result['attendence_data']['vehicle'];
-                    this.announcementCount=result['announcementCount']['announcementCount'];
+                    this.announcementCount=result['announcementCount']['previous_announcementCount'];
+                    this.Today_announcementCount=result['announcementCount']['today_announcementCount'];
+
                     console.log(this.announcementCount);
-                    
                     this.user_data = result['user_data'];
                     this.today_checkin = result['today_checkin'];
                     this.total_dealer = result['total_dealer'];
                     this.Approval_array = result['Approval_array']['PendingTravelPlan'];
                     this.expense = result['Approval_array']['expense'];
                     this.leaveany = result['Approval_array']['leave'];
-                    
+
                     console.log(this.Approval_array)
-                    
+
                     this.total_direct_dealer = result['total_direct_dealer'];
                     this.total_distributor = result['total_distributor'];
                     this.total_primary_order = result['total_primary_order'];
                     this.total_secondary_order = result['total_secondary_order'];
                     this.today_followup = result['today_followup']
                     this.leave = result['attendance_punch_msg']
-                    
+
                     if (this.last_attendence_data.start_time != '') {
                         var dt = moment("12:15 AM", ["h:mm A"]).format("HH:mm");
                         var H = +this.last_attendence_data.start_time.substr(0, 2);
@@ -459,49 +461,49 @@ export class DashboardPage {
                         var ampm = H < 12 ? "AM" : "PM";
                         this.start_attend_time = h + this.last_attendence_data.start_time.substr(2, 3) +' '+ ampm;
                     }
-                    
+
                 },error=>{
                     console.log("Dashboard error");
                     this.serve.dismiss()
-                    
+
                 })
-                
+
             }
             open_menu() {
                 console.log(this.user_logged_in);
                 this.events.publish('user:navigation_menu');
             }
-            
+
             goToCheckin() {
                 if(this.checkin_data != null){
-                    console.log("if");  
-                    console.log(this.checkin_data.length);  
-                    this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});         
+                    console.log("if");
+                    console.log(this.checkin_data.length);
+                    this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
                 }
                 else{
-                    this.navCtrl.push(CheckinNewPage);    
+                    this.navCtrl.push(CheckinNewPage);
                 }
             }
-            
+
             goToTravel() {
                 if(this.Approval_array>0)
                 {
                     this.navCtrl.push(TravelNewlistPage, { from: 'travel', view_type:'Team'});
-                    
-                    
+
+
                 }
                 else{
                     this.navCtrl.push(TravelListNewPage, { from: 'travel', view_type:'Team'});
-                    
+
                 }
             }
-            
-            
+
+
             goToLead() {
                 this.navCtrl.push(LmsLeadListPage);
-                
+
             }
-            
+
             goToFollowup() {
                 this.navCtrl.push(FollowupListPage);
             }
@@ -512,65 +514,65 @@ export class DashboardPage {
                 this.navCtrl.push(ExpenseListPage, { from: 'expense', view_type: 'Team'
             });
         }
-        
-        
-        
+
+
+
         goToMainDistributorListPage(type) {
             this.navCtrl.push(MainDistributorListPage, { 'type': type })
         }
         start_visit() {
-            
+
             this.navCtrl.push(CheckinNewPage);
         }
         goToOrders(type) {
             this.navCtrl.push(OrderListPage, { 'type': type });
             // this.navCtrl.push(ProductSubdetailPage,{'id':50});
         }
-        
-        
-        
-        
+
+
+
+
         show_Error(){
             console.log("start your attendence first");
-            
+
             let alert = this.alertCtrl.create({
                 title: 'Alert',
                 subTitle: 'Please Start Attendence First',
                 buttons: [
                     {
                         text: 'Ok',
-                        handler: () => 
+                        handler: () =>
                         {
-                            
+
                         }
                     }
                 ]
             });
             alert.present();
-            
-            
-            
-            
+
+
+
+
         }
-        
+
         open_notification(){
             console.log("inside notification");
             this.navCtrl.push(AnnouncementListPage);
-            
+
         }
-        
+
         announcementModal() {
             const modal = this.modalCtrl.create(AnnouncementListPage);
-            
+
             modal.onDidDismiss(data => {
                 console.log(data);
                 this.last_attendence();
-                
+
             });
             modal.present();
-            
+
         }
-        
+
         networkType:any=[]
         getNetworkType(){
             this.serve.addData('', "lead/distributionNetworkModule").then((result => {
@@ -579,8 +581,8 @@ export class DashboardPage {
             }))
         }
         doRefresh (refresher)
-        { 
-            
+        {
+
             this.last_attendence();
             this.pending_checkin();
             setTimeout(() => {
@@ -588,15 +590,15 @@ export class DashboardPage {
             }, 1000);
         }
         presentAlert(type) {
-            
+
             this.platform.ready().then(() => {
-                
+
                 var whiteList = ['com.package.example','com.package.example2'];
-                
+
                 (<any>window).gpsmockchecker.check(whiteList, (result) => {
-                    
+
                     console.log(result);
-                    
+
                     if(result.isMock){
                         console.log("DANGER!! Mock is in use");
                         console.log("Apps that use gps mock: ");
@@ -606,9 +608,9 @@ export class DashboardPage {
                             buttons: [
                                 {
                                     text: 'Ok',
-                                    handler: () => 
+                                    handler: () =>
                                     {
-                                        
+
                                     }
                                 }
                             ]
@@ -628,15 +630,15 @@ export class DashboardPage {
                                         handler: () => {
                                             console.log('Yes clicked');
                                             console.log(this.vehicle);
-                                            
+
                                             if(this.vehicle != 'Car'&&this.vehicle != 'Bike'){
                                                 this.checkLocationActive('Stop');
-                                                
+
                                             }
-                                            
-                                            
+
+
                                             else{
-                                                
+
                                             }
                                         }
                                     },
@@ -647,7 +649,7 @@ export class DashboardPage {
                                             console.log('Cancel clicked');
                                         }
                                     }
-                                    
+
                                 ]
                             });
                             alert.present();
@@ -663,12 +665,12 @@ export class DashboardPage {
                                         handler: () => {
                                             console.log('Yes clicked');
                                             console.log(this.vehicle);
-                                            
+
                                             this.checkLocationActive('Start');
-                                            
-                                            
-                                            
-                                            
+
+
+
+
                                         }
                                     },
                                     {
@@ -678,25 +680,25 @@ export class DashboardPage {
                                             console.log('Cancel clicked');
                                         }
                                     }
-                                    
+
                                 ]
                             });
                             alert.present();
                         }
                     }
-                    
-                    
+
+
                 }, (error) => console.log(error));
-                
+
             });
-            
-            
+
+
         }
         Attendance(type)
         {
-            
+
             console.log(type);
-            
+
             this.isCheckinEnabled = true;
 
             var options = {
@@ -707,18 +709,18 @@ export class DashboardPage {
             this.serve.show_loading();
             if(this.isCheckinEnabled==true){
                 console.log("function is call");
-                
+
                 this.geolocation.getCurrentPosition(options).then((resp) => {
                     var lat = resp.coords.latitude
                     var lng = resp.coords.longitude
                     this.serve.show_loading();
-                    
+
                     if(type=='Stop'){
                         this.attendence_serv.stop_attend({ 'lat': lat, 'lng': lng, 'attend_id': this.last_attendence_data.attend_id }).then((result) => {
                             this.serve.dismiss()
 
                             this.isCheckinEnabled = false;
-    
+
                             if (result == 'success') {
                                 this.serve.presentToast('Work Time Stopped Successfully');
                                 this.last_attendence()
@@ -736,10 +738,10 @@ export class DashboardPage {
                         else(this.leave=="Able To Punch Attendance")
                         {
                             this.attendence_serv.start_attend({ 'lat': lat, 'lng': lng, 'id': this.user_id, }).then((result) => {
-                                
+
                                 this.isCheckinEnabled = false;
                                 this.serve.dismiss();
-    
+
                                 if (result['msg'] == 'success') {
                                     this.events.publish('user:login');
                                     this.serve.presentToast('Work Time Started Successfully');
@@ -749,12 +751,12 @@ export class DashboardPage {
                                 this.serve.dismiss()
                                 this.serve.errToasr()
                             })
-                            
+
                         }
-                        
-                        
+
+
                     }
-                    
+
                 }).catch((error) => {
                     this.serve.dismiss();
 
@@ -762,7 +764,7 @@ export class DashboardPage {
                         title: '',
                         message: 'Could not get Location !!',
                         buttons: [
-                            
+
                             {
                                 text: 'OK',
                                 handler: () => {
@@ -773,18 +775,18 @@ export class DashboardPage {
                 });
             }
         }
-        
+
         checkLocationActive(targetAction){
-            
+
             console.log("Check location");
-            
-            
+
+
             this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
                 () => {
-                    
+
                     this.diagnostic.requestLocationAuthorization().then((status)=>{
                         console.log(status);
-                        
+
                         switch (status) {
                             case this.diagnostic.permissionStatus.NOT_REQUESTED:
                             console.log("Permission not requested");
@@ -805,7 +807,7 @@ export class DashboardPage {
                             console.log("Permission granted only when in use");
                             this.Attendance(targetAction);
                             break;
-                            
+
                             default:
                             console.log("DEFAULT CASE");
                             console.log(status);
@@ -813,29 +815,29 @@ export class DashboardPage {
                         }
                     },error=>{
                         console.log("authorision Error");
-                        
+
                         this.diagnostic.locationAuthorizationMode.ALWAYS
-                    }) 
-                    
+                    })
+
                 },
                 error => {
                     console.log("Accuracy Error");
-                    
+
                     this.serve.dismiss();
                     this.serve.presentToast('Please Allow Location!!')
                     this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY
                 });
-                
+
             }
-            
+
             throwLocationError() {
-                
+
                 console.log("location error");
-                
+
                 let alert=this.alertCtrl.create({
                     title:'To access this app please allow location permission from KEI App',
                     cssClass:'action-close',
-                    
+
                     buttons: [{
                         text: 'Cancel',
                         role: 'cancel',
@@ -852,9 +854,8 @@ export class DashboardPage {
                     }]
                 });
                 alert.present();
-                
+
             }
-            
-            
+
+
         }
-        
