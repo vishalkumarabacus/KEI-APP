@@ -11,7 +11,7 @@
             <ion-list>
 
                 <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && lead_type?.invalid}">
-                    <ion-label><span>Lead Type</span></ion-label>
+                    <ion-label><span>Lead Category</span></ion-label>
                     <ion-select name="lead_type" #lead_type="ngModel" [(ngModel)]="form.lead_type" (ngModelChange)="get_assign_dr(form.lead_type)" [disabled]="(disableSelect == true)">
                        <ion-option value="1">Distributor</ion-option>
                        <ion-option value="2">Dealer</ion-option>
@@ -38,7 +38,7 @@
                 </ion-item>
                 <p  *ngIf="f.submitted && lead_type?.invalid" class="error-line">Select Type Is Required</p>
 
-                <ion-item class="cs-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && dr_id?.invalid}">
+                <!-- <ion-item class="cs-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && dr_id?.invalid}">
                    <ion-label *ngIf="form.lead_type == '1'"><span>Select Distributor</span></ion-label>
                    <ion-label *ngIf="form.lead_type == '2'"><span>Select Dealer</span></ion-label>
                     <ion-label *ngIf="form.lead_type == '3'"><span>Select Retailer</span></ion-label>
@@ -70,9 +70,9 @@
                     #selectComponent
                      [disabled]="(disableSelect == true)">
                 </ionic-selectable>
-            </ion-item>
+            </ion-item> -->
 
-            <p  *ngIf="f.submitted && dr_id?.invalid" class="error-line">Select Type Is Required</p>
+            <!-- <p  *ngIf="f.submitted && dr_id?.invalid" class="error-line">Select Type Is Required</p> -->
 
             <ion-item class="cs-normal-select mt16 mb0" [ngClass]="{'cs-error':f.submitted && followup_type?.invalid}">
                 <ion-label><span>Followup Type</span></ion-label>

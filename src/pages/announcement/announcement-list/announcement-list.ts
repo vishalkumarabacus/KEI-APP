@@ -11,21 +11,21 @@ import { AnnouncementDetailPage } from '../announcement-detail/announcement-deta
   selector: 'page-announcement-list',
   templateUrl: 'announcement-list.html',
 })
-export class AnnouncementListPage 
+export class AnnouncementListPage
 {
   user_data:any={};
   userType:any;
   sendRequest:any=false
   announcementList:any=[];
-  
+
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
     public storage: Storage,
     public constant:ConstantProvider,
     public viewcontrol: ViewController,
-    
-    public db:MyserviceProvider) 
+
+    public db:MyserviceProvider)
     {
       if(this.constant.UserLoggedInData.loggedInUserType == 'Employee')
       {
@@ -36,29 +36,39 @@ export class AnnouncementListPage
         this.userType='drLogin'
       }
       console.log(this.userType);
-      
-      setTimeout(() => 
+
+      setTimeout(() =>
       {
         this.getAnnouncementList()
-        
+
       }, 500);
     }
-    
-    ionViewDidLoad() 
+
+    ionViewDidLoad()
     {
       console.log('ionViewDidLoad AnnouncementListPage');
     }
-    
+
     deatilPage(id,to_id)
     {
       this.navCtrl.push(AnnouncementDetailPage,{'id':id,'to_id':to_id});
+      this.db.addData({'noticeId':to_id},"Attendence/update_notification_status").then(resp=>
+        {
+            console.log(resp);
+           this.getAnnouncementList()
+
+        },err=>
+        {
+            this.db.dismiss()
+            this.db.errToasr()
+        })
     }
-    
+
     getAnnouncementList()
     {
       this.db.show_loading();
       this.sendRequest=false
-      
+
       this.db.addData({'userType':this.userType},"Announcement/announcement_list").then(resp=>
         {
           console.log(resp);
@@ -71,19 +81,18 @@ export class AnnouncementListPage
           this.db.errToasr()
         })
       }
-      
+
       doRefresh (refresher)
-      {   
-        this.getAnnouncementList() 
+      {
+        this.getAnnouncementList()
         setTimeout(() => {
           refresher.complete();
         }, 1000);
       }
-      
+
       close() {
-        
+
         this.viewcontrol.dismiss();
       }
-      
+
     }
-    

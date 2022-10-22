@@ -16,6 +16,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { AttendenceserviceProvider } from '../../../../providers/attendenceservice/attendenceservice';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import moment from 'moment';
+import { CheckinNewPage } from '../../../checkin-new/checkin-new';
 
 
 
@@ -48,6 +49,8 @@ export class LmsLeadDetailPage {
     this.last_attendence()
 
     this.dr_id=this.navParams.get('id');
+    this.tab_id=this.navParams.get('tab_id');
+    console.log(this.tab_id);
     console.log(this.dr_id);
     this.dr_detail();
     console.log('ionViewDidLoad LmsLeadDetailPage');
@@ -57,6 +60,7 @@ export class LmsLeadDetailPage {
 
   search:any={}
   dr_id:any;
+  tab_id:any;
   lead_detail:any={};
   contactPerson:any={};
   visiting_image:any=[];
@@ -82,6 +86,11 @@ export class LmsLeadDetailPage {
       if (this.lead_detail.date_updated) {
         this.lead_detail.date_updated = moment(this.lead_detail.date_updated).format('YYYY-MM-DD');
         console.log(this.lead_detail.date_updated);
+        console.log(this.today_date);
+      }
+      if (this.lead_detail.date_created) {
+        this.lead_detail.date_created = moment(this.lead_detail.date_created).format('YYYY-MM-DD');
+        console.log(this.lead_detail.date_created);
         console.log(this.today_date);
       }
       this.visiting_image.push(this.lead_detail.visiting_card_image)
@@ -112,9 +121,9 @@ export class LmsLeadDetailPage {
   {
     this.navCtrl.push(LmsQuotationListPage,{'type':type,'id':id,'company_name':company_name});
   }
-  goOnTravelAdd()
+  go_editlead()
     {
-      this.navCtrl.push(LmsLeadAddPage,{'data':this.lead_detail})
+      this.navCtrl.push(LmsLeadAddPage,{'data':this.lead_detail,'tab_id':this.tab_id})
     }
   addContactPerson(id){
     this.navCtrl.push(AddMultipleContactPage,{'dr_id':id})
@@ -710,4 +719,14 @@ checkLocationActive(type,id,name){
             alert.present();
 
         }
+        goToCheckin() {
+          if(this.checkin_data != null){
+              console.log("if");
+              console.log(this.checkin_data.length);
+              this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
+          }
+          else{
+              this.navCtrl.push(CheckinNewPage);
+          }
+      }
 }

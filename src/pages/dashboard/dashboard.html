@@ -13,12 +13,18 @@
             <div class="logo"><img style="width:100px;height:75px"src="assets/imgs/kei.png" alt=""></div>
             <div class="buttons">
 
-                <div class="notification-btn">
+                <div class="notification-btn" *ngIf="announcementCount==0">
                     <button ion-button  (click)="announcementModal()">
                         <ion-icon ios="ios-notifications" md="md-notifications" class="notification_icon"></ion-icon>
                     </button>
                     <p>{{announcementCount}}</p>
                 </div>
+                <div class="notification-btn" style="animation: shake 5s infinite;" *ngIf="announcementCount>0">
+                  <button ion-button  (click)="announcementModal()">
+                      <ion-icon ios="ios-notifications" md="md-notifications" class="notification_icon"></ion-icon>
+                  </button>
+                  <p>{{announcementCount}}</p>
+              </div>
                 <button ion-button (click)="open_menu()">
                     <ion-icon ios="ios-menu" md="md-menu" class="menu_icon"></ion-icon>
                 </button>
