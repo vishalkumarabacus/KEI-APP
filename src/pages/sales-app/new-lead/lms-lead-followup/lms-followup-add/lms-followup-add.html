@@ -10,14 +10,13 @@
         <div class="edit">
             <ion-list>
 
-                <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && lead_type?.invalid}">
+                <!-- <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && lead_type?.invalid}">
                     <ion-label><span>Lead Category</span></ion-label>
                     <ion-select name="lead_type" #lead_type="ngModel" [(ngModel)]="form.lead_type" (ngModelChange)="get_assign_dr(form.lead_type)" [disabled]="(disableSelect == true)">
                        <ion-option value="1">Distributor</ion-option>
                        <ion-option value="2">Dealer</ion-option>
                         <ion-option value="3">Retailer</ion-option>
                         <ion-option value="4">Project</ion-option>
-                        <!-- <ion-option value="5">End User</ion-option> -->
                         <ion-option value="5">Architect</ion-option>
                         <ion-option value="6">Constructor</ion-option>
                         <ion-option value="7">Contractor</ion-option>
@@ -35,8 +34,36 @@
 
 
                     </ion-select>
-                </ion-item>
-                <p  *ngIf="f.submitted && lead_type?.invalid" class="error-line">Select Type Is Required</p>
+                </ion-item> -->
+                <!-- <p  *ngIf="f.submitted && lead_type?.invalid" class="error-line">Select Type Is Required</p> -->
+
+                <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && lead_type?.invalid}" *ngIf="type==9 && !followup_category">
+                  <ion-label><span>Lead Category</span></ion-label>
+                  <ion-select name="lead_Category" #lead_Category="ngModel" [(ngModel)]="form.lead_Category" (ngModelChange)="get_assign_dr(form.lead_Category)">
+                     <ion-option value="Distributor">Distributor</ion-option>
+                     <ion-option value="Dealer">Dealer</ion-option>
+                      <ion-option value="Retailer">Retailer</ion-option>
+                      <ion-option value="Project">Project</ion-option>
+                      <ion-option value="Architect">Architect</ion-option>
+                      <ion-option value="Constructor">Constructor</ion-option>
+                      <ion-option value="Contractor">Contractor</ion-option>
+                      <ion-option value="Interior Designer">Interior Designer</ion-option>
+                      <!-- <ion-option value="9">Online</ion-option> -->
+                      <ion-option value="Electrician">Electrician</ion-option>
+                      <ion-option value="Direct Customer">Direct Customer</ion-option>
+                      <ion-option value="Builders">Builders</ion-option>
+                      <ion-option value="Consultant">Consultant</ion-option>
+                      <ion-option value="Govt Department">Govt Department</ion-option>
+                      <ion-option value="Industry">Industry</ion-option>
+                      <ion-option value="Infra">Infra</ion-option>
+                      <ion-option value="MEPM">MEPM</ion-option>
+                      <!-- <ion-option value="19">Site Tracking</ion-option> -->
+
+
+                  </ion-select>
+              </ion-item>
+              <p  *ngIf="f.submitted && lead_Category?.invalid" class="error-line">Select Category Is Required</p>
+
 
                 <!-- <ion-item class="cs-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && dr_id?.invalid}">
                    <ion-label *ngIf="form.lead_type == '1'"><span>Select Distributor</span></ion-label>

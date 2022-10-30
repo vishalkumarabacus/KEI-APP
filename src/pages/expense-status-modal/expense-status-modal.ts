@@ -19,7 +19,7 @@ export class ExpenseStatusModalPage {
   data:any={}
   filter:any={}
   user:any=[]
-
+  tab:any;
   from_page :any=''
   lead_detail:any=[]
   constructor(
@@ -92,7 +92,7 @@ export class ExpenseStatusModalPage {
         this.data.id=this.navParams.get("travelId");
       }
       if(this.from_page =='leaddetail')
-      {
+      {  this.tab=this.navParams.get("Tab")
         this.data.id=this.navParams.get("lead_id");
         this.data.status=this.navParams.get("status");
 

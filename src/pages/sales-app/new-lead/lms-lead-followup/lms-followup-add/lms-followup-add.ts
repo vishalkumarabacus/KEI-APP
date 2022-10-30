@@ -22,10 +22,19 @@ export class LmsFollowupAddPage {
   today_date:any='';
   followup_edit:any={}
   page_from:any;
+  followup_category:any;
+  name:any;
   disableSelect:boolean = false;
 
 
   ionViewWillEnter() {
+    this.followup_category=this.navParams.get('followup_category')
+    console.log(this.followup_category);
+    this.name=this.navParams.get('name')
+    console.log(this.name);
+
+
+
 
     if(this.navParams.get('from'))
       {
@@ -103,7 +112,13 @@ export class LmsFollowupAddPage {
     console.log(this.form);
 
     this.form.drid = this.form.dr_id.id;
-    this.form.companyname = this.form.dr_id.company_name;
+    if(this.form.dr_id.company_name==''||this.form.dr_id.company_name==null){
+      this.form.companyname=this.name
+    }
+    else{
+      this.form.companyname = this.form.dr_id.company_name;
+    }
+
     this.form.followup_id=this.navParams.get('update_id')
 
     this.db.show_loading()

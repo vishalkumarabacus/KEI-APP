@@ -103,7 +103,7 @@
   <div class="edit mt10 ml10 mr10">
     <ion-list>
       <div>
-        <ion-list radio-group class="radio-type-group" name="status" [(ngModel)]="data.status1" *ngIf="data.status!='qualified'">
+        <ion-list radio-group class="radio-type-group" name="status1" #status1="ngModel" [(ngModel)]="data.status1" *ngIf="data.status!='qualified' && !tab">
 
         <div class="dflex">
             <ion-item>
@@ -117,7 +117,7 @@
         </div>
     </ion-list>
 
-    <ion-list radio-group class="radio-type-group" name="status" [(ngModel)]="data.status1" *ngIf="data.status=='qualified'">
+    <ion-list radio-group class="radio-type-group" name="status1" #status1="ngModel" [(ngModel)]="data.status1" *ngIf="data.status=='qualified' || tab">
 
       <div class="dflex">
           <ion-item>
@@ -149,7 +149,7 @@
 
 
   <div class="text-right mt32">
-    <button ion-button color="secondary"  [disabled]="!data.reason && data.status1"  (click)="update_status()">Update</button>
+    <button ion-button color="secondary"  [disabled]="!(data.reason && data.status1)"  (click)="update_status()">Update</button>
   </div>
 
 

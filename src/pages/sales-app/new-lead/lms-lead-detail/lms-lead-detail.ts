@@ -17,6 +17,7 @@ import { AttendenceserviceProvider } from '../../../../providers/attendenceservi
 import { Diagnostic } from '@ionic-native/diagnostic';
 import moment from 'moment';
 import { CheckinNewPage } from '../../../checkin-new/checkin-new';
+import { CheckinListPage } from '../../checkin-list/checkin-list';
 
 
 
@@ -101,12 +102,14 @@ export class LmsLeadDetailPage {
     });
   }
 
-  lead_followup(type,id,company_name)
+  lead_followup(type,id,company_name,followup_cat,name)
   {
     console.log(type);
     console.log(id);
     console.log(company_name);
-    this.navCtrl.push(LmsFollowupListPage,{'type':type,'id':id,'company_name':company_name})
+    console.log(followup_cat);
+
+    this.navCtrl.push(LmsFollowupListPage,{'type':type,'id':id,'company_name':company_name,'followup_category':followup_cat,'name':name})
   }
 
   lead_activity(type,id,company_name)
@@ -438,23 +441,17 @@ show_Error(){
 
 
   }
-  // statusModal1(type)
-  // {
-  //   this.navCtrl.push(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail' });
-  // }
+  statusModal_site(type)
+  {
+    this.navCtrl.push(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'Tab':'site','from':'leaddetail' });
+  }
 
   statusModal1(type)
   {
-    console.log(type)
-    let modal = this.modalCtrl.create(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail'});
-
-    modal.onDidDismiss(data =>
-    {
-      console.log(data);
-      this.dr_detail()
-    });
-    modal.present();
+    this.navCtrl.push(ExpenseStatusModalPage,{'lead_id':this.dr_id,'status':this.lead_detail.status,'from':'leaddetail' });
   }
+
+
 
   update_visiting_card(){
     var loading = this.loadingCtrl.create({
@@ -719,14 +716,10 @@ checkLocationActive(type,id,name){
             alert.present();
 
         }
-        goToCheckin() {
-          if(this.checkin_data != null){
-              console.log("if");
-              console.log(this.checkin_data.length);
-              this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
-          }
-          else{
-              this.navCtrl.push(CheckinNewPage);
-          }
-      }
+        gotoViewCheckin(id){
+          console.log(id);
+
+         this.navCtrl.push(CheckinListPage,{'dr_id':id, 'comes_from':'lead_detail'})
+
+        }
 }

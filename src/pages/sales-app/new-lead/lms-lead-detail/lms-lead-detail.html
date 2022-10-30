@@ -6,7 +6,7 @@
             <button ion-button icon-only color="light"  *ngIf="(lead_detail.status=='Lost'||lead_detail.status=='Disqualified'||lead_detail.status=='Win') && lead_detail.date_updated == today_date && tab_id!=19"  (click)="go_editlead()" >
                 <ion-icon name="md-create"></ion-icon>
             </button>
-            <button ion-button icon-only color="light"  *ngIf="tab_id==19 && lead_detail.date_created == today_date" (click)="go_editlead()" >
+            <button ion-button icon-only color="light"  *ngIf="tab_id==19 && lead_detail.date_created == today_date && lead_detail.status!='Lost'" (click)="go_editlead()" >
               <ion-icon name="md-create"></ion-icon>
           </button>
             <button ion-button icon-only color="light"  *ngIf="lead_detail.status=='qualified' || lead_detail.status=='Lead Bank' && tab_id!=19 " (click)="go_editlead()" >
@@ -213,7 +213,7 @@
                     </div>
                     <div class="lower" *ngIf="lead_detail.expected_order_month">
                       <p>Expected Order Month</p>
-                      <p>{{lead_detail.expected_order_month?lead_detail.expected_order_month:'N/A'}}</p>
+                      <p>{{lead_detail.expected_order_month?lead_detail.expected_order_month:'N/A'}}-({{lead_detail.expected_order_Year}})</p>
                   <!-- </div> -->
               </div>
                     </div>
@@ -259,7 +259,7 @@
                 Create Checkin
             </div>
         </a>
-        <a class="no-height"*ngIf=" (last_attendence_data.start_time != '') "   (click)="presentalert(lead_detail.type,lead_detail.id,lead_detail.company_name)">
+        <a class="no-height"*ngIf="lead_detail.dr_checkin>0"   (click)="gotoViewCheckin(lead_detail.id)">
           <p><span>{{lead_detail.dr_checkin}}</span></p>
           <div class="info">
              Checkin List
@@ -278,7 +278,7 @@
                     </div>
                 </a>
 
-                <a class="no-height" (click)="lead_followup(lead_detail.type,lead_detail.id,lead_detail.company_name)">
+                <a class="no-height" (click)="lead_followup(lead_detail.type,lead_detail.id,lead_detail.company_name,lead_detail.lead_Category,lead_detail.name)">
                     <p><span>{{lead_detail.dr_followup}}</span></p>
                     <div class="info">
                         Follow Up
@@ -319,13 +319,20 @@
                     </li>
                 </ul>
             </div> -->
-            <div class="endcheck inherit p0" *ngIf="lead_detail.status=='qualified' && tab_id==19">
+            <div class="endcheck inherit p0" *ngIf="lead_detail.status=='qualified' && tab_id!=19">
 
                 <div class="wp100 mt16">
                     <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
                     <button color="theme" (click)="statusModal1()" ion-button block round>Change Status</button>
                 </div>
             </div>
+            <div class="endcheck inherit p0" *ngIf="lead_detail.status=='Lead Bank' && tab_id==19">
+
+              <div class="wp100 mt16">
+                  <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
+                  <button color="theme" (click)="statusModal_site()" ion-button block round>Change Status</button>
+              </div>
+          </div>
         </div>
 
 

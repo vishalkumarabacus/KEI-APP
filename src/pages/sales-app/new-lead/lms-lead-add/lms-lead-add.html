@@ -212,12 +212,12 @@
         <ion-label><span>Lead Souce Type<strong>*</strong></span></ion-label>
         <ion-select name="source_type" #source_type="ngModel" [(ngModel)]="form.source_type" required>
             <ion-option  value="Electrician">Electrician</ion-option>
-            <ion-option  value="Architect/Interio Designer">Architect/Interior Designer</ion-option>
+            <ion-option  value="Architect/Interior Designer">Architect/Interior Designer</ion-option>
             <ion-option  value="Retailer" >Retailer</ion-option>
             <ion-option  value="Others" >Others</ion-option>
         </ion-select>
     </ion-item>
-             <p  *ngIf="f.submitted && stage_of_project?.invalid" class="error-line">Select Type Is Required</p>
+             <p  *ngIf="f.submitted && source_type?.invalid" class="error-line">Source Type Is Required</p>
      <ion-item >
           <ion-label floating><span>Lead Source Contact Name<strong>*</strong></span></ion-label>
           <ion-input type="text" placeholder="Enter Lead Source Contact Name"  name="lead_source_contact" #lead_source_contact="ngModel"  [(ngModel)]="form.source" [ngClass]="{'is-invalid':f.submitted && source?.invalid}" required></ion-input>
@@ -272,8 +272,8 @@
               </ion-item>
               <ion-item class="cs-normal-select mt10" >
                   <ion-label><span>City </span></ion-label>
-                  <ion-select   name="city1" name="city1" #city1="ngModel" [(ngModel)]="form.city1"  (ionChange)="selectarea()">
-                      <ion-option *ngFor="let row of city_list" value="{{row.city}}"  >{{row.city}}</ion-option>
+                  <ion-select  name="city" #city="ngModel" [(ngModel)]="form.city">
+                      <ion-option *ngFor="let row of city_list" value="{{row.city}}" >{{row.city}}</ion-option>
                   </ion-select>
               </ion-item>
               <!-- <ion-item class="cs-normal-select mb0">
@@ -313,19 +313,55 @@
               </ion-select>
               <!-- <ion-datetime display-format="MMM YYYY" placeholder ="Select Month" name="expected_order_month" [(ngModel)]="form.expected_order_month" #expected_order_month="ngModel" [ngClass]="{'is-invalid':f.submitted && expected_order_month?.invalid}" required></ion-datetime> -->
           </ion-item>
+          <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && expected_order_Year?.invalid}" >
+            <ion-label > <span>Expected Order Year *</span></ion-label>
+            <ion-select  name = "expected_order_month"  #expected_order_Year="ngModel"  [(ngModel)]="form.expected_order_Year" [ngClass]="{'is-invalid':f.submitted && expected_order_Year?.invalid}" required>
+              <ion-option value='2022'>2022</ion-option>
+              <ion-option value='2023'>2023</ion-option>
+              <ion-option value='2024'>2024</ion-option>
+              <ion-option value='2025'>2025</ion-option>
+              <ion-option value='2026'>2026</ion-option>
+              <ion-option value='2027'>2027</ion-option>
+              <ion-option value='2028'>2028</ion-option>
+              <ion-option value='2029'>2029</ion-option>
+              <ion-option value='2030'>2030</ion-option>
+
+
+            </ion-select>
+            <!-- <ion-datetime display-format="MMM YYYY" placeholder ="Select Month" name="expected_order_month" [(ngModel)]="form.expected_order_month" #expected_order_month="ngModel" [ngClass]="{'is-invalid':f.submitted && expected_order_month?.invalid}" required></ion-datetime> -->
+        </ion-item>
              <ion-item [ngClass]="{'cs-error':f.submitted && ninety_coil_requirment?.invalid}">
-              <ion-label floating><span> Expected 90m Coil Requirment<strong>*</strong></span></ion-label>
+              <ion-label floating><span> Expected No. Of 90m Coil Requirment<strong>*</strong></span></ion-label>
               <ion-input type="number" placeholder="Enter 90m Coil Requirment"  name="ninety_coil_requirment " #ninety_coil_requirment="ngModel" [(ngModel)]="form.ninety_coil_requirment" required [ngClass]="{'is-invalid':f.submitted && ninety_coil_requirment?.invalid}" required></ion-input>
           </ion-item>
           <ion-item [ngClass]="{'cs-error':f.submitted && one_eighty_coil_requirment?.invalid}">
-            <ion-label floating><span>Expected 180m Coil Requirment<strong>*</strong></span></ion-label>
+            <ion-label floating><span>Expected No. Of 180m Coil Requirment<strong>*</strong></span></ion-label>
             <ion-input type="number" placeholder="Enter 180m Coil Requirment"  name="one_eighty_coil_requirment " #one_eighty_coil_requirment="ngModel" [(ngModel)]="form.one_eighty_coil_requirment" required [ngClass]="{'is-invalid':f.submitted && one_eighty_coil_requirment?.invalid}" required></ion-input>
         </ion-item>
-          <ion-item [ngClass]="{'cs-error':f.submitted && attached_retailer_name?.invalid}">
+
+          <!-- <ion-item [ngClass]="{'cs-error':f.submitted && attached_retailer_name?.invalid}">
             <ion-label floating><span>Attached Retailer Name<strong>*</strong></span></ion-label>
             <ion-input type="text" placeholder="Enter Attached Retailer Name"  name="attached_retailer_name " #attached_retailer_name="ngModel" [(ngModel)]="form.attached_retailer_name" required [ngClass]="{'is-invalid':f.submitted && attached_retailer_name?.invalid}" required></ion-input>
-        </ion-item>
+        </ion-item> -->
+        <div class="edit m0 mt16">
+          <ion-item class="cs-select">
+            <ion-label> Select Attached Retailer Name<strong>*</strong></ion-label>
+            <ionic-selectable
+            item-content
+            [(ngModel)]="form.attached_retailer_name"
+            [items]="distributor_network_list"
+            itemValueField="id"
+            itemTextField="company_name"
+            name="company_name"
+            [canSearch]="true"
+            #RetailerSelectable
+             required>
+        </ionic-selectable>
+          </ion-item>
+        </div>
          </ng-container>
+
+
             <ion-item class="cs-textarea1" [ngClass]="{'cs-error':f.submitted && description?.invalid}">
                 <ion-label floating><span>Description</span></ion-label>
                 <ion-textarea  placeholder="Enter Description"  type="text" name="description" #description="ngModel" [(ngModel)]="form.description" ></ion-textarea>

@@ -27,7 +27,7 @@ import { ExpensePopoverPage } from '../../expense-popover/expense-popover';
 })
 export class CheckinListPage {
   @ViewChild(Navbar) navBar: Navbar;
-  
+
   date:any;
   limit=0;
   flag:any='';
@@ -43,16 +43,25 @@ export class CheckinListPage {
   addCheckinDisable:boolean=false;
   constructor(public alertCtrl: AlertController,public popoverCtrl: PopoverController, public attendence_serv: AttendenceserviceProvider ,public navCtrl: NavController, public navParams: NavParams, public service: MyserviceProvider, public loadingCtrl: LoadingController, public events: Events) {
     this.userId = this.navParams.get('userId');
+    console.log(this.userId);
+    if(this.navParams.get('comes_from')=='lead_detail'){
+      console.log("hello world");
+      this.userId=this.navParams.get('dr_id');
+      // this.data = team_attendence_data.id;
+      console.log(this.userId);
+      this.checkin_list();
+
+    }
     this.last_attendence();
   }
-  
+
   ionViewWillEnter()
   {
-    
+
     console.log(this.navParams);
     console.log(this.enterCheckinDetail);
-    
-    
+
+
     this.checkinClicked=false;
     console.log(this.checkinClicked);
     // this.service.dismiss()
@@ -61,20 +70,20 @@ export class CheckinListPage {
     this.date = moment(this.date).format('YYYY-MM-DD');
   }
   ionViewDidLoad() {
-    
+
     console.log('ionViewDidLoad CheckinListPage');
     // this.navBar.backButtonClick = (e:UIEvent)=>{
     //   this.navCtrl.push(DashboardPage);
     //  }
   }
-  
+
   ionViewDidEnter()
   {
-    this.events.publish('current_page','Dashboard');    
+    this.events.publish('current_page','Dashboard');
   }
-  
-  
-  
+
+
+
   pending_checkin()
   {
     this.service.pending_data().then((result)=>{
@@ -83,35 +92,35 @@ export class CheckinListPage {
       this.checkin_id = result['checkin_id'];
       this.checkin_data = result['checkin_data'];
       console.log(this.checkin_data);
-      
+
       if(this.checkin_data != null){
         console.log("checkin_data is null");
         this.addCheckinDisable = true;
       }
-      
+
       if(this.navParams.get('via') == 'checkinIsCreated' && this.enterCheckinDetail){
         this.navParams.data = null;
         this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
       }
       else{
-        
+
       }
-      
+
     })
   }
-  
-  
+
+
   today_checkin:any = [];
   previous_checkin:any = [];
-  
+
   search: any = {};
-  
+
   load_data:any = "0";
-  
-  presentPopover(myEvent) 
+
+  presentPopover(myEvent)
   {
     let popover = this.popoverCtrl.create(ExpensePopoverPage,{'from':'Checkins'});
-    
+
     popover.present({
       ev: myEvent
     });
@@ -124,68 +133,68 @@ export class CheckinListPage {
         this.checkinType = resultData.TabStatus;
         console.log(this.checkinType);
         this.checkin_list();
-        
+
         // this.getTravelPlan();
       }
-     
+
      })
-  
+
   }
-  
+
   checkin_list()
   {
-    
+
     let loading = this.loadingCtrl.create({
       spinner: 'hide',
       content: `<img src="./assets/imgs/gif.svg" class="h55" />`,
       dismissOnPageChange: true
     });
     loading.present();
-    
+
     if(this.search.check_in_date!=null)
     {
       this.search.check_in_date = moment(this.search.check_in_date).format('YYYY-MM-DD');
       console.log(this.search.check_in_date);
     }
-    
+
     this.service.addData({'date':this.search.check_in_date,'limit':this.limit,'userId':this.userId,'checkin_type':this.checkinType},'Checkin/checkin_list').then((result)=>{
       console.log(result);
       this.today_checkin = result['today_checkin'];
       this.previous_checkin = result['previous_checkin'];
       console.log(this.previous_checkin);
-      
+
       if(this.today_checkin.length == 0)
       {
         this.load_data = "1";
       }
-      
+
       if(this.previous_checkin == 0)
       {
         this.load_data = "1";
       }
-      
+
       loading.dismiss();
-      
+
     },err=>
     {
-      
+
       this.service.errToasr();
       loading.dismiss();
-      
+
     });
-    
+
     // setTimeout(() => {
     //   loading.dismiss();
-      
+
     // }, 2000);
   }
-  
-  
-  
+
+
+
   loadData(infiniteScroll)
   {
     console.log('loading');
-    
+
     this.limit=this.previous_checkin.length;
     this.service.addData({'date':this.search.check_in_date,'limit':this.limit},'Checkin/checkin_list').then( r =>
       {
@@ -204,24 +213,24 @@ export class CheckinListPage {
         }
       });
     }
-    
+
     addCheckin(){
       this.navCtrl.push(AddCheckinPage)
     }
-    
+
     end_visit(checkin_id)
     {
       console.log(checkin_id);
-      
+
       this.navCtrl.push(EndCheckinPage,{'data':this.checkin_data});
     }
-    
+
     checkin_detail(checkin_id)
     {
-      
+
       this.checkinClicked=true;
       console.log(checkin_id);
-      
+
       this.service.addData({'checkin_id':checkin_id},'Checkin/checkin_detail').then((result)=>
       {
         console.log(result);
@@ -230,25 +239,25 @@ export class CheckinListPage {
           this.navCtrl.push(CheckinDetailPage,{'data':result});
         }
       })
-      
+
     }
-    
-    
+
+
     goBack()
     {
       console.log('Back');
       this.navCtrl.push(DashboardPage);
     }
-    
+
     last_attendence() {
       this.attendence_serv.last_attendence_data().then((result) => {
         console.log(result);
         this.last_attendence_data = result['attendence_data'];
       })
     }
-    
+
     show_Error(){
-      
+
       console.log("start your attendence first");
       let alert = this.alertCtrl.create({
         title: 'Alert',
@@ -256,7 +265,7 @@ export class CheckinListPage {
         buttons: [
           {
             text: 'Ok',
-            handler: () => 
+            handler: () =>
             {
             }
           }
@@ -264,10 +273,10 @@ export class CheckinListPage {
       });
       alert.present();
     }
-  
+
     doRefresh (refresher)
-        { 
-            
+        {
+
             this.last_attendence();
             this.pending_checkin();
             this.checkin_list();
@@ -275,8 +284,7 @@ export class CheckinListPage {
                 refresher.complete();
             }, 1000);
         }
-        
-    
+
+
 
   }
-  
