@@ -203,6 +203,7 @@ import { TravelPopOverPageModule } from '../pages/travel-pop-over/travel-pop-ove
 import { ChangeStatusModelPage } from '../pages/change-status-model/change-status-model';
 import { ChangeStatusModelPageModule } from '../pages/change-status-model/change-status-model.module';
 import { TravelNewlistPageModule } from '../pages/travel-newlist/travel-newlist.module';
+import { SelectSearchableModule } from 'ionic-select-searchable';
 // import { CacheModule } from "ionic-cache";
 @NgModule({
     declarations: [
@@ -374,6 +375,7 @@ import { TravelNewlistPageModule } from '../pages/travel-newlist/travel-newlist.
         UploadFilePageModule,
         ChangeStatusModelPageModule,
         TravelNewlistPageModule,
+        SelectSearchableModule,
     ],
     bootstrap: [IonicApp],
     entryComponents: [

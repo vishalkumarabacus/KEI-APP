@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import moment from 'moment';
 import { MyserviceProvider } from '../../../../../providers/myservice/myservice';
 import { LmsFollowupAddPage } from '../lms-followup-add/lms-followup-add';
 
@@ -20,6 +21,12 @@ export class LmsFollowupListPage {
     this.type=this.navParams.get('type');
     this.id=this.navParams.get('id');
     this.company_name=this.navParams.get('company_name');
+    this.followup_category=this.navParams.get('followup_category');
+    console.log(this.followup_category);
+
+    this.name=this.navParams.get('name')
+    console.log(this.name);
+
     console.log(this.type);
     console.log(this.id);
     console.log(this.company_name);
@@ -30,16 +37,19 @@ export class LmsFollowupListPage {
   }
 
 
-  followup_list:any[];
+  followup_list:any=[];
   type:any;
   id:any;
   company_name:any;
+  followup_category:any;
+  name:any
+
 
   lead_followup_add(type,id,company_name,add)
   {
     console.log(this.type);
     console.log(this.id);
-    this.navCtrl.push(LmsFollowupAddPage,{'type':type,'id':id,'company_name':company_name ,'from':add})
+    this.navCtrl.push(LmsFollowupAddPage,{'type':type,'id':id,'company_name':company_name,'followup_category':this.followup_category,'name':this.name,'from':add})
   }
   update_followup(row,type,id)
     {
@@ -59,6 +69,9 @@ export class LmsFollowupListPage {
       console.log(resp);
       this.followup_list = resp['data'];
       console.log(this.followup_list);
+
+
+
     },
     err=>
     {

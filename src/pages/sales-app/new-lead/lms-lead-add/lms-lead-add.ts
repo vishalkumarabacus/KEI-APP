@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { MyserviceProvider } from '../../../../providers/myservice/myservice';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { IonicSelectableComponent } from 'ionic-selectable';
+import { ViewChild } from '@angular/core';
+
 
 
 @IonicPage()
@@ -11,13 +14,16 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 })
 export class LmsLeadAddPage {
 
+  @ViewChild('RetailerSelectable') RetailerSelectable: IonicSelectableComponent;
+
+
   today_date = new Date().toISOString().slice(0,10);
 
-
-
   constructor(public navCtrl: NavController, public navParams: NavParams,private camera: Camera,public db:MyserviceProvider,private alertCtrl: AlertController,public loadingCtrl: LoadingController) {
-    this.getNetworkType()
+    this.getNetworkType();
 this.source()
+this.get_network_list(3);
+
 // this.dr_detail()
   }
 
@@ -191,7 +197,7 @@ console.log(this.form.id);
   city_list:any=[]
   getCityList()
   {
-    this.form.city1 = [];
+
     console.log(this.form);
     // this.show_loading()
 
@@ -325,7 +331,7 @@ console.log(this.form.id);
           this.get_district()
           this.form.district = result['district_name']
           this.getCityList()
-          this.form.city1 = result['city']
+          this.form.city = result['city']
           // this.selectarea()
           // this.form.area = result['area']
           console.log(this.form);
@@ -399,7 +405,7 @@ console.log(this.form.id);
       {
         return
       }
-      this.db.show_loading()
+      // this.db.show_loading()
       console.log(this.form.district);
       // Distributor/save_lead
       //
@@ -418,5 +424,60 @@ console.log(this.form.id);
         this.db.dismiss()
       });
     }
+
+
+
+    distributor_network_list:any = [];
+    string:any={}
+
+    test66(event,network){
+      console.log(event.text);
+      this.search=event.text
+      console.log(this.search);
+      this.get_network_list(network)
+
+    }
+
+
+    get_network_list(network_type)
+    {
+      console.log(network_type);
+
+
+        // this.service.show_loading()
+         this.db.addData({'filter':this.string, 'type':network_type},'Distributor/get_type_list').then((result)=>{
+          console.log(result);
+          this.distributor_network_list = result;
+          for(let i = 0 ;i<this.distributor_network_list.length;i++){
+            if(this.distributor_network_list[i].company_name==null){
+              this.distributor_network_list[i].company_name=''
+          }
+          if(this.distributor_network_list[i].name==null){
+              this.distributor_network_list[i].name=''
+          }
+          if(this.distributor_network_list[i].mobile==null){
+              this.distributor_network_list[i].mobile=''
+          }
+            if(this.distributor_network_list[i].name!=""||this.distributor_network_list[i].mobile!=""){
+              this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name+' '+'('+this.distributor_network_list[i].name+'  '+this.distributor_network_list[i].mobile+')'
+            }
+            if(this.distributor_network_list[i].name==""&&this.distributor_network_list[i].mobile==""){
+              this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name
+            }
+          }
+
+
+          // this.service.dismiss();
+
+        });
+
+
+
+
+    }
+    // open()
+    // {
+    //   this.selectComponent.open();
+    // }
 
   }

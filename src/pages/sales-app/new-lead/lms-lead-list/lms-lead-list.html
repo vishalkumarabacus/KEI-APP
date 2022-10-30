@@ -101,11 +101,15 @@
             </div>
             <div class="mid">
                 <div class="content-info" (click)="lead_detail(data.id)">
-                    <div class="left-info"*ngIf="data.type!=19" >
-                        <div class="circle" >{{data.company_name.substring(0,1).toUpperCase()}}</div>
+                    <div class="left-info"*ngIf="data.type!=19">
+                        <div class="circle" *ngIf="data.company_name!=null">{{data.company_name.substring(0,1).toUpperCase()}}</div>
+                        <div class="circle" *ngIf="data.company_name==null">--</div>
+
                     </div>
                     <div class="left-info"*ngIf="data.type==19" >
-                        <div class="circle" >{{data.name.substring(0,1).toUpperCase()}}</div>
+                        <div class="circle" *ngIf="data.name!=null">{{data.name.substring(0,1).toUpperCase()}}</div>
+                        <div class="circle" *ngIf="data.name==null">N/A</div>
+
                     </div>
                     <div class="right-info">
                         <!-- (Verified) -->
@@ -123,9 +127,9 @@
               <p>SO Name</p>
               <p>{{data.executive_name}}</p>
           </div>
-            <div class="lower" *ngIf="data.state  || data.district  || data.city  || data.area" (click)="lead_detail(data.id)">
+            <div class="lower" *ngIf="data.state  || data.district  || data.city " (click)="lead_detail(data.id)">
                 <p>Address</p>
-                <p>{{data.address}} {{!data.area ? 'N/A' : data.area | titlecase}} {{!data.district ? '' : ', '+data.district | titlecase}} {{!data.state ? 'N/A' : data.state | titlecase}} </p>
+                <p>{{data.city}}{{!data.district ? '' : ', '+data.district | titlecase}} {{!data.state ? 'N/A' : data.state | titlecase}} </p>
             </div>
         </div>
     </div>
