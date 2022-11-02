@@ -21,11 +21,13 @@ export class LmsFollowupListPage {
     this.type=this.navParams.get('type');
     this.id=this.navParams.get('id');
     this.company_name=this.navParams.get('company_name');
+    this.lead_status=this.navParams.get('status');
     this.followup_category=this.navParams.get('followup_category');
     console.log(this.followup_category);
-
     this.name=this.navParams.get('name')
     console.log(this.name);
+    console.log(this.lead_status);
+
 
     console.log(this.type);
     console.log(this.id);
@@ -43,6 +45,7 @@ export class LmsFollowupListPage {
   company_name:any;
   followup_category:any;
   name:any
+  lead_status:any;
 
 
   lead_followup_add(type,id,company_name,add)

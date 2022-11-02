@@ -18,6 +18,9 @@ export class LmsActivityListPage {
     this.type=this.navParams.get('type');
     this.id=this.navParams.get('id');
     this.company_name=this.navParams.get('company_name');
+    this.lead_status=this.navParams.get('status')
+    console.log(this.lead_status);
+
     console.log(this.type);
     console.log(this.id);
     console.log(this.company_name);
@@ -31,6 +34,7 @@ export class LmsActivityListPage {
   type:any;
   id:any;
   company_name:any;
+  lead_status:any;
 
   lead_activity_add(type,id,company_name)
   {

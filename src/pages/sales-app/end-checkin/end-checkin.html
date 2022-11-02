@@ -413,28 +413,46 @@
               <ion-item class="cs-normal-select mt15 mb0" [ngClass]="{'cs-error':f.submitted && stage_of_project?.invalid}" *ngIf="checkin_data.dr_type== '19'">
                 <ion-label><span>Stage Of Project<strong>*</strong></span></ion-label>
                 <ion-select name="stage_of_project" #stage_of_project="ngModel" [(ngModel)]="Site_checkin.stage_of_project" required>
-                    <ion-option  value="Foundation">Foundation</ion-option>
-                    <ion-option  value="Brickwork">Brickwork</ion-option>
-                    <ion-option  value="Plaster(Pipes)">Plaster(Pipes)</ion-option>
+                    <ion-option  value="Foundation" [disabled]="checkin_data.last_stage_of_project=='Brickwork' || checkin_data.last_stage_of_project=='Plaster(Pipes)' || checkin_data.last_stage_of_project=='Wireing'">Foundation</ion-option>
+                    <ion-option  value="Brickwork"  [disabled]="checkin_data.last_stage_of_project=='Plaster(Pipes)' || checkin_data.last_stage_of_project=='Wireing'">Brickwork</ion-option>
+                    <ion-option  value="Plaster(Pipes)" [disabled]="checkin_data.last_stage_of_project=='Wireing'">Plaster(Pipes)</ion-option>
                     <ion-option  value="Wireing" >Wireing</ion-option>
                 </ion-select>
             </ion-item>
             <p class="error-line relative"  *ngIf="f.submitted && stage_of_project?.invalid">Stage Of Project is Required!</p>
-
             </ion-list>
             <ion-list>
-                <ion-item class="cs-textarea1 " [ngClass]="{'cs-error': (f.submitted && site_status?.invalid)}" *ngIf="checkin_data.dr_type== '19'">
-                    <ion-label floating><span>Status *</span></ion-label>
-                    <ion-select name="status" #status="ngModel" [(ngModel)]="Site_checkin.site_status" placeholder="Select Status" required>
-                      <ion-option value="Not able to meet the owner">Not able to meet the owner (another visit required)</ion-option>
-                      <ion-option value="Site postponed">Site postponed (to be revisited)</ion-option>
-                      <ion-option value="Win">Won (if the lead is converted)</ion-option>
-                      <ion-option value="Partially won">Partially won (if more visits required for conversion)</ion-option>
-                      <ion-option value="Lost">Lost (if the site is closed with competitor)</ion-option>
-                    </ion-select>
-                </ion-item>
-                <p class="error-line relative"  *ngIf="f.submitted && site_status?.invalid">Status is Required!</p>
+              <div class="edit m0 mt16">
+                <ion-item class="cs-select" [ngClass]="{'cs-error': (f.submitted && site_status?.invalid)}" *ngIf="checkin_data.dr_type== '19'">
+                  <ion-label><strong>Select Status *</strong></ion-label>
+                    <ionic-selectable
+                   item-content
+                   [(ngModel)]="Site_checkin.site_status"
+                   [items]="Site_status_array"
+                   itemValueField="id"
+                   itemTextField="Status_type"
+                   value="value"
+                   name="status"
+                   [canSearch]="true"
+                   #selectSelectable
+                   required>
+                    </ionic-selectable>
+                   <!-- <ion-select name="status" #status="ngModel" [(ngModel)]="Site_checkin.site_status" placeholder="Select Status" required>
+                    <ion-option value="Not able to meet the owner">Not able to meet the owner (another visit required)</ion-option>
+                    <ion-option value="Site postponed">Site postponed (to be revisited)</ion-option>
+                    <ion-option value="Win">Won (if the lead is converted)</ion-option>
+                    <ion-option value="Partially won">Partially won (if more visits required for conversion)</ion-option>
+                    <ion-option value="Lost">Lost (if the site is closed with competitor)</ion-option>
+                  </ion-select> -->
+              </ion-item>
+              <p class="error-line relative"  *ngIf="f.submitted && site_status?.invalid">Status is Required!</p>
+
+              </div>
             </ion-list>
+
+
+
+
             <ion-list>
                 <ion-item class="cs-textarea1 " [ngClass]="{'cs-error': (f.submitted && description?.invalid)}">
                     <ion-label floating><span>Visit Remark *</span></ion-label>

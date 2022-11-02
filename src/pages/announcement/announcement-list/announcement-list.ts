@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { ConstantProvider } from '../../../providers/constant/constant';
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { AnnouncementDetailPage } from '../announcement-detail/announcement-detail';
+import { LmsLeadDetailPage } from '../../sales-app/new-lead/lms-lead-detail/lms-lead-detail';
 
 
 @IonicPage()
@@ -49,9 +50,12 @@ export class AnnouncementListPage
       console.log('ionViewDidLoad AnnouncementListPage');
     }
 
-    deatilPage(id,to_id)
+    deatilPage(id,to_id,tab)
     {
-      this.navCtrl.push(AnnouncementDetailPage,{'id':id,'to_id':to_id});
+      // this.navCtrl.push(LmsLeadDetailPage,{'id':id,'type':'Lead','to_id':to_id});
+      this.navCtrl.push(LmsLeadDetailPage,{'id':id,'type':'Lead','tab_id':tab});
+
+
       this.db.addData({'noticeId':to_id},"Attendence/update_notification_status").then(resp=>
         {
             console.log(resp);

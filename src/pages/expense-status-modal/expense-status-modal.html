@@ -140,8 +140,10 @@
               </ion-select>
           </ion-item> -->
           <ion-item class="cs-textarea1">
-            <ion-label floating><span>Reason</span></ion-label>
-            <ion-textarea name="reason" placeholder="Reason is Required" [(ngModel)]="data.reason" required></ion-textarea>
+            <ion-label floating *ngIf="data.status1=='Lost' || data.status1=='Disqualified'"><span>Reason</span></ion-label>
+            <ion-label floating *ngIf="data.status1=='Win' || data.status1=='qualified'"><span>Remark</span></ion-label>
+
+            <ion-textarea name="reason" placeholder="Enter..." [(ngModel)]="data.reason" required></ion-textarea>
         </ion-item>
       </div>
     </ion-list>
