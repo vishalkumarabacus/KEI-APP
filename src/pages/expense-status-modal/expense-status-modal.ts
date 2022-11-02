@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, ModalController, NavController, NavParams, ViewController } from 'ionic-angular';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
+import { LmsLeadListPage } from '../sales-app/new-lead/lms-lead-list/lms-lead-list';
 
 /**
 * Generated class for the ExpenseStatusModalPage page.
@@ -171,6 +172,9 @@ export class ExpenseStatusModalPage {
         if(result)
         {
           this.serve.presentToast('Status Changed Successfully!!');
+          if(this.from_page =='leaddetail'){
+            this.navCtrl.push(LmsLeadListPage)
+          }
           this.viewCtrl.dismiss();
         }
       },

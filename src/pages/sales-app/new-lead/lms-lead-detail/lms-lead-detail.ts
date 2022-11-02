@@ -102,22 +102,24 @@ export class LmsLeadDetailPage {
     });
   }
 
-  lead_followup(type,id,company_name,followup_cat,name)
+  lead_followup(type,id,company_name,followup_cat,name,status)
   {
     console.log(type);
     console.log(id);
     console.log(company_name);
     console.log(followup_cat);
+    console.log(status);
 
-    this.navCtrl.push(LmsFollowupListPage,{'type':type,'id':id,'company_name':company_name,'followup_category':followup_cat,'name':name})
+
+    this.navCtrl.push(LmsFollowupListPage,{'type':type,'id':id,'company_name':company_name,'followup_category':followup_cat,'name':name,'status':status})
   }
 
-  lead_activity(type,id,company_name)
+  lead_activity(type,id,company_name,lead_status)
   {
     console.log(type);
     console.log(id);
     console.log(company_name);
-    this.navCtrl.push(LmsActivityListPage,{'type':type,'id':id,'company_name':company_name})
+    this.navCtrl.push(LmsActivityListPage,{'type':type,'id':id,'company_name':company_name,'status':lead_status})
   }
 
   goToQuotation(type,id,company_name)

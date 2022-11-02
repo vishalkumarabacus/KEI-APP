@@ -24,9 +24,9 @@
                     </div>
                 </div>
 
-                <div class="right-date">
+                <!-- <div class="right-date">
                     <button class="{{row.status}}"><p>{{row.status}}</p></button>
-                </div>
+                </div> -->
             </div>
 
             <div class="mid">
@@ -41,7 +41,7 @@
 
                     </div>
                     <div class="right-info" style="margin-left: auto;">
-                        <ion-icon name="create" class="cs-action" *ngIf="row.date_created|date:'d MMM y'==today_date && row.status =='Pending'" (click)="update_followup(row,type,row.id)"></ion-icon>
+                        <ion-icon name="create" class="cs-action" *ngIf="row.date_created==today_date  && lead_status!='Win' && lead_status!='Lost'" (click)="update_followup(row,type,row.id)"></ion-icon>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
 
 
 
-<ion-footer class="af-none">
+<ion-footer class="af-none" *ngIf="lead_status!='Win' && lead_status!='Lost'">
     <div class="cus-fab">
         <button (click)="lead_followup_add(type,id,company_name,'add')">
             <i class="material-icons">add</i>

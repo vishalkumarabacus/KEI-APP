@@ -32,7 +32,7 @@
 			</div>
 
 			<div class="scroll_in_modal">
-				<div class="list-box mt16"  [ngClass]="(data.read_status == '1')? 'color-white' : ''"  *ngFor="let data of announcementList" (click)="deatilPage(data.notice_id,data.id)">
+				<div class="list-box mt16"  [ngClass]="(data.read_status == '1')? 'color-white' : ''"  *ngFor="let data of announcementList" (click)="deatilPage(data.dr_id,data.notice_id,'9')">
 					<div class="upper">
 						<div class="left-date">
 

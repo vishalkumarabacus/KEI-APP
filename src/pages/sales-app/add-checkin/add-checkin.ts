@@ -264,7 +264,7 @@ export class AddCheckinPage {
             this.distributor_network_list[i].city=''
           }
             if(this.distributor_network_list[i].name!=""||this.distributor_network_list[i].mobile!=""){
-              this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name+','+this.distributor_network_list[i].city +'('+this.distributor_network_list[i].name+'  '+this.distributor_network_list[i].mobile+')'
+              this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name+',    '+this.distributor_network_list[i].city +'('+this.distributor_network_list[i].name+'  '+this.distributor_network_list[i].mobile+')'
             }
             if(this.distributor_network_list[i].name==""&&this.distributor_network_list[i].mobile==""){
               this.distributor_network_list[i].company_name=this.distributor_network_list[i].company_name

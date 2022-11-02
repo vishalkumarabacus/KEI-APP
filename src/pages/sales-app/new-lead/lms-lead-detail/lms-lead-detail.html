@@ -6,7 +6,7 @@
             <button ion-button icon-only color="light"  *ngIf="(lead_detail.status=='Lost'||lead_detail.status=='Disqualified'||lead_detail.status=='Win') && lead_detail.date_updated == today_date && tab_id!=19"  (click)="go_editlead()" >
                 <ion-icon name="md-create"></ion-icon>
             </button>
-            <button ion-button icon-only color="light"  *ngIf="tab_id==19 && lead_detail.date_created == today_date && lead_detail.status!='Lost'" (click)="go_editlead()" >
+            <button ion-button icon-only color="light"  *ngIf="tab_id==19 && lead_detail.date_created == today_date && lead_detail.status!='Lost' && lead_detail.status!='Win'" (click)="go_editlead()" >
               <ion-icon name="md-create"></ion-icon>
           </button>
             <button ion-button icon-only color="light"  *ngIf="lead_detail.status=='qualified' || lead_detail.status=='Lead Bank' && tab_id!=19 " (click)="go_editlead()" >
@@ -65,7 +65,7 @@
                             <button color="theme" (click)="statusModal1()" ion-button block round>Change Status</button>
                         </div>
                     </div>
-                    <div class="endcheck inherit p0">
+                    <div class="endcheck inherit p0" *ngIf="lead_detail.status!='Win' && lead_detail.status!='Lost'">
 
                         <div class="wp100 mt16">
                             <!-- <button ion-button class="circle-btn" (click)="rmLocalConvExp(i, val3.amount)"><i class="material-icons">delete_sweep</i></button> -->
@@ -253,32 +253,32 @@
 
 
 
-        <a class="no-height"*ngIf=" (last_attendence_data.start_time != '')"   (click)="presentalert(lead_detail.type,lead_detail.id,lead_detail.company_name)">
+        <a class="no-height"*ngIf=" (last_attendence_data.start_time != '')&& lead_detail.status!='Win' && lead_detail.status!='Lost'"   (click)="presentalert(lead_detail.type,lead_detail.id,lead_detail.company_name)">
             <p><span>{{lead_detail.dr_checkin}}</span></p>
             <div class="info">
                 Create Checkin
             </div>
         </a>
-        <a class="no-height"*ngIf="lead_detail.dr_checkin>0"   (click)="gotoViewCheckin(lead_detail.id)">
+        <a class="no-height"*ngIf="lead_detail.dr_checkin>0 && lead_detail.status!='Win' && lead_detail.status!='Lost'"   (click)="gotoViewCheckin(lead_detail.id)">
           <p><span>{{lead_detail.dr_checkin}}</span></p>
           <div class="info">
              Checkin List
           </div>
       </a>
-        <a class="no-height" *ngIf=" (last_attendence_data.start_time == '00:00:00'||last_attendence_data.start_time == '')"  (click)="show_Error()">
+        <a class="no-height" *ngIf=" (last_attendence_data.start_time == '00:00:00'||last_attendence_data.start_time == '') && lead_detail.status!='Win' && lead_detail.status!='Lost'"  (click)="show_Error()">
             <p><span>{{lead_detail.dr_checkin}}</span></p>
             <div class="info">
                 Create Checkin
             </div>
         </a>
-                <a class="no-height" (click)="lead_activity(lead_detail.type,lead_detail.id,lead_detail.company_name)">
+                <a class="no-height" (click)="lead_activity(lead_detail.type,lead_detail.id,lead_detail.company_name,lead_detail.status)">
                     <p><span>{{lead_detail.dr_activity}}</span></p>
                     <div class="info">
                         Activity
                     </div>
                 </a>
 
-                <a class="no-height" (click)="lead_followup(lead_detail.type,lead_detail.id,lead_detail.company_name,lead_detail.lead_Category,lead_detail.name)">
+                <a class="no-height" (click)="lead_followup(lead_detail.type,lead_detail.id,lead_detail.company_name,lead_detail.lead_Category,lead_detail.name,lead_detail.status)">
                     <p><span>{{lead_detail.dr_followup}}</span></p>
                     <div class="info">
                         Follow Up

@@ -111,10 +111,10 @@ export class MyApp {
 
         setTimeout(() => {
             console.log("settimeout");
-            
+
             if (this.constant.UserLoggedInData.userLoggedInChk == false) {
                 console.log('inside if');
-                
+
                 // this.nav.setRoot(CatalogueHomePage);
                 this.nav.setRoot(LoginPage, { 'registerType': 'Employee' });
 
@@ -122,7 +122,7 @@ export class MyApp {
             }
             else {
                 console.log("inside else");
-                
+
                 if (this.constant.UserLoggedInData.loggedInUserType == 'Employee') {
                 console.log(this.constant.UserLoggedInData.loggedInUserType);
 
@@ -167,7 +167,7 @@ export class MyApp {
             //     this.nav.setRoot(LoginPage);
             // }
         }, 2000);
-       
+
         platform.ready().then(() => {
             statusBar.overlaysWebView(false);
             setTimeout(() => {
@@ -190,7 +190,7 @@ export class MyApp {
 
             console.log("App component 131");
 
-            
+
 
 
         });
@@ -319,7 +319,7 @@ export class MyApp {
         });
 
 
-       
+
 
 
         /******************Events*****************************/

@@ -21,9 +21,9 @@ export class LmsLeadAddPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private camera: Camera,public db:MyserviceProvider,private alertCtrl: AlertController,public loadingCtrl: LoadingController) {
     this.getNetworkType();
-this.source()
-this.get_network_list(3);
-
+    this.source()
+    this.get_network_list(3);
+    this.disableMonth(2021,1);
 // this.dr_detail()
   }
 
@@ -96,12 +96,12 @@ console.log(this.form.id);
     // }
 
     this.form.type_id =19;
-    this.db.show_loading()
+    // this.db.show_loading()
     this.db.addData({"data":this.form,"loginData":this.user_data,'visiting_card_image':this.image_data },"Lead/save_lead")
     .then(resp=>{
 
       console.log(resp);
-      this.db.dismiss()
+      // this.db.dismiss()
 
       if(resp['msg'] == 'success')
       {
@@ -479,5 +479,19 @@ console.log(this.form.id);
     // {
     //   this.selectComponent.open();
     // }
+
+    month:any=["January","February","March","April","May","June","July","August","September","October","November","December"];
+    todayDate:any=new Date();
+    disableMonth(year,month){
+    if(year==this.todayDate.getFullYear()){
+      if(month<this.todayDate.getMonth()){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+    }
 
   }

@@ -8,9 +8,7 @@
                 <ion-searchbar (ngModelChange)="get_assign_dr(drid)" [(ngModel)]="filter.name" name="name" ></ion-searchbar>
                 <ion-buttons end>
                     <button ion-button icon-only (click)="presentPopover($event)">
-
                         <ion-icon name="funnel"></ion-icon>
-
                         <!-- <ion-icon name="ellipsis-vertical"></ion-icon> -->
                     </button>
                 </ion-buttons>
@@ -65,25 +63,40 @@
     <div class="capsule-tabs">
         <ul>
           <li [ngClass]="{'active' : filter.status=='lead Bank'}" (click)="filter.date='';start=0;filter.status='lead Bank';get_assign_dr(drid)">
-            <p>Lead Bank<span>{{allCount.leadbank?allCount.leadbank:'0'}}</span></p>
+            <div>
+              <p>Lead Bank</p>
+             <p style="justify-content: center;"><span class="count" style="margin-left: 0px !important;">{{allCount.leadbank?allCount.leadbank:'0'}}</span></p>
+            </div>
           </li>
-          <!-- <li [ngClass]="{'active' : filter.status=='Qualified'}" (click)="filter.date='';start=0;filter.status='Qualified';get_assign_dr(drid)">
-            <p>Qualified<span>{{upcoming_count}}</span></p>
-          </li> -->
           <li [ngClass]="{'active' : filter.status=='Qualified'}"(click)="filter.date='';start=0;filter.status='Qualified' ;get_assign_dr(drid)" *ngIf="drid !=19">
-            <p>Running<span>{{allCount.qualified?allCount.qualified:'0'}}</span></p>
+            <div>
+              <p>Running</p>
+             <p style="justify-content: center;"><span class="count" style="margin-left: 0px !important;">{{allCount.qualified?allCount.qualified:'0'}}</span></p>
+            </div>
           </li>
-          <li [ngClass]="{'active' : filter.status=='Partially win'}"(click)="filter.date='';start=0;filter.status='Partially win';get_assign_dr(drid)" *ngIf="drid ==19">
-            <p> Partially won<span>{{allCount.win?allCount.win:'0'}}</span></p>
+          <li [ngClass]="{'active' : filter.status=='Partially won'}"(click)="filter.date='';start=0;filter.status='Partially won';get_assign_dr(drid)" *ngIf="drid ==19">
+            <div>
+              <p>Partially won</p>
+              <p style="justify-content: center;"><span class="count" style="margin-left: 0px !important;">{{allCount.partiallywon?allCount.partiallywon:'0'}}</span></p>
+            </div>
           </li>
           <li [ngClass]="{'active' : filter.status=='win'}"(click)="filter.date='';start=0;filter.status='win';get_assign_dr(drid)">
-              <p>Win<span>{{allCount.win?allCount.win:'0'}}</span></p>
+              <div>
+                <p>Win</p>
+                <p style="justify-content: center;"><span class="count" style="margin-left: 0px !important;">{{allCount.win?allCount.win:'0'}}</span></p>
+              </div>
             </li>
             <li [ngClass]="{'active' : filter.status=='lost'}" (click)="filter.date='';start=0;filter.status='lost';get_assign_dr(drid)">
-                <p>Lost<span>{{allCount.lost?allCount.lost:'0'}}</span></p>
+                <div>
+                  <p>Lost</p>
+                 <p style="justify-content: center;"><span class="count" style="margin-left: 0px !important;">{{allCount.lost?allCount.lost:'0'}}</span></p>
+                </div>
             </li>
             <li [ngClass]="{'active' : filter.status=='Disqualified'}"(click)="filter.date='';start=0;filter.status='Disqualified' ;get_assign_dr(drid)" *ngIf="drid !=19">
-              <p>Disqualified<span>{{allCount.disqualified?allCount.disqualified:'0'}}</span></p>
+              <div>
+                <p>Disqualified</p>
+                <p style="justify-content: center;"><span class="count" style="margin-left: 0px;">{{allCount.disqualified?allCount.disqualified:'0'}}</span></p>
+              </div>
             </li>
         </ul>
       </div>

@@ -22,6 +22,7 @@ import { CheckinNewPage } from '../../checkin-new/checkin-new';
 import { ExecutiveOrderDetailPage } from '../../executive-order-detail/executive-order-detail';
 import { DashboardPage } from '../../dashboard/dashboard';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { IonicSelectableComponent } from 'ionic-selectable';
 
 
 
@@ -39,6 +40,8 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 })
 export class EndCheckinPage {
   @ViewChild(Navbar) navBar: Navbar;
+  @ViewChild('selectSelectable') selectSelectable: IonicSelectableComponent;
+
 
   state_list:any=[];city_list:any=[];
   city_name:any=[];
@@ -68,6 +71,7 @@ export class EndCheckinPage {
   flag_upload = true;
   flag_play = true;
   for_order:any = [];
+  Site_status_array:any=[];
   functionCalled:any=0
 
 
@@ -83,11 +87,26 @@ export class EndCheckinPage {
       this.getState();
       this.checkinForm = this.formBuilder.group({
         description: ['',Validators.compose([Validators.required])],
+        site_status: ['',Validators.compose([Validators.required])],
+        stage_of_project: ['',Validators.compose([Validators.required])],
+        Contact_decision: ['',Validators.compose([Validators.required])],
+
+
+
 
       })
       this.checkin.dr_name = this.checkin_data.dr_name;
       this.checkin.name = this.checkin_data.name;
       this.checkin.dr_mobile = this.checkin_data.dr_mobile_no;
+
+      this.Site_status_array=[
+        {id:'1', value:'Not able to meet the owner', Status_type:'Not able to meet the owner (another visit required)'},
+        {id:'2', value:'Site postponed', Status_type:'Site postponed (to be revisited)'},
+        {id:'3', value:'Win',Status_type:'Won (if the lead is converted)'},
+        {id:'4',value:'Partially won',Status_type:'Partially won (if more visits required for conversion)'},
+        {id:'5',value:'Lost',Status_type:'Lost (if the site is closed with competitor)'}
+
+      ];
     }
 
     ionViewDidLoad() {
