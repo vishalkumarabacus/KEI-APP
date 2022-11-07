@@ -1025,5 +1025,8 @@ goOnOrderDetail(id)
                 alert.present();
 
             }
+            test(status){
+              console.log(status);
+            }
 
     }

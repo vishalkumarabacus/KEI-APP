@@ -436,6 +436,7 @@
                    value="value"
                    name="site_status"
                    [canSearch]="true"
+                   (ngModelChange)="test(Site_checkin.site_status)"
                    #site_status="ngModel"
                    required>
                     </ionic-selectable>
@@ -463,7 +464,7 @@
                 <p class="error-line relative"  *ngIf="f.submitted && description?.invalid" >Visit Remark is Required!</p>
             </ion-list>
             <ion-list>
-              <ion-item class="cs-textarea1 " [ngClass]="{'cs-error': (f.submitted && Competitor_on_the_project?.invalid)}" *ngIf="checkin_data.dr_type== '19' && Site_checkin.site_status=='Lost'">
+              <ion-item class="cs-textarea1 " [ngClass]="{'cs-error': (f.submitted && Competitor_on_the_project?.invalid)}" *ngIf="checkin_data.dr_type=='19' && (Site_checkin.site_status && Site_checkin.site_status.value=='Lost')">
                   <ion-label floating><span>Competitor on the project*</span></ion-label>
                   <ion-input name="Competitor_on_the_project" #Competitor_on_the_project="ngModel" [(ngModel)]="Site_checkin.Competitor_on_the_project"  placeholder="Enter Competitor on the project" required></ion-input>
               </ion-item>
