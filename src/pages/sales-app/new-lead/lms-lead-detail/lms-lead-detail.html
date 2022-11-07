@@ -259,7 +259,7 @@
                 Create Checkin
             </div>
         </a>
-        <a class="no-height"*ngIf="lead_detail.dr_checkin>0 && lead_detail.status!='Win' && lead_detail.status!='Lost'"   (click)="gotoViewCheckin(lead_detail.id)">
+        <a class="no-height"*ngIf="lead_detail.dr_checkin>0"   (click)="gotoViewCheckin(lead_detail.id)">
           <p><span>{{lead_detail.dr_checkin}}</span></p>
           <div class="info">
              Checkin List
