@@ -205,21 +205,23 @@
                             </div>
                             <div class="edit ml0 mr0" *ngIf="checkin_data.beat_code=='' && checkin_data.dr_type == '3'">
                                 <ion-list>
-                                    <ion-item class="cs-normal-select mt16">
+                                    <ion-item class="cs-normal-select mt16" [ngClass]="{'cs-error':f.submitted && beat_code?.invalid}">
                                         <ion-label>Assign Beat Code</ion-label>
                                         <ionic-selectable
                                         item-content
                                         [(ngModel)]="checkin.beat_code"
                                         [items]="beatCodeList"
                                         itemValueField="beat_code"
-                                        name="beat_code1"
+                                        name="beat_code"
                                         value="beat_code"
                                         itemTextField="beat_code1"
                                         [canSearch]="true"
-                                        #selectComponent >
+                                        #beat_code="ngModel" >
                                     </ionic-selectable>
 
                                       </ion-item>
+                                      <p  *ngIf="f.submitted && beat_code?.invalid" class="error-line">Assign Beat Code Is Required</p>
+
                                 </ion-list>
 
                             </div>
@@ -432,9 +434,9 @@
                    itemValueField="id"
                    itemTextField="Status_type"
                    value="value"
-                   name="status"
+                   name="site_status"
                    [canSearch]="true"
-                   #selectSelectable
+                   #site_status="ngModel"
                    required>
                     </ionic-selectable>
                    <!-- <ion-select name="status" #status="ngModel" [(ngModel)]="Site_checkin.site_status" placeholder="Select Status" required>
@@ -568,28 +570,29 @@
     <div class="cs-figure mt16" *ngIf="checkin_data.beat_code!='' && checkin_data.dr_type == '3'" >
         <ng-container >
         <p> <span>Beat Code :</span> {{checkin_data.beat_code}}</p>
-
         <p><span>Name :</span>  {{checkin_data.area}}</p>
     </ng-container>
     </div>
-    <div class="edit ml0 mr0" *ngIf="checkin_data.beat_code=='' && checkin_data.dr_type == '3'">
-        <ion-list>
-            <ion-item class="cs-normal-select mt16">
+    <div class="edit ml0 mr0" *ngIf="checkin_data.beat_code=='' && checkin_data.dr_type == '3'" >
+        <ion-list  >
+            <ion-item class="cs-normal-select mt16"  [ngClass]="{'cs-error': (f.submitted && beat_code?.invalid)}">
                 <ion-label>Assign Beat Code</ion-label>
                 <ionic-selectable
                 item-content
                 [(ngModel)]="checkin.beat_code"
                 [items]="beatCodeList"
                 itemValueField="beat_code"
-                name="beat_code1"
+                name="beat_code"
                 value="beat_code"
                 itemTextField="beat_code1"
                 [canSearch]="true"
-                #selectComponent >
-            </ionic-selectable>
+                #beat_code="ngModel" required>
+                </ionic-selectable>
 
               </ion-item>
+              <p class="error-line relative"  *ngIf="f.submitted && beat_code?.invalid" >Assign Beat Code is Required!</p>
         </ion-list>
+
 
     </div>
 

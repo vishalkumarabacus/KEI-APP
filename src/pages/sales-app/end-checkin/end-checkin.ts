@@ -90,9 +90,7 @@ export class EndCheckinPage {
         site_status: ['',Validators.compose([Validators.required])],
         stage_of_project: ['',Validators.compose([Validators.required])],
         Contact_decision: ['',Validators.compose([Validators.required])],
-
-
-
+        beat_code: ['',Validators.compose([Validators.required])],
 
       })
       this.checkin.dr_name = this.checkin_data.dr_name;
@@ -972,7 +970,7 @@ goOnOrderDetail(id)
                             break;
                             case this.diagnostic.permissionStatus.GRANTED:
                             console.log("Permission granted always");
-                            this.end_checkin(id,description,targetAction);
+                            this.end_checkin(id,description,targetAction,);
                             break;
                             case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
                             console.log("Permission granted only when in use");
